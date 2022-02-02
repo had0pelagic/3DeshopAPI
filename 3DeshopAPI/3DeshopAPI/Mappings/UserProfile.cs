@@ -9,9 +9,10 @@ namespace _3DeshopAPI.Mappings
         public UserProfile()
         {
             CreateMap<User, UserModel>()
-                .ForSourceMember(x => x.Password, opt => opt.DoNotValidate());
-            CreateMap<UserModel, User>()
-                .ForMember(x => x.Password, opt => opt.Ignore());
+                .ForSourceMember(x => x.Password, opt => opt.DoNotValidate())
+                .ForSourceMember(x => x.Id, opt => opt.DoNotValidate());
+            CreateMap<NewUserModel, User>()
+                .ForMember(x => x.Id, opt => opt.Ignore());
         }
     }
 }
