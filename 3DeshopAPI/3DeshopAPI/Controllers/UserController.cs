@@ -29,7 +29,7 @@ namespace _3DeshopAPI.Controllers
         /// Returns user list
         /// </summary>
         /// <returns></returns>
-        [HttpGet("GetUsers")]
+        [HttpGet]
         public async Task<ActionResult<List<UserModel>>> GetUsers()
         {
             var response = await _userService.GetAllUsers();
@@ -42,7 +42,7 @@ namespace _3DeshopAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("GetUser/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<UserModel>> GetUser(Guid id)
         {
             var response = await _userService.GetUser(id);
@@ -55,7 +55,7 @@ namespace _3DeshopAPI.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost("AddUser")]
+        [HttpPost]
         public async Task<ActionResult<UserModel>> RegisterUser(UserRegisterModel model)
         {
             var newUser = _mapper.Map<Domain.User>(model);
@@ -70,7 +70,7 @@ namespace _3DeshopAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("RemoveUser")]
+        [HttpDelete]
         public async Task<ActionResult<UserModel>> RemoveUser(Guid id)
         {
             var user = await _userService.GetUser(id);
@@ -91,7 +91,7 @@ namespace _3DeshopAPI.Controllers
         /// <param name="id"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPut("UpdateUser")]
+        [HttpPut]
         public async Task<IActionResult> UpdateUser(Guid id, UserModel model)
         {
             var userModel = _mapper.Map<Domain.User>(model);
@@ -106,7 +106,7 @@ namespace _3DeshopAPI.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [Authorize(Roles = "User")]
-        [HttpPost("ChangePassword")]
+        [HttpPost("{id}/change-password")]
         public async Task<IActionResult> ChangePassword(Guid id, [FromBody] UserPasswordModel model)
         {
             return await _userService.ChangePassword(id, model);
@@ -117,7 +117,7 @@ namespace _3DeshopAPI.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost("Login")]
+        [HttpPost("authenticate")]
         public async Task<ActionResult<TokenModel>> UserLogin([FromBody] UserLoginModel model)
         {
             return await _authService.UserLogin(model);
