@@ -1,6 +1,9 @@
-﻿using _3DeshopAPI.Services.Interfaces;
+﻿using _3DeshopAPI.Exceptions;
+using _3DeshopAPI.Models.User;
+using _3DeshopAPI.Services.Interfaces;
 using Domain;
 using Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace _3DeshopAPI.Services
@@ -24,8 +27,6 @@ namespace _3DeshopAPI.Services
         {
             var users = await _context.Users.ToListAsync();
 
-            _logger.LogInformation(users.ToString());
-
             return users;
         }
 
@@ -38,31 +39,37 @@ namespace _3DeshopAPI.Services
         {
             var user = await _context.Users.FindAsync(id);
 
-            _logger.LogInformation(user.ToString());
-
             return user;
         }
-        
+
         /// <summary>
         /// Adds user by given model to db
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public Task AddUser(User user)
+        public async Task RegisterUser(User model)
         {
-            _context.Users.Add(user);
+            if (UsernameExists(model.Username))
+            {
+                throw new InvalidClientOperationException(ErrorCodes.InvalidUsername);
+            }
 
-            return _context.SaveChangesAsync();
+            model.UserRole = UserRoles.User;
+            model.ImageURL = "https://images.random/defaultimage.jp";
+
+            _context.Users.Add(model);
+
+            await _context.SaveChangesAsync();
         }
 
         /// <summary>
         /// Removes user by given model from db
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public Task RemoveUser(User user)
+        public Task RemoveUser(User model)
         {
-            _context.Users.Remove(user);
+            _context.Users.Remove(model);
 
             return _context.SaveChangesAsync();
         }
@@ -70,22 +77,123 @@ namespace _3DeshopAPI.Services
         /// <summary>
         /// Updates user by given model to db
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<User?> UpdateUser(User user)
+        public async Task<IActionResult> UpdateUser(Guid id, User model)
         {
-            var dbUser = await _context.Users.FindAsync(user.Id);
+            if (!UserExists(id))
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
 
-            dbUser.FirstName = user.FirstName;
-            dbUser.LastName = user.LastName;
-            dbUser.Email = user.Email;
-            dbUser.Username = user.Username;
-            dbUser.Password = user.Password;
-            dbUser.ImageURL = user.ImageURL;
+            var dbUser = await _context.Users.FindAsync(id);
 
+            if (model.FirstName != null)
+            {
+                dbUser.FirstName = model.FirstName;
+            }
+            if (model.LastName != null)
+            {
+                dbUser.LastName = model.LastName;
+            }
+            if (model.Email != null)
+            {
+                dbUser.Email = model.Email;
+            }
+            if (model.Username != null)
+            {
+                dbUser.Username = model.Username;
+            }
+            if (model.ImageURL != null)
+            {
+                dbUser.ImageURL = model.ImageURL;
+            }
+
+            _context.Entry(dbUser).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
+            return new NoContentResult();
+        }
+
+        /// <summary>
+        /// Changes user password
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> ChangePassword(Guid id, UserPasswordModel model)
+        {
+            if (!UserExists(id))
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+
+            var dbUser = await _context.Users.FindAsync(id);
+
+            if (model.NewPassword != model.RepeatNewPassword)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.BadPassword);
+            }
+            if (dbUser.Password == model.NewPassword)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.SamePassword);
+            }
+
+            dbUser.Password = model.NewPassword;
+
+            _context.Entry(dbUser).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return new NoContentResult();
+        }
+
+        /// <summary>
+        /// Checks if username and users password is valid
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<User?> IsUserValid(UserLoginModel model)
+        {
+            var dbUser = await _context.Users.FirstOrDefaultAsync(x => x.Username == model.Username);
+
+            if (dbUser == null || dbUser?.Password != model.Password)
+            {
+                return null;
+            }
+
             return dbUser;
+        }
+
+        /// <summary>
+        /// Checks for users role
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public async Task<string?> GetUserRole(UserLoginModel model)
+        {
+            var user = await _context.Users.Where(x => x.Username == model.Username).FirstAsync();
+
+            return user.UserRole;
+        }
+
+        /// <summary>
+        /// Checks if user exists
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private bool UserExists(Guid id)
+        {
+            return _context.Users.Any(x => x.Id == id);
+        }
+
+        /// <summary>
+        /// Checks if username exists
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        private bool UsernameExists(string username)
+        {
+            return _context.Users.Any(x => x.Username == username);
         }
     }
 }

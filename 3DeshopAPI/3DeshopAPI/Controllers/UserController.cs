@@ -1,6 +1,9 @@
-﻿using _3DeshopAPI.Models;
+﻿using _3DeshopAPI.Auth.Interfaces;
+using _3DeshopAPI.Models;
+using _3DeshopAPI.Models.User;
 using _3DeshopAPI.Services.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace _3DeshopAPI.Controllers
@@ -10,19 +13,23 @@ namespace _3DeshopAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IAuthService _authService;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _config;
 
-        public UserController(IUserService userService, IMapper mapper)
+        public UserController(IUserService userService, IAuthService authService, IMapper mapper, IConfiguration config)
         {
             _userService = userService;
+            _authService = authService;
             _mapper = mapper;
+            _config = config;
         }
 
         /// <summary>
         /// Returns user list
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("GetUsers")]
         public async Task<ActionResult<List<UserModel>>> GetUsers()
         {
             var response = await _userService.GetAllUsers();
@@ -35,7 +42,7 @@ namespace _3DeshopAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("GetUser/{id}")]
         public async Task<ActionResult<UserModel>> GetUser(Guid id)
         {
             var response = await _userService.GetUser(id);
@@ -46,14 +53,14 @@ namespace _3DeshopAPI.Controllers
         /// <summary>
         /// Adds user by given NewUserModel
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost]
-        public async Task<ActionResult<UserModel>> AddUser(NewUserModel user)
+        [HttpPost("AddUser")]
+        public async Task<ActionResult<UserModel>> RegisterUser(UserRegisterModel model)
         {
-            var newUser = _mapper.Map<Domain.User>(user);
+            var newUser = _mapper.Map<Domain.User>(model);
 
-            await _userService.AddUser(newUser);
+            await _userService.RegisterUser(newUser);
 
             return CreatedAtAction(nameof(GetUser), new { id = newUser.Id }, _mapper.Map<UserModel>(newUser));
         }
@@ -63,7 +70,7 @@ namespace _3DeshopAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete]
+        [HttpDelete("RemoveUser")]
         public async Task<ActionResult<UserModel>> RemoveUser(Guid id)
         {
             var user = await _userService.GetUser(id);
@@ -79,27 +86,41 @@ namespace _3DeshopAPI.Controllers
         }
 
         /// <summary>
-        /// Updates user by given id and NewUserModelValues
+        /// Updates user by given id and UserModel values
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="user"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPut]
-        public async Task<ActionResult<UserModel>> UpdateUser(Guid id, NewUserModel user)
+        [HttpPut("UpdateUser")]
+        public async Task<IActionResult> UpdateUser(Guid id, UserModel model)
         {
-            var updatedUser = _mapper.Map<Domain.User>(user);
-            var dbUser = await _userService.GetUser(id);
+            var userModel = _mapper.Map<Domain.User>(model);
 
-            if (dbUser == null)
-            {
-                return NotFound();
-            }
+            return await _userService.UpdateUser(id, userModel);
+        }
 
-            updatedUser.Id = id;
+        /// <summary>
+        /// Changes user password, takes old password and new password from body
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "User")]
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword(Guid id, [FromBody] UserPasswordModel model)
+        {
+            return await _userService.ChangePassword(id, model);
+        }
 
-            updatedUser = await _userService.UpdateUser(updatedUser);
-
-            return Ok(_mapper.Map<UserModel>(updatedUser));
+        /// <summary>
+        /// Gets users JWT token
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("Login")]
+        public async Task<ActionResult<TokenModel>> UserLogin([FromBody] UserLoginModel model)
+        {
+            return await _authService.UserLogin(model);
         }
     }
 }
