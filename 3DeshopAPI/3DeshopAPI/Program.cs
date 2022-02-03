@@ -43,6 +43,7 @@ builder.Services.AddSwaggerGen(opts =>
     });
 });
 builder.SetupServices();
+builder.Services.AddRouting(opts => opts.LowercaseUrls = true);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<Context>(opts =>
 {
