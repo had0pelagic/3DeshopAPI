@@ -13,6 +13,7 @@ namespace _3DeshopAPI.Mappings
 
             CreateMap<ProductModel, Product>()
                 .ForMember(x => x.Id, opt => opt.Ignore());
+
         }
     }
 }

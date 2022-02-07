@@ -27,7 +27,8 @@ namespace _3DeshopAPI.Controllers
         {
             var products = await _productService.GetAllProducts();
 
-            return Ok(products);
+            return Ok(products.Select(x => _mapper.Map<ProductModel>(x)));
+
         }
 
         /// <summary>
@@ -40,12 +41,7 @@ namespace _3DeshopAPI.Controllers
         {
             var product = await _productService.GetProduct(id);
 
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(product);
+            return Ok(_mapper.Map<ProductModel>(product));
         }
 
         //[HttpPost]

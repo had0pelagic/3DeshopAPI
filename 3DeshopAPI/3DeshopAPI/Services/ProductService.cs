@@ -2,6 +2,7 @@
 using _3DeshopAPI.Services.Interfaces;
 using Domain.Product;
 using Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace _3DeshopAPI.Services
 {
@@ -16,14 +17,33 @@ namespace _3DeshopAPI.Services
             _context = context;
         }
 
-        public Task<List<Product>> GetAllProducts()
+        public async Task<List<Product>> GetAllProducts()
         {
-            throw new InvalidClientOperationException(ErrorCodes.ProductNotFound);
+            var products = await _context.Products
+                .Include(i => i.About)
+                .Include(i => i.User)
+                .Include(i => i.Specifications)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return products;
         }
 
-        public Task<Product?> GetProduct(Guid id)
+        public async Task<Product> GetProduct(Guid id)
         {
-            throw new InvalidClientOperationException(ErrorCodes.ProductNotFound);
+            var product = await _context.Products
+                .Include(i => i.About)
+                .Include(i => i.User)
+                .Include(i => i.Specifications)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(i => i.Id == id);
+
+            if (product == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.ProductNotFound);
+            }
+
+            return product;
         }
     }
 }

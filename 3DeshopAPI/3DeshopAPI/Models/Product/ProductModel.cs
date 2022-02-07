@@ -1,8 +1,11 @@
-﻿namespace _3DeshopAPI.Models.Product
+﻿using Domain.Product;
+
+namespace _3DeshopAPI.Models.Product
 {
     public class ProductModel
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public About About { get; set; }
+        public Domain.User User { get; set; }
+        public Specifications Specifications { get; set; }
     }
 }
