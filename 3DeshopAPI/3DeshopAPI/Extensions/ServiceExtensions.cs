@@ -42,6 +42,7 @@ namespace _3DeshopAPI.Extensions
         public static void SetupServices(this WebApplicationBuilder builder)
         {
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
         }
     }

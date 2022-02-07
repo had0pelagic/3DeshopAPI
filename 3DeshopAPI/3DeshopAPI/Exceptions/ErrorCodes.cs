@@ -11,6 +11,8 @@ namespace _3DeshopAPI.Exceptions
         [Description("Passwords do not match")]
         BadPassword,
         [Description("Password cannot be the same as previous")]
-        SamePassword
+        SamePassword,
+        [Description("Product was not found")]
+        ProductNotFound
     }
 }
