@@ -26,6 +26,7 @@ namespace _3DeshopAPI.Extensions
 
                         if (contextFeature.Error is InvalidClientOperationException)
                         {
+                            context.Response.StatusCode = StatusCodes.Status400BadRequest;
                             message = contextFeature.Error.Message;
                         }
 

@@ -6,5 +6,6 @@ namespace _3DeshopAPI.Services.Interfaces
     {
         Task<List<Product>> GetAllProducts();
         Task<Product?> GetProduct(Guid id);
+        Task UploadProduct(Product product);
     }
 }

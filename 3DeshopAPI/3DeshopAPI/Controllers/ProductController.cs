@@ -1,6 +1,7 @@
 ﻿using _3DeshopAPI.Models.Product;
 using _3DeshopAPI.Services.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace _3DeshopAPI.Controllers
@@ -23,11 +24,11 @@ namespace _3DeshopAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<List<ProductModel>>> GetAllProducts()
+        public async Task<ActionResult<List<ProductPageModel>>> GetAllProducts()
         {
             var products = await _productService.GetAllProducts();
 
-            return Ok(products.Select(x => _mapper.Map<ProductModel>(x)));
+            return Ok(products.Select(x => _mapper.Map<ProductPageModel>(x)));
 
         }
 
@@ -44,14 +45,20 @@ namespace _3DeshopAPI.Controllers
             return Ok(_mapper.Map<ProductModel>(product));
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult<>> UploadProduct(ProductModel model)
-        //{
-        //    var newProduct = _mapper.Map<Domain.Product>(model);
+        /// <summary>
+        /// Upload product
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        //[Authorize(Roles = "User")]
+        public async Task<ActionResult<ProductUploadModel>> UploadProduct(ProductModel model)
+        {
+            var newProduct = _mapper.Map<Domain.Product.Product>(model);
 
-        //    await _productService.UploadProduct(newProduct);
+            await _productService.UploadProduct(newProduct);
 
-        //    return CreatedAtAction(nameof(GetUser), new { id = newUser.Id }, _mapper.Map<UserModel>(newUser));
-        //}
+            return CreatedAtAction(nameof(GetProduct), new { id = newProduct.Id }, _mapper.Map<ProductModel>(newProduct));
+        }
     }
 }
