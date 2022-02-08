@@ -1,5 +1,7 @@
 ﻿using _3DeshopAPI.Models.Product;
+using _3DeshopAPI.Models.User;
 using AutoMapper;
+using Domain;
 using Domain.Product;
 
 namespace _3DeshopAPI.Mappings
@@ -26,6 +28,21 @@ namespace _3DeshopAPI.Mappings
                 .ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.UserId, opt => opt.Ignore())
                 .ForMember(x => x.Specifications, opt => opt.Ignore());
+
+            CreateMap<Image, ProductImageModel>()
+                .ForSourceMember(x => x.Id, opt => opt.DoNotValidate());
+            CreateMap<ProductImageModel, Image>()
+                .ForMember(x => x.Id, opt => opt.Ignore());
+
+            CreateMap<Comment, ProductCommentModel>()
+                .ForSourceMember(x => x.Id, opt => opt.DoNotValidate())
+                .ForSourceMember(x => x.Created, opt => opt.DoNotValidate())
+                .ForSourceMember(x => x.Product, opt => opt.DoNotValidate());
+            CreateMap<ProductCommentModel, Comment>()
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.User, opt => opt.Ignore())
+                .ForMember(x => x.Created, opt => opt.Ignore())
+                .ForMember(x => x.Product, opt => opt.Ignore());
 
             CreateMap<Product, ProductModel>()
                 .ForSourceMember(x => x.Id, opt => opt.DoNotValidate());

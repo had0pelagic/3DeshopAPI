@@ -49,7 +49,9 @@ namespace _3DeshopAPI.Services
         /// <returns></returns>
         public async Task RegisterUser(User model)
         {
-            if (UsernameExists(model.Username))
+            var userExists = UsernameExists(model.Username);
+
+            if (userExists)
             {
                 throw new InvalidClientOperationException(ErrorCodes.InvalidUsername);
             }
@@ -177,16 +179,6 @@ namespace _3DeshopAPI.Services
         }
 
         /// <summary>
-        /// Checks if user exists
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        private bool UserExists(Guid id)
-        {
-            return _context.Users.Any(x => x.Id == id);
-        }
-
-        /// <summary>
         /// Checks if username exists
         /// </summary>
         /// <param name="username"></param>
@@ -194,6 +186,16 @@ namespace _3DeshopAPI.Services
         private bool UsernameExists(string username)
         {
             return _context.Users.Any(x => x.Username == username);
+        }
+
+        /// <summary>
+        /// Checks if user exists
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private bool UserExists(Guid id)
+        {
+            return _context.Users.Any(x => x.Id == id);
         }
     }
 }
