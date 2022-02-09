@@ -5,6 +5,7 @@ using _3DeshopAPI.Models;
 using _3DeshopAPI.Services;
 using _3DeshopAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Diagnostics;
+using Serilog;
 
 namespace _3DeshopAPI.Extensions
 {
@@ -24,17 +25,24 @@ namespace _3DeshopAPI.Extensions
                     {
                         var message = "Internal server exception, please try again later";
 
-                        if (contextFeature.Error is InvalidClientOperationException)
+                        switch (contextFeature.Error)
                         {
-                            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                            message = contextFeature.Error.Message;
+                            case InvalidClientOperationException:
+                                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                                await context.Response.WriteAsync(new Error
+                                {
+                                    StatusCode = StatusCodes.Status400BadRequest,
+                                    Message = contextFeature.Error.Message
+                                }.ToString());
+                                break;
+                            default:
+                                await context.Response.WriteAsync(new Error
+                                {
+                                    StatusCode = context.Response.StatusCode,
+                                    Message = message
+                                }.ToString());
+                                break;
                         }
-
-                        await context.Response.WriteAsync(new Error
-                        {
-                            StatusCode = context.Response.StatusCode,
-                            Message = message
-                        }.ToString());
                     }
                 });
             });
@@ -44,6 +52,8 @@ namespace _3DeshopAPI.Extensions
         {
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<ICommentService, CommentService>();
+            builder.Services.AddScoped<IProductDetailService, ProductDetailService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
         }
     }

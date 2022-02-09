@@ -2,6 +2,6 @@
 {
     public class ProductImageModel
     {
-        public string ImageUrl { get; set; }
+        public string Data { get; set; }
     }
 }

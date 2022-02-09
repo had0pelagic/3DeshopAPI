@@ -1,7 +1,5 @@
 ﻿using _3DeshopAPI.Models.Product;
-using _3DeshopAPI.Models.User;
 using AutoMapper;
-using Domain;
 using Domain.Product;
 
 namespace _3DeshopAPI.Mappings
@@ -34,6 +32,16 @@ namespace _3DeshopAPI.Mappings
             CreateMap<ProductImageModel, Image>()
                 .ForMember(x => x.Id, opt => opt.Ignore());
 
+            CreateMap<Category, ProductCategoryModel>()
+                .ForSourceMember(x => x.Id, opt => opt.DoNotValidate());
+            CreateMap<ProductCategoryModel, Category>()
+                .ForMember(x => x.Id, opt => opt.Ignore());
+
+            CreateMap<Format, ProductFormatModel>()
+                .ForSourceMember(x => x.Id, opt => opt.DoNotValidate());
+            CreateMap<ProductFormatModel, Format>()
+                .ForMember(x => x.Id, opt => opt.Ignore());
+
             CreateMap<Comment, ProductCommentModel>()
                 .ForSourceMember(x => x.Id, opt => opt.DoNotValidate())
                 .ForSourceMember(x => x.Created, opt => opt.DoNotValidate())
@@ -45,13 +53,20 @@ namespace _3DeshopAPI.Mappings
                 .ForMember(x => x.Product, opt => opt.Ignore());
 
             CreateMap<Product, ProductModel>()
-                .ForSourceMember(x => x.Id, opt => opt.DoNotValidate());
+                .ForSourceMember(x => x.Id, opt => opt.DoNotValidate())
+                .ForMember(x => x.Formats, opt => opt.Ignore())
+                .ForMember(x => x.Categories, opt => opt.Ignore())
+                .ForMember(x => x.Images, opt => opt.Ignore());
             CreateMap<ProductModel, Product>()
                 .ForMember(x => x.Id, opt => opt.Ignore());
 
+            CreateMap<Product, ProductUploadModel>()
+                .ForSourceMember(x => x.Id, opt => opt.DoNotValidate())
+                .ForMember(x => x.Formats, opt => opt.Ignore())
+                .ForMember(x => x.Categories, opt => opt.Ignore())
+                .ForMember(x => x.Images, opt => opt.Ignore());
             CreateMap<ProductUploadModel, Product>()
                 .ForMember(x => x.Id, opt => opt.Ignore());
-
         }
     }
 }

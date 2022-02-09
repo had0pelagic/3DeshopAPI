@@ -5,10 +5,28 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Events;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager config = builder.Configuration;
+
+//builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().CreateLogger());
+
+// remove default logging providers
+builder.Logging.ClearProviders();
+// Serilog configuration		
+var logger = new LoggerConfiguration()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
+    .WriteTo.Console()
+    .CreateLogger();
+// Register Serilog
+builder.Logging.AddSerilog(logger);
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -43,6 +61,9 @@ builder.Services.AddSwaggerGen(opts =>
     });
 });
 builder.SetupServices();
+builder.Services.AddHttpClient();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddRouting(opts => opts.LowercaseUrls = true);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<Context>(opts =>

@@ -11,12 +11,14 @@ namespace _3DeshopAPI.Services
     public class UserService : IUserService
     {
         private readonly ILogger<UserService> _logger;
+        private readonly IHttpContextAccessor _contextAccessor;
         private readonly Context _context;
 
-        public UserService(ILogger<UserService> logger, Context context)
+        public UserService(ILogger<UserService> logger, IHttpContextAccessor contextAccessor, Context context)
         {
             _logger = logger;
             _context = context;
+            _contextAccessor = contextAccessor;
         }
 
         /// <summary>
@@ -176,6 +178,17 @@ namespace _3DeshopAPI.Services
             var user = await _context.Users.Where(x => x.Username == model.Username).FirstAsync();
 
             return user.UserRole;
+        }
+
+        /// <summary>
+        /// Returns user details
+        /// </summary>
+        /// <returns></returns>
+        public User GetCurrentUser()
+        {
+            var username = _contextAccessor.HttpContext.User.Identity.Name;
+
+            return _context.Users.FirstOrDefault(x => x.Username == username);
         }
 
         /// <summary>

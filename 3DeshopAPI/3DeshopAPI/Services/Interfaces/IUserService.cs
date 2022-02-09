@@ -14,5 +14,6 @@ namespace _3DeshopAPI.Services.Interfaces
         Task<IActionResult> ChangePassword(Guid id, UserPasswordModel model);
         Task<User?> IsUserValid(UserLoginModel model);
         Task<string?> GetUserRole(UserLoginModel model);
+        User GetCurrentUser();
     }
 }

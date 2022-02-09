@@ -92,6 +92,7 @@ namespace _3DeshopAPI.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPut]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> UpdateUser(Guid id, UserModel model)
         {
             var userModel = _mapper.Map<Domain.User>(model);
@@ -105,8 +106,8 @@ namespace _3DeshopAPI.Controllers
         /// <param name="id"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        [Authorize(Roles = "User")]
         [HttpPost("{id}/change-password")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> ChangePassword(Guid id, [FromBody] UserPasswordModel model)
         {
             return await _userService.ChangePassword(id, model);
@@ -121,6 +122,17 @@ namespace _3DeshopAPI.Controllers
         public async Task<ActionResult<TokenModel>> UserLogin([FromBody] UserLoginModel model)
         {
             return await _authService.UserLogin(model);
+        }
+
+
+        /// <summary>
+        /// Returns user details
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("get-current-user")]
+        public IActionResult GetCurrentUser()
+        {
+            return Ok(_userService.GetCurrentUser());
         }
     }
 }
