@@ -181,6 +181,18 @@ namespace _3DeshopAPI.Services
         }
 
         /// <summary>
+        /// Gets username by id
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public async Task<string?> GetUsername(Guid id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            return user.Username;
+        }
+
+        /// <summary>
         /// Returns user details
         /// </summary>
         /// <returns></returns>

@@ -58,11 +58,11 @@ namespace _3DeshopAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<UserModel>> RegisterUser(UserRegisterModel model)
         {
-            var newUser = _mapper.Map<Domain.User>(model);
+            var response = _mapper.Map<Domain.User>(model);
 
-            await _userService.RegisterUser(newUser);
+            await _userService.RegisterUser(response);
 
-            return CreatedAtAction(nameof(GetUser), new { id = newUser.Id }, _mapper.Map<UserModel>(newUser));
+            return CreatedAtAction(nameof(GetUser), new { id = response.Id }, _mapper.Map<UserModel>(response));
         }
 
         /// <summary>
@@ -73,16 +73,16 @@ namespace _3DeshopAPI.Controllers
         [HttpDelete]
         public async Task<ActionResult<UserModel>> RemoveUser(Guid id)
         {
-            var user = await _userService.GetUser(id);
+            var response = await _userService.GetUser(id);
 
-            if (user == null)
+            if (response == null)
             {
                 return NotFound();
             }
 
-            await _userService.RemoveUser(user);
+            await _userService.RemoveUser(response);
 
-            return Ok(_mapper.Map<UserModel>(user));
+            return Ok(_mapper.Map<UserModel>(response));
         }
 
         /// <summary>
@@ -95,9 +95,9 @@ namespace _3DeshopAPI.Controllers
         [Authorize(Roles = "User")]
         public async Task<IActionResult> UpdateUser(Guid id, UserModel model)
         {
-            var userModel = _mapper.Map<Domain.User>(model);
+            var response = _mapper.Map<Domain.User>(model);
 
-            return await _userService.UpdateUser(id, userModel);
+            return await _userService.UpdateUser(id, response);
         }
 
         /// <summary>

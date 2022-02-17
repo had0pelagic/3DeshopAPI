@@ -27,14 +27,14 @@ namespace _3DeshopAPI.Services
         /// Get all products, returns only front page data about product
         /// </summary>
         /// <returns></returns>
-        public async Task<List<Product>> GetAllProducts()
+        public async Task<List<ProductDisplayModel>> GetAllProducts()
         {
             var products = await _context.Products
                 .Include(i => i.About)
                 .AsNoTracking()
                 .ToListAsync();
 
-            return products;
+            return products.Select(x => ToProductDisplayModel(x).Result).ToList();
         }
 
         /// <summary>
@@ -104,6 +104,25 @@ namespace _3DeshopAPI.Services
         }
 
         /// <summary>
+        /// Maps Product model to ProductDisplayModel
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<ProductDisplayModel> ToProductDisplayModel(Product model)
+        {
+            return new ProductDisplayModel
+            {
+                Id = model.Id,
+                Name = model.About.Name,
+                Username = await _userService.GetUsername(model.UserId),
+                Price = model.About.Price,
+                Downloads = model.About.Downloads,
+                ImageUrl = await GetProductImageUrl(model.Id),
+                Categories = await GetProductCategories(model.Id)
+            };
+        }
+
+        /// <summary>
         /// Gets product categories
         /// </summary>
         /// <param name="id"></param>
@@ -143,6 +162,18 @@ namespace _3DeshopAPI.Services
                 .Include(i => i.Image)
                 .Select(i => _mapper.Map<ProductImageModel>(i.Image))
                 .ToListAsync();
+        }
+
+        /// <summary>
+        /// Returns single product image
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private async Task<string> GetProductImageUrl(Guid id)
+        {
+            var images = await GetProductImages(id);
+
+            return !images.Any() ? "NoImage" : images.FirstOrDefault().Data;
         }
 
         /// <summary>

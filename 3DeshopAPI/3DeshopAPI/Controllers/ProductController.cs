@@ -24,11 +24,11 @@ namespace _3DeshopAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<List<ProductPageModel>>> GetAllProducts()
+        public async Task<ActionResult<List<ProductDisplayModel>>> GetAllProducts()
         {
-            var products = await _productService.GetAllProducts();
+            var response = await _productService.GetAllProducts();
 
-            return Ok(products.Select(x => _mapper.Map<ProductPageModel>(x)));
+            return Ok(response);
         }
 
         /// <summary>
@@ -39,9 +39,9 @@ namespace _3DeshopAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductModel>> GetProduct(Guid id)
         {
-            var product = await _productService.GetProduct(id);
+            var response = await _productService.GetProduct(id);
 
-            return Ok(product);
+            return Ok(response);
         }
 
         /// <summary>
@@ -53,9 +53,9 @@ namespace _3DeshopAPI.Controllers
         [Authorize(Roles = "User")]
         public async Task<ActionResult<ProductModel>> UploadProduct(ProductUploadModel model)
         {
-            var product = await _productService.UploadProduct(model);
+            var response = await _productService.UploadProduct(model);
 
-            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, await _productService.ToProductModel(product));
+            return CreatedAtAction(nameof(GetProduct), new { id = response.Id }, await _productService.ToProductModel(response));
         }
     }
 }

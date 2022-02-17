@@ -11,8 +11,20 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager config = builder.Configuration;
-
 //builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().CreateLogger());
+
+var origins = "AllowOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: origins,
+                      builder =>
+                      {
+                          //builder.WithOrigins("http://localhost:3000");
+                          builder.AllowAnyHeader();
+                          builder.AllowAnyMethod();
+                          builder.AllowAnyOrigin();
+                      });
+});
 
 // remove default logging providers
 builder.Logging.ClearProviders();
@@ -109,6 +121,8 @@ if (app.Environment.IsDevelopment())
 app.ConfigureExceptionHandler();
 
 app.UseHttpsRedirection();
+
+app.UseCors(origins);
 
 app.UseAuthentication();
 
