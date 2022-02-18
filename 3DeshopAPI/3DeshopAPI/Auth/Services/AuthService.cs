@@ -1,4 +1,5 @@
 ﻿using _3DeshopAPI.Auth.Interfaces;
+using _3DeshopAPI.Exceptions;
 using _3DeshopAPI.Models;
 using _3DeshopAPI.Models.User;
 using _3DeshopAPI.Services.Interfaces;
@@ -29,6 +30,11 @@ namespace _3DeshopAPI.Auth.Services
         public async Task<ActionResult<TokenModel>> UserLogin(UserLoginModel model)
         {
             var user = await _userService.IsUserValid(model);
+
+            if (user == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
 
             var authClaims = new List<Claim>
             {
