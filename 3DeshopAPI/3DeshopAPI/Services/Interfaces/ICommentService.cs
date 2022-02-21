@@ -6,5 +6,6 @@ namespace _3DeshopAPI.Services.Interfaces
     public interface ICommentService
     {
         Task<IActionResult> AddProductComment(Guid productId, Guid userId, Comment model);
+        Task<List<Comment>> GetProductComments(Guid productId);
     }
 }

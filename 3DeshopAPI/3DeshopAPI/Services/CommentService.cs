@@ -3,6 +3,7 @@ using _3DeshopAPI.Services.Interfaces;
 using Domain.Product;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace _3DeshopAPI.Services
 {
@@ -17,6 +18,28 @@ namespace _3DeshopAPI.Services
             _logger = logger;
             _userService = userService;
             _context = context;
+        }
+
+        /// <summary>
+        /// Gets product comments
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<List<Comment>> GetProductComments(Guid productId)
+        {
+            var product = await _context.Products.FindAsync(productId);
+
+            if (product == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.ProductNotFound);
+            }
+
+            var comments = await _context.Comments
+                .Include(x => x.Product)
+                .Include(x => x.User)
+                .ToListAsync();
+
+            return comments.Where(x => x.Product.Id == productId).ToList();
         }
 
         /// <summary>

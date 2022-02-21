@@ -20,6 +20,18 @@ namespace _3DeshopAPI.Controllers
         }
 
         /// <summary>
+        /// Gets product comments
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<List<ProductCommentDisplayModel>>> GetProductComments(Guid productId)
+        {
+            var response = await _commentService.GetProductComments(productId);
+
+            return Ok(response.Select(x => _mapper.Map<ProductCommentDisplayModel>(x)));
+        }
+
+        /// <summary>
         /// Adds and sets product comment
         /// </summary>
         /// <param name="productId"></param>

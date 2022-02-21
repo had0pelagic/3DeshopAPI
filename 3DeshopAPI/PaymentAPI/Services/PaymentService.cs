@@ -34,7 +34,7 @@ namespace PaymentAPI.Services
         {
             //check if user is valid
 
-            var response = await _context.Payments.AddAsync(model);
+            _context.Payments.Add(model);
 
             await _context.SaveChangesAsync();
         }
