@@ -18,6 +18,11 @@ namespace _3DeshopAPI.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Sends email through google smtp server
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> SendMail(MailModel model)
         {

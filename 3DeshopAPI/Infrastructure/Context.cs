@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Payment;
 using Domain.Product;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,5 +26,7 @@ namespace Infrastructure
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Format> Formats { get; set; }
         public DbSet<Image> Images { get; set; }
+
+        public DbSet<Payment> Payments { get; set; }
     }
 }

@@ -17,6 +17,12 @@ namespace _3DeshopAPI.Services
             _smptSettings = smptSettings.Value;
         }
 
+        /// <summary>
+        /// Sends email through google smtp server
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidClientOperationException"></exception>
         public async Task<bool> SendMail(Mail model)
         {
             try
