@@ -58,11 +58,11 @@ namespace _3DeshopAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<UserModel>> RegisterUser(UserRegisterModel model)
         {
-            var response = _mapper.Map<Domain.User>(model);
+            var user = _mapper.Map<Domain.User>(model);
 
-            await _userService.RegisterUser(response);
+            await _userService.RegisterUser(user);
 
-            return CreatedAtAction(nameof(GetUser), new { id = response.Id }, _mapper.Map<UserModel>(response));
+            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, _mapper.Map<UserModel>(user));
         }
 
         /// <summary>
@@ -95,9 +95,9 @@ namespace _3DeshopAPI.Controllers
         [Authorize(Roles = "User")]
         public async Task<IActionResult> UpdateUser(Guid id, UserModel model)
         {
-            var response = _mapper.Map<Domain.User>(model);
+            var user = _mapper.Map<Domain.User>(model);
 
-            return await _userService.UpdateUser(id, response);
+            return await _userService.UpdateUser(id, user);
         }
 
         /// <summary>

@@ -19,6 +19,8 @@ namespace _3DeshopAPI.Exceptions
         [Description("Format was not found")]
         FormatNotFound,
         [Description("Value is empty")]
-        Empty
+        Empty,
+        [Description("Error while sending an email")]
+        Email
     }
 }

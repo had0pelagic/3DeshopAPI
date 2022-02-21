@@ -1,4 +1,5 @@
 using _3DeshopAPI.Extensions;
+using _3DeshopAPI.Models.Settings;
 using AutoMapper;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -72,7 +73,10 @@ builder.Services.AddSwaggerGen(opts =>
         }
     });
 });
+
 builder.SetupServices();
+builder.Services.Configure<SMTPSettings>(builder.Configuration.GetSection("SMTP"));
+
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
