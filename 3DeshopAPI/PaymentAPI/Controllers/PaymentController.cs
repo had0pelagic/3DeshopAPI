@@ -23,7 +23,7 @@ namespace PaymentAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<ActionResult<PaymentDisplayModel>> GetPayment(Guid id)
         {
             var response = await _paymentService.GetPayment(id);

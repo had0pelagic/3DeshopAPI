@@ -7,6 +7,19 @@ using PaymentAPI.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var origins = "AllowOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: origins,
+                      builder =>
+                      {
+                          //builder.WithOrigins("http://localhost:3000");
+                          builder.AllowAnyHeader();
+                          builder.AllowAnyMethod();
+                          builder.AllowAnyOrigin();
+                      });
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -66,6 +79,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(origins);
 
 app.UseAuthorization();
 
