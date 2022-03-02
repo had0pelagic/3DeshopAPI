@@ -134,16 +134,16 @@ namespace _3DeshopAPI.Services
 
             var dbUser = await _context.Users.FindAsync(id);
 
-            if (model.NewPassword != model.RepeatNewPassword)
+            if (model.Password != model.ConfirmPassword)
             {
                 throw new InvalidClientOperationException(ErrorCodes.BadPassword);
             }
-            if (dbUser.Password == model.NewPassword)
+            if (dbUser.Password == model.Password)
             {
                 throw new InvalidClientOperationException(ErrorCodes.SamePassword);
             }
 
-            dbUser.Password = model.NewPassword;
+            dbUser.Password = model.Password;
 
             _context.Entry(dbUser).State = EntityState.Modified;
             await _context.SaveChangesAsync();
