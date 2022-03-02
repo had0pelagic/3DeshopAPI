@@ -27,8 +27,6 @@ builder.Services.AddCors(options =>
                       });
 });
 
-// remove default logging providers
-builder.Logging.ClearProviders();
 // Serilog configuration		
 var logger = new LoggerConfiguration()
     .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
@@ -116,11 +114,8 @@ var automapper = app.Services.GetRequiredService<IMapper>();
 automapper.ConfigurationProvider.AssertConfigurationIsValid();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.ConfigureExceptionHandler();
 
