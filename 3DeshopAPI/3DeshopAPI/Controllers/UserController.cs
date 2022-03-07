@@ -1,5 +1,6 @@
 ﻿using _3DeshopAPI.Auth.Interfaces;
 using _3DeshopAPI.Models;
+using _3DeshopAPI.Models.Product;
 using _3DeshopAPI.Models.User;
 using _3DeshopAPI.Services.Interfaces;
 using AutoMapper;
@@ -124,7 +125,6 @@ namespace _3DeshopAPI.Controllers
             return await _authService.UserLogin(model);
         }
 
-
         /// <summary>
         /// Returns user details
         /// </summary>
@@ -133,6 +133,19 @@ namespace _3DeshopAPI.Controllers
         public IActionResult GetCurrentUser()
         {
             return Ok(_userService.GetCurrentUser());
+        }
+
+        /// <summary>
+        /// Returns all user bought products
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}/purchases")]
+        public async Task<List<Guid>> GetPurchasedIds(Guid id)
+        {
+            var response = _userService.GetPurchasedIds(id);
+
+            return await response;
         }
     }
 }

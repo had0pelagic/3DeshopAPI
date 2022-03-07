@@ -1,4 +1,5 @@
 ﻿using _3DeshopAPI.Exceptions;
+using _3DeshopAPI.Models.Product;
 using _3DeshopAPI.Models.User;
 using _3DeshopAPI.Services.Interfaces;
 using Domain;
@@ -201,6 +202,21 @@ namespace _3DeshopAPI.Services
             var username = _contextAccessor.HttpContext.User.Identity.Name;
 
             return _context.Users.FirstOrDefault(x => x.Username == username);
+        }
+
+        /// <summary>
+        /// Returns all user purchased product ids
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<List<Guid>> GetPurchasedIds(Guid id)
+        {
+            var ids = _context.Payments
+                .Where(x => x.UserId == id)
+                .Select(x => x.ProductId)
+                .ToList();
+
+            return ids;
         }
 
         /// <summary>

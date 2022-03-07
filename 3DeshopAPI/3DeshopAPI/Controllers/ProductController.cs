@@ -11,11 +11,13 @@ namespace _3DeshopAPI.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public ProductController(IProductService productService, IMapper mapper)
+        public ProductController(IProductService productService, IUserService userService, IMapper mapper)
         {
             _productService = productService;
+            _userService = userService;
             _mapper = mapper;
         }
 
@@ -56,6 +58,21 @@ namespace _3DeshopAPI.Controllers
             var response = await _productService.UploadProduct(model);
 
             return CreatedAtAction(nameof(GetProduct), new { id = response.Id }, await _productService.ToProductModel(response));
+        }
+
+        /// <summary>
+        /// Returns all user bought products
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}/purchases")]
+        public async Task<ActionResult<List<ProductDisplayModel>>> GetAllPurchases(Guid id)
+        {
+            ///get purchased product ids
+            var productIds = await _userService.GetPurchasedIds(id);
+            var response = await _productService.GetAllPurchases(id, productIds);
+
+            return Ok(response);
         }
     }
 }

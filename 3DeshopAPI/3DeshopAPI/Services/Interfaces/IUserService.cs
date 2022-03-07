@@ -1,4 +1,5 @@
-﻿using _3DeshopAPI.Models.User;
+﻿using _3DeshopAPI.Models.Product;
+using _3DeshopAPI.Models.User;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,7 @@ namespace _3DeshopAPI.Services.Interfaces
         Task<User?> IsUserValid(UserLoginModel model);
         Task<string?> GetUserRole(UserLoginModel model);
         Task<string?> GetUsername(Guid id);
+        Task<List<Guid>> GetPurchasedIds(Guid id);
         User GetCurrentUser();
     }
 }

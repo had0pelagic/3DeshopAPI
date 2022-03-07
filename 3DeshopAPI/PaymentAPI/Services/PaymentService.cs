@@ -1,5 +1,6 @@
 ﻿using Domain.Payment;
 using Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using PaymentAPI.Services.Interfaces;
 
 namespace PaymentAPI.Services
@@ -21,6 +22,13 @@ namespace PaymentAPI.Services
         public async Task<Payment?> GetPayment(Guid id)
         {
             var response = await _context.Payments.FindAsync(id);
+
+            return response;
+        }
+
+        public async Task<List<Payment>> GetPayments()
+        {
+            var response = await _context.Payments.ToListAsync();
 
             return response;
         }

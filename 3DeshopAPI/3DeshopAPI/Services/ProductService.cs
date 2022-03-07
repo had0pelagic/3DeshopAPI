@@ -5,6 +5,7 @@ using AutoMapper;
 using Domain.Product;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using PaymentAPI.Services.Interfaces;
 
 namespace _3DeshopAPI.Services
 {
@@ -14,11 +15,13 @@ namespace _3DeshopAPI.Services
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly Context _context;
+        private readonly IPaymentService _paymentService;
 
-        public ProductService(ILogger<ProductService> logger, IUserService userService, IMapper mapper, Context context)
+        public ProductService(ILogger<ProductService> logger, IUserService userService, IPaymentService paymentService, IMapper mapper, Context context)
         {
             _logger = logger;
             _userService = userService;
+            _paymentService = paymentService;
             _context = context;
             _mapper = mapper;
         }
@@ -56,7 +59,11 @@ namespace _3DeshopAPI.Services
                 throw new InvalidClientOperationException(ErrorCodes.ProductNotFound);
             }
 
-            return await ToProductModel(product);
+            var payments = await _paymentService.GetPayments();
+            var userId = _userService.GetCurrentUser().Id;
+            var isBoughtByUser = payments.Any(x => x.UserId == userId && x.ProductId == id);
+
+            return await ToProductModel(product, isBoughtByUser);
         }
 
         /// <summary>
@@ -90,7 +97,7 @@ namespace _3DeshopAPI.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<ProductModel> ToProductModel(Product model)
+        public async Task<ProductModel> ToProductModel(Product model, bool isBoughtByUser = false)
         {
             return new ProductModel
             {
@@ -99,7 +106,8 @@ namespace _3DeshopAPI.Services
                 UserId = model.UserId,
                 Categories = await GetProductCategories(model.Id),
                 Formats = await GetProductFormats(model.Id),
-                Images = await GetProductImages(model.Id)
+                Images = await GetProductImages(model.Id),
+                IsBoughtByUser = isBoughtByUser
             };
         }
 
@@ -120,6 +128,22 @@ namespace _3DeshopAPI.Services
                 ImageUrl = await GetProductImageUrl(model.Id),
                 Categories = await GetProductCategories(model.Id)
             };
+        }
+
+        /// <summary>
+        /// Returns all user bought products
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<List<ProductDisplayModel>> GetAllPurchases(Guid id, List<Guid> productIds)
+        {
+            var products = await _context.Products
+                .Include(i => i.About)
+                .Where(x => productIds.Contains(x.Id))
+                .AsNoTracking()
+                .ToListAsync();
+
+            return products.Select(x => ToProductDisplayModel(x).Result).ToList();
         }
 
         /// <summary>

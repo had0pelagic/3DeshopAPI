@@ -5,7 +5,8 @@ using _3DeshopAPI.Models;
 using _3DeshopAPI.Services;
 using _3DeshopAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Diagnostics;
-using Serilog;
+using PaymentAPI.Services;
+using PaymentAPI.Services.Interfaces;
 
 namespace _3DeshopAPI.Extensions
 {
@@ -56,6 +57,7 @@ namespace _3DeshopAPI.Extensions
             builder.Services.AddScoped<IProductDetailService, ProductDetailService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IMailService, MailService>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
         }
     }
 }

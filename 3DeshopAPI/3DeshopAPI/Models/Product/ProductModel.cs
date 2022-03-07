@@ -11,5 +11,6 @@
         public List<ProductCategoryModel> Categories { get; set; }
         public List<ProductFormatModel> Formats { get; set; }
         public List<ProductImageModel> Images { get; set; }
+        public bool IsBoughtByUser { get; set; }
     }
 }

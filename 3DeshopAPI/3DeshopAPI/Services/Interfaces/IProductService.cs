@@ -8,6 +8,7 @@ namespace _3DeshopAPI.Services.Interfaces
         Task<List<ProductDisplayModel>> GetAllProducts();
         Task<ProductModel?> GetProduct(Guid id);
         Task<Product> UploadProduct(ProductUploadModel product);
-        Task<ProductModel> ToProductModel(Product model);
+        Task<ProductModel> ToProductModel(Product model, bool isBoughtByUser = false);
+        Task<List<ProductDisplayModel>> GetAllPurchases(Guid id, List<Guid> productIds);
     }
 }
