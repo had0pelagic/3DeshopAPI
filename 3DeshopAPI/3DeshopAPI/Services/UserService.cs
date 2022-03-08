@@ -159,7 +159,9 @@ namespace _3DeshopAPI.Services
         /// <returns></returns>
         public async Task<User?> IsUserValid(UserLoginModel model)
         {
-            var dbUser = await _context.Users.FirstOrDefaultAsync(x => x.Username == model.Username);
+            var dbUser = await _context
+                .Users
+                .FirstOrDefaultAsync(x => EF.Functions.Collate(x.Username, "SQL_Latin1_General_CP1_CS_AS") == model.Username);
 
             if (dbUser == null || dbUser?.Password != model.Password)
             {
