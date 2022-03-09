@@ -1,6 +1,4 @@
-﻿using Domain.Product;
-
-namespace _3DeshopAPI.Models.Product
+﻿namespace _3DeshopAPI.Models.Product
 {
     public class ProductUploadModel
     {

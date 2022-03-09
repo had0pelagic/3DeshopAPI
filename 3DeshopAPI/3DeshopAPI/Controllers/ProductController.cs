@@ -57,7 +57,7 @@ namespace _3DeshopAPI.Controllers
         {
             var response = await _productService.UploadProduct(model);
 
-            return CreatedAtAction(nameof(GetProduct), new { id = response.Id }, await _productService.ToProductModel(response));
+            return CreatedAtAction(nameof(GetProduct), new { id = response.Id }, await _productService.ProductToProductModel(response));
         }
 
         /// <summary>
@@ -68,7 +68,6 @@ namespace _3DeshopAPI.Controllers
         [HttpGet("{id}/purchases")]
         public async Task<ActionResult<List<ProductDisplayModel>>> GetAllPurchases(Guid id)
         {
-            ///get purchased product ids
             var productIds = await _userService.GetPurchasedIds(id);
             var response = await _productService.GetAllPurchases(id, productIds);
 

@@ -17,10 +17,10 @@ namespace Infrastructure.Migrations
                 name: "IX_Products_UserId",
                 table: "Products");
 
-            //migrationBuilder.RenameColumn(
-            //    name: "ImageUrl",
-            //    table: "Images",
-            //    newName: "Data");
+            migrationBuilder.RenameColumn(
+                name: "ImageUrl",
+                table: "Images",
+                newName: "Data");
 
             migrationBuilder.CreateTable(
                 name: "Payments",
@@ -44,10 +44,10 @@ namespace Infrastructure.Migrations
             migrationBuilder.DropTable(
                 name: "Payments");
 
-            //migrationBuilder.RenameColumn(
-            //    name: "Data",
-            //    table: "Images",
-            //    newName: "ImageUrl");
+            migrationBuilder.RenameColumn(
+                name: "Data",
+                table: "Images",
+                newName: "ImageUrl");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_UserId",

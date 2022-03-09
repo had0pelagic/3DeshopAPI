@@ -13,9 +13,9 @@ namespace _3DeshopAPI.Services
     {
         private readonly ILogger<ProductService> _logger;
         private readonly IUserService _userService;
+        private readonly IPaymentService _paymentService;
         private readonly IMapper _mapper;
         private readonly Context _context;
-        private readonly IPaymentService _paymentService;
 
         public ProductService(ILogger<ProductService> logger, IUserService userService, IPaymentService paymentService, IMapper mapper, Context context)
         {
@@ -37,7 +37,7 @@ namespace _3DeshopAPI.Services
                 .AsNoTracking()
                 .ToListAsync();
 
-            return products.Select(x => ToProductDisplayModel(x).Result).ToList();
+            return products.Select(x => ProductToProductDisplayModel(x).Result).ToList();
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace _3DeshopAPI.Services
             var userId = _userService.GetCurrentUser().Id;
             var isBoughtByUser = payments.Any(x => x.UserId == userId && x.ProductId == id);
 
-            return await ToProductModel(product, isBoughtByUser);
+            return await ProductToProductModel(product, isBoughtByUser);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace _3DeshopAPI.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<ProductModel> ToProductModel(Product model, bool isBoughtByUser = false)
+        public async Task<ProductModel> ProductToProductModel(Product model, bool isBoughtByUser = false)
         {
             return new ProductModel
             {
@@ -116,7 +116,7 @@ namespace _3DeshopAPI.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<ProductDisplayModel> ToProductDisplayModel(Product model)
+        public async Task<ProductDisplayModel> ProductToProductDisplayModel(Product model)
         {
             return new ProductDisplayModel
             {
@@ -143,7 +143,7 @@ namespace _3DeshopAPI.Services
                 .AsNoTracking()
                 .ToListAsync();
 
-            return products.Select(x => ToProductDisplayModel(x).Result).ToList();
+            return products.Select(x => ProductToProductDisplayModel(x).Result).ToList();
         }
 
         /// <summary>

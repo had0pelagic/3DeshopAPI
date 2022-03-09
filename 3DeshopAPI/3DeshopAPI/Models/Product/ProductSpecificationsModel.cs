@@ -2,8 +2,8 @@
 {
     public class ProductSpecificationsModel
     {
-        private string _data;
-        public string Data//byte[]
+        private byte[] _data;
+        public byte[] Data
         {
             get => _data;
             set

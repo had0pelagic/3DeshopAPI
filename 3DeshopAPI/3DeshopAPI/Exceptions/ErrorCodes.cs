@@ -21,6 +21,8 @@ namespace _3DeshopAPI.Exceptions
         [Description("Value is empty")]
         Empty,
         [Description("Error while sending an email")]
-        Email
+        Email,
+        [Description("Please upload file")]
+        File
     }
 }
