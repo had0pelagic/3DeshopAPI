@@ -23,6 +23,11 @@ namespace _3DeshopAPI.Mappings
             CreateMap<ProductImageModel, Image>()
                 .ForMember(x => x.Id, opt => opt.Ignore());
 
+            CreateMap<Domain.Product.File, ProductFileModel>()
+                .ForSourceMember(x => x.Id, opt => opt.DoNotValidate());
+            CreateMap<ProductFileModel, Domain.Product.File>()
+                .ForMember(x => x.Id, opt => opt.Ignore());
+
             CreateMap<Category, ProductCategoryModel>()
                 .ForSourceMember(x => x.Id, opt => opt.DoNotValidate());
             CreateMap<ProductCategoryModel, Category>()
@@ -56,7 +61,8 @@ namespace _3DeshopAPI.Mappings
                 .ForSourceMember(x => x.Id, opt => opt.DoNotValidate())
                 .ForMember(x => x.Formats, opt => opt.Ignore())
                 .ForMember(x => x.Categories, opt => opt.Ignore())
-                .ForMember(x => x.Images, opt => opt.Ignore());
+                .ForMember(x => x.Images, opt => opt.Ignore())
+                .ForMember(x => x.Files, opt => opt.Ignore());
             CreateMap<ProductUploadModel, Product>()
                 .ForMember(x => x.Id, opt => opt.Ignore());
 

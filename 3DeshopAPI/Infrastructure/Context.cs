@@ -18,6 +18,7 @@ namespace Infrastructure
 
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductCategories> ProductCategories { get; set; }
+        public DbSet<ProductFiles> ProductFiles { get; set; }
         public DbSet<ProductFormats> ProductFormats { get; set; }
         public DbSet<ProductImages> ProductImages { get; set; }
         public DbSet<About> About { get; set; }
@@ -26,6 +27,7 @@ namespace Infrastructure
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Format> Formats { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<Domain.Product.File> Files { get; set; }
 
         public DbSet<Payment> Payments { get; set; }
     }

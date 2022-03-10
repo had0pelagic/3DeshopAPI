@@ -82,10 +82,11 @@ namespace _3DeshopAPI.Services
 
             var newProduct = _mapper.Map<Product>(model);
 
-            _context.Products.Add(newProduct);
+            await _context.Products.AddAsync(newProduct);
+            await SetProductFiles(newProduct, model.Files);
             await SetProductCategories(newProduct, model.Categories);
             await SetProductFormats(newProduct, model.Formats);
-            SetProductImages(newProduct, model.Images);
+            await SetProductImages(newProduct, model.Images);
 
             await _context.SaveChangesAsync();
 
@@ -201,6 +202,34 @@ namespace _3DeshopAPI.Services
         }
 
         /// <summary>
+        /// Sets product files
+        /// </summary>
+        /// <param name="product"></param>
+        /// <param name="files"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        private async Task SetProductFiles(Product product, List<ProductFileModel> files)
+        {
+            try
+            {
+                foreach (var file in files)
+                {
+                    var newFile = _mapper.Map<Domain.Product.File>(file);
+                    await _context.Files.AddAsync(newFile);
+                    await _context.ProductFiles.AddAsync(new ProductFiles()
+                    {
+                        File = newFile,
+                        Product = product
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Sets product categories
         /// </summary>
         /// <param name="product"></param>
@@ -215,9 +244,11 @@ namespace _3DeshopAPI.Services
                     var foundCategory = await _context.Categories.FindAsync(categoryId);
 
                     if (foundCategory == null)
+                    {
                         throw new InvalidClientOperationException(ErrorCodes.CategoryNotFound);
+                    }
 
-                    _context.ProductCategories.Add(new ProductCategories
+                    await _context.ProductCategories.AddAsync(new ProductCategories
                     {
                         Product = product,
                         Category = foundCategory
@@ -250,13 +281,11 @@ namespace _3DeshopAPI.Services
                         throw new InvalidClientOperationException(ErrorCodes.FormatNotFound);
                     }
 
-                    var productFormat = new ProductFormats()
+                    await _context.ProductFormats.AddAsync(new ProductFormats()
                     {
                         Product = product,
                         Format = foundFormat
-                    };
-
-                    _context.ProductFormats.Add(productFormat);
+                    });
                 }
             }
             catch (Exception ex)
@@ -272,23 +301,19 @@ namespace _3DeshopAPI.Services
         /// <param name="model"></param>
         /// <returns></returns>
         /// <exception cref="InvalidClientOperationException"></exception>
-        private void SetProductImages(Product product, List<ProductImageModel> images)
+        private async Task SetProductImages(Product product, List<ProductImageModel> images)
         {
             try
             {
                 foreach (var image in images)
                 {
                     var newImage = _mapper.Map<Image>(image);
-
-                    _context.Images.Add(newImage);
-
-                    var productImages = new ProductImages()
+                    await _context.Images.AddAsync(newImage);
+                    await _context.ProductImages.AddAsync(new ProductImages()
                     {
                         Image = newImage,
                         Product = product
-                    };
-
-                    _context.ProductImages.Add(productImages);
+                    });
                 }
             }
             catch (Exception ex)

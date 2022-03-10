@@ -52,7 +52,7 @@ namespace _3DeshopAPI.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost("upload-product")]
-        [Authorize(Roles = "User")]
+        //[Authorize(Roles = "User")]
         public async Task<ActionResult<ProductModel>> UploadProduct([FromBody] ProductUploadModel model)
         {
             var response = await _productService.UploadProduct(model);
