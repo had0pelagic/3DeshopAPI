@@ -3,6 +3,17 @@
     public class Image
     {
         public Guid Id { get; set; }
-        public string Data { get; set; }
+        private byte[] _data;
+        public byte[] Data
+        {
+            get => _data;
+            set
+            {
+                _data = value;
+                Size = _data.Length;
+            }
+        }
+        public double Size { get; set; }
+        public string Format { get; set; }
     }
 }

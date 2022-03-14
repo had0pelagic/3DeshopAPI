@@ -2,6 +2,8 @@
 {
     public class ProductImageModel
     {
-        public string Data { get; set; }
+        public byte[] Data { get; set; }
+        public double? Size { get; set; }
+        public string Format { get; set; }
     }
 }

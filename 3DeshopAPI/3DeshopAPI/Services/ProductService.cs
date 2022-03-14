@@ -126,7 +126,7 @@ namespace _3DeshopAPI.Services
                 Username = await _userService.GetUsername(model.UserId),
                 Price = model.About.Price,
                 Downloads = model.About.Downloads,
-                ImageUrl = await GetProductImageUrl(model.Id),
+                Image = await GetProductImage(model.Id),
                 Categories = await GetProductCategories(model.Id)
             };
         }
@@ -194,11 +194,12 @@ namespace _3DeshopAPI.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        private async Task<string> GetProductImageUrl(Guid id)
+        private async Task<ProductImageModel> GetProductImage(Guid id)
         {
             var images = await GetProductImages(id);
 
-            return !images.Any() ? "NoImage" : images.FirstOrDefault().Data;
+            //return !images.Any() ? new byte[] : images.FirstOrDefault().Data;
+            return !images.Any() ? null : images.FirstOrDefault();
         }
 
         /// <summary>
