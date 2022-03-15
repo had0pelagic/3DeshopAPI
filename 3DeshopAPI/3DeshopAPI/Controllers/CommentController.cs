@@ -37,9 +37,9 @@ namespace _3DeshopAPI.Controllers
         /// <param name="productId"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("post-comment/{productId}/{userId}")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> AddProductComment(Guid productId, Guid userId, ProductCommentModel model)
+        public async Task<IActionResult> AddProductComment(Guid productId, Guid userId, [FromBody] ProductCommentModel model)
         {
             var comment = _mapper.Map<Domain.Product.Comment>(model);
 
