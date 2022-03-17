@@ -6,6 +6,7 @@ namespace PaymentAPI.Services.Interfaces
     {
         Task<Payment?> GetPayment(Guid id);
         Task<List<Payment>> GetPayments();
+        Task<Payment?> UserHasPaid(Guid productId, Guid userId);
         Task Pay(Payment model);
     }
 }

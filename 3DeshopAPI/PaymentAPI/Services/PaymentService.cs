@@ -46,5 +46,10 @@ namespace PaymentAPI.Services
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Payment?> UserHasPaid(Guid productId, Guid userId)
+        {
+            return await _context.Payments.FirstOrDefaultAsync(x => x.ProductId == productId && x.UserId == userId);
+        }
     }
 }

@@ -38,6 +38,7 @@
 
 
 	<ItemGroup>
+	  <Folder Include="Models\File\" />
 	  <Folder Include="Models\Order\" />
 	</ItemGroup>
 

@@ -2,6 +2,7 @@
 {
     public class ProductFileModel
     {
+        public string Name { get; set; }
         public byte[] _data;
         public byte[] Data
         {

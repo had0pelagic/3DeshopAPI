@@ -3,6 +3,7 @@
     public class File
     {
         public Guid Id { get; set; }
+        public string Name { get; set; }
         private byte[] _data;
         public byte[] Data
         {

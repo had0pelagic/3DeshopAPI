@@ -23,6 +23,8 @@ namespace _3DeshopAPI.Exceptions
         [Description("Error while sending an email")]
         Email,
         [Description("Please upload file")]
-        File
+        File,
+        [Description("User has not bought the product")]
+        NotPaid
     }
 }
