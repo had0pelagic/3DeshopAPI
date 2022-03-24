@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Order;
 using Domain.Payment;
 using Domain.Product;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,12 @@ namespace Infrastructure
         public DbSet<Format> Formats { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Domain.Product.File> Files { get; set; }
+
+        public DbSet<Offer> Offers { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderImages> OrderImages { get; set; }
+        public DbSet<OrderOffers> OrderOffers { get; set; }
+        public DbSet<Job> Jobs { get; set; }
 
         public DbSet<Payment> Payments { get; set; }
     }

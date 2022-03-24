@@ -18,9 +18,9 @@ namespace _3DeshopAPI.Mappings
             CreateMap<ProductSpecificationsModel, Specifications>()
                 .ForMember(x => x.Id, opt => opt.Ignore());
 
-            CreateMap<Image, ProductImageModel>()
+            CreateMap<Image, ImageModel>()
                 .ForSourceMember(x => x.Id, opt => opt.DoNotValidate());
-            CreateMap<ProductImageModel, Image>()
+            CreateMap<ImageModel, Image>()
                 .ForMember(x => x.Id, opt => opt.Ignore());
 
             CreateMap<Domain.Product.File, ProductFileModel>()

@@ -7,7 +7,7 @@
         public string Username { get; set; }
         public double Price { get; set; }
         public int? Downloads { get; set; }
-        public ProductImageModel Image { get; set; }
+        public ImageModel Image { get; set; }
         public List<ProductCategoryModel> Categories { get; set; }
     }
 }

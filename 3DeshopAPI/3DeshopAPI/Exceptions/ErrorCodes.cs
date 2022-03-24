@@ -25,6 +25,10 @@ namespace _3DeshopAPI.Exceptions
         [Description("Please upload file")]
         File,
         [Description("User has not bought the product")]
-        NotPaid
+        NotPaid,
+        [Description("Order has not been found")]
+        OrderNotFound,
+        [Description("Offer has not been found")]
+        OfferNotFound
     }
 }

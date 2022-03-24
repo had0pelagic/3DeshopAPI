@@ -16,7 +16,7 @@ namespace _3DeshopAPI.Services
         private readonly IPaymentService _paymentService;
         private readonly Context _context;
 
-        public FileService(ILogger<ProductService> logger, IUserService userService, IPaymentService paymentService, IMapper mapper, Context context)
+        public FileService(ILogger<ProductService> logger, IUserService userService, IPaymentService paymentService, Context context)
         {
             _logger = logger;
             _userService = userService;

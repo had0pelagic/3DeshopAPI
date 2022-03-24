@@ -180,12 +180,12 @@ namespace _3DeshopAPI.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        private async Task<List<ProductImageModel>> GetProductImages(Guid id)
+        private async Task<List<ImageModel>> GetProductImages(Guid id)
         {
             return await _context.ProductImages
                 .Where(i => i.Product.Id == id)
                 .Include(i => i.Image)
-                .Select(i => _mapper.Map<ProductImageModel>(i.Image))
+                .Select(i => _mapper.Map<ImageModel>(i.Image))
                 .ToListAsync();
         }
 
@@ -194,7 +194,7 @@ namespace _3DeshopAPI.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        private async Task<ProductImageModel> GetProductImage(Guid id)
+        private async Task<ImageModel> GetProductImage(Guid id)
         {
             var images = await GetProductImages(id);
 
@@ -302,7 +302,7 @@ namespace _3DeshopAPI.Services
         /// <param name="model"></param>
         /// <returns></returns>
         /// <exception cref="InvalidClientOperationException"></exception>
-        private async Task SetProductImages(Product product, List<ProductImageModel> images)
+        private async Task SetProductImages(Product product, List<ImageModel> images)
         {
             try
             {

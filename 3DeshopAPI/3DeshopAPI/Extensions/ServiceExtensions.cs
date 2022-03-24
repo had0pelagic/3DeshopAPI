@@ -59,6 +59,7 @@ namespace _3DeshopAPI.Extensions
             builder.Services.AddScoped<IMailService, MailService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IFileService, FileService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
         }
     }
 }

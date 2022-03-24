@@ -8,6 +8,6 @@
         public List<ProductFileModel> Files { get; set; }
         public List<Guid> Categories { get; set; }
         public List<Guid> Formats { get; set; }
-        public List<ProductImageModel> Images { get; set; }
+        public List<ImageModel> Images { get; set; }
     }
 }
