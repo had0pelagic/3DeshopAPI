@@ -1,6 +1,8 @@
-﻿namespace Domain.Order
+﻿using _3DeshopAPI.Models.Product;
+
+namespace _3DeshopAPI.Models.Order
 {
-    public class Order
+    public class OrderDisplayModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -9,5 +11,6 @@
         public Guid UserId { get; set; }
         public DateTime Created { get; set; }
         public DateTime CompleteTill { get; set; }
+        public List<ImageModel> Images { get; set; }
     }
 }

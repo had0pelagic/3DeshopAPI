@@ -7,6 +7,7 @@ namespace _3DeshopAPI.Services.Interfaces
     {
         public Task<List<Order>> GetOrders();
         public Task<Order> GetOrder(Guid id);
+        public Task<OrderDisplayModel> GetDisplayOrder(Guid id);
         public Task<Order> PostOrder(OrderUploadModel model);
         public Task<List<Offer>> GetOffers();
         public Task<Offer> GetOffer(Guid id);

@@ -71,6 +71,20 @@ namespace _3DeshopAPI.Controllers
 
             return Ok(response);
         }
+
+        /// <summary>
+        /// Returns OrderDisplayModel by given id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("get-display-order/{id}")]
+        public async Task<ActionResult<OrderDisplayModel>> GetDisplayOrder(Guid id)
+        {
+            var response = await _orderService.GetDisplayOrder(id);
+
+            return Ok(response);
+        }
+
         /// <summary>
         /// Uploads new order
         /// </summary>

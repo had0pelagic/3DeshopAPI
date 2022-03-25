@@ -54,7 +54,7 @@ namespace _3DeshopAPI.Services
         }
 
         /// <summary>
-        /// Returns offer by given id
+        /// Returns order by given id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -62,7 +62,30 @@ namespace _3DeshopAPI.Services
         {
             var order = await _context.Orders.FindAsync(id);
 
+            if (order == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.OrderNotFound);
+            }
+
             return order;
+        }
+
+        /// <summary>
+        /// Returns OrderDisplayModel by given id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidClientOperationException"></exception>
+        public async Task<OrderDisplayModel?> GetDisplayOrder(Guid id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+
+            if (order == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.OrderNotFound);
+            }
+
+            return await OrderToOrderDisplayModel(order);
         }
 
         /// <summary>
@@ -148,7 +171,7 @@ namespace _3DeshopAPI.Services
             return offer;
         }
 
-        /// <summary>
+        /// <summary> 
         /// Returns all offers associated with selected order
         /// </summary>
         /// <returns></returns>
@@ -222,6 +245,40 @@ namespace _3DeshopAPI.Services
                 .ToListAsync();
 
             return jobs;
+        }
+
+        /// <summary>
+        /// Maps Order to OrderDisplayModel
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<OrderDisplayModel> OrderToOrderDisplayModel(Order model)
+        {
+            return new OrderDisplayModel
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Description = model.Description,
+                Price = model.Price,
+                UserId = model.UserId,
+                CompleteTill = model.CompleteTill,
+                Created = model.Created,
+                Images = await GetOrderImages(model.Id),
+            };
+        }
+
+        /// <summary>
+        /// Returns all images associated with order
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private async Task<List<ImageModel>> GetOrderImages(Guid id)
+        {
+            return await _context.OrderImages
+                .Where(i => i.Order.Id == id)
+                .Include(i => i.Image)
+                .Select(i => _mapper.Map<ImageModel>(i.Image))
+                .ToListAsync();
         }
 
         /// <summary>
