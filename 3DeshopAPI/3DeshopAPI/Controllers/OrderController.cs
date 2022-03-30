@@ -48,6 +48,18 @@ namespace _3DeshopAPI.Controllers
         }
 
         /// <summary>
+        /// Returns all orders associated with user
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("get-user-orders/{id}")]
+        public async Task<List<Order>> GetUserOrders(Guid id)
+        {
+            var response = await _orderService.GetUserOrders(id);
+
+            return response;
+        }
+
+        /// <summary>
         /// Returns all inactive orders
         /// </summary>
         /// <returns></returns>
@@ -149,16 +161,30 @@ namespace _3DeshopAPI.Controllers
         }
 
         /// <summary>
-        /// Approves offer by creating new active job
+        /// Accepts offer by creating new active job
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="offerId"></param>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        [HttpPost("approve-offer/{userId}/{offerId}/{orderId}")]
-        public async Task<Job> ApproveOffer(Guid userId, Guid offerId, Guid orderId)
+        [HttpPost("accept-offer/{userId}/{offerId}/{orderId}")]
+        public async Task<Job> AcceptOffer(Guid userId, Guid offerId, Guid orderId)
         {
-            var response = await _orderService.ApproveOffer(userId, offerId, orderId);
+            var response = await _orderService.AcceptOffer(userId, offerId, orderId);
+
+            return response;
+        }
+
+        /// <summary>
+        /// Declines offer, removes offer from database
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="offerId"></param>
+        /// <returns></returns>
+        [HttpPost("decline-offer/{userId}/{offerId}")]
+        public async Task<Offer> DeclineOffer(Guid userId, Guid offerId)
+        {
+            var response = await _orderService.DeclineOffer(userId, offerId);
 
             return response;
         }

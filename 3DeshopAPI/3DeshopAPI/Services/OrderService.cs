@@ -37,6 +37,20 @@ namespace _3DeshopAPI.Services
         }
 
         /// <summary>
+        /// Returns all orders associated with user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<List<Order>> GetUserOrders(Guid id)
+        {
+            var orders = await _context.Orders
+                .Where(x => x.UserId == id)
+                .ToListAsync();
+
+            return orders;
+        }
+
+        /// <summary>
         /// Returns all inactive orders
         /// </summary>
         /// <returns></returns>
@@ -195,7 +209,7 @@ namespace _3DeshopAPI.Services
         /// <param name="orderId"></param>
         /// <returns></returns>
         /// <exception cref="InvalidClientOperationException"></exception>
-        public async Task<Job> ApproveOffer(Guid userId, Guid offerId, Guid orderId)
+        public async Task<Job> AcceptOffer(Guid userId, Guid offerId, Guid orderId)
         {
             var user = await _userService.GetUser(userId);
 
@@ -230,6 +244,41 @@ namespace _3DeshopAPI.Services
             return job;
         }
 
+        /// <summary>
+        /// Declines offer, removes offer from database
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="offerId"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidClientOperationException"></exception>
+        public async Task<Offer> DeclineOffer(Guid userId, Guid offerId)
+        {
+            var user = await _userService.GetUser(userId);
+
+            if (user == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+
+            var offer = await GetOffer(offerId);
+
+            if (offer == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.OfferNotFound);
+            }
+
+            _context.Offers.Remove(offer);
+            await _context.SaveChangesAsync();
+
+            return offer;
+        }
+
+
+        /// <summary>
+        /// Returns job by given id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<Job> GetJob(Guid id)
         {
             var job = await _context.Jobs.FindAsync(id);
@@ -237,6 +286,10 @@ namespace _3DeshopAPI.Services
             return job;
         }
 
+        /// <summary>
+        /// Returns all existing jobs
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<Job>> GetJobs()
         {
             var jobs = await _context.Jobs
