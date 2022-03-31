@@ -125,7 +125,125 @@ namespace _3DeshopAPI.Services
 
             return order;
         }
+        /// <summary>
+        /// Sets job progress and writes progress comment
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidClientOperationException"></exception>
+        public async Task<Job> SetJobProgress(JobProgressModel model)
+        {
+            var user = await _userService.GetUser(model.UserId);
 
+            if (user == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+
+            var order = await _context.Orders.FindAsync(model.OrderId);
+
+            if (order == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.OrderNotFound);
+            }
+
+            var job = await GetJob(model.Id);
+
+            if (job == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.JobNotFound);
+            }
+
+            job.Progress = model.Progress;
+            _context.Entry(job).State = EntityState.Modified;
+
+            var jobProgress = new JobProgress()
+            {
+                Created = DateTime.UtcNow,
+                Description = model.Comment,
+                JobId = model.Id,
+                UserId = model.UserId,
+                Progress = model.Progress
+            };
+            await _context.Progresses.AddAsync(jobProgress);
+            await _context.SaveChangesAsync();
+
+            return job;
+        }
+
+        /// <summary>
+        /// Sets job status to inactive
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidClientOperationException"></exception>
+        public async Task<Job> WorkerAbandonJob(AbandonJobModel model)
+        {
+            var user = await _userService.GetUser(model.UserId);
+
+            if (user == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+
+            var job = await GetJob(model.JobId);
+
+            if (job == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.JobNotFound);
+            }
+
+            if (job.Offer.UserId != model.UserId)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UnauthorizedForAction);
+            }
+
+            job.Active = false;
+            _context.Entry(job).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return job;
+        }
+
+        /// <summary>
+        /// Returns all progresses associated with given job
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidClientOperationException"></exception>
+        public async Task<List<JobProgress>> GetJobProgress(Guid userId, Guid orderId)
+        {
+            var user = await _userService.GetUser(userId);
+
+            if (user == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+
+            var order = await _context.Orders.FindAsync(orderId);
+
+            if (order == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.OrderNotFound);
+            }
+
+            var jobs = await _context.Jobs.ToListAsync();
+            var job = jobs
+                .Where(x => x.Order.Id == orderId)
+                .FirstOrDefault();
+
+            if (job == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.JobNotFound);
+            }
+
+            var progresses = await _context.Progresses
+                .Where(x => x.JobId == job.Id)
+                .ToListAsync();
+
+            return progresses;
+
+        }
         /// <summary>
         /// Returns all offers
         /// </summary>
@@ -235,7 +353,8 @@ namespace _3DeshopAPI.Services
             var job = new Job()
             {
                 Offer = offer,
-                Order = order
+                Order = order,
+                Created = DateTime.UtcNow
             };
 
             await _context.Jobs.AddAsync(job);
@@ -273,15 +392,16 @@ namespace _3DeshopAPI.Services
             return offer;
         }
 
-
         /// <summary>
         /// Returns job by given id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<Job> GetJob(Guid id)
+        public async Task<Job?> GetJob(Guid id)
         {
-            var job = await _context.Jobs.FindAsync(id);
+            var job = await _context.Jobs
+                .Include(x => x.Offer)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             return job;
         }
@@ -296,6 +416,23 @@ namespace _3DeshopAPI.Services
                 .Include(x => x.Order)
                 .Include(x => x.Offer)
                 .ToListAsync();
+
+            return jobs;
+        }
+
+        /// <summary>
+        /// Returns all existing jobs
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<Job>> GetUserJobs(Guid id)
+        {
+            var jobs = await _context.Jobs
+                .Include(x => x.Order)
+                .Include(x => x.Offer)
+                .ToListAsync();
+            var userJobs = jobs
+                .Where(x => x.Offer.UserId == id)
+                .ToList();
 
             return jobs;
         }

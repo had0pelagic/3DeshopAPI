@@ -29,6 +29,10 @@ namespace _3DeshopAPI.Exceptions
         [Description("Order has not been found")]
         OrderNotFound,
         [Description("Offer has not been found")]
-        OfferNotFound
+        OfferNotFound,
+        [Description("Job has not been found")]
+        JobNotFound,
+        [Description("User is unauthorized for this action")]
+        UnauthorizedForAction
     }
 }

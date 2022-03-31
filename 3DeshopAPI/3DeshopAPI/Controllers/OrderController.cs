@@ -111,6 +111,45 @@ namespace _3DeshopAPI.Controllers
         }
 
         /// <summary>
+        /// Sets job progress and writes progress comment
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("set-progress")]
+        public async Task<ActionResult<Job>> SetJobProgress(JobProgressModel model)
+        {
+            var response = await _orderService.SetJobProgress(model);
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Sets job status to inactive
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("worker-abandon-job")]
+        public async Task<ActionResult<Job>> WorkerAbandonJob(AbandonJobModel model)
+        {
+            var response = await _orderService.WorkerAbandonJob(model);
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Returns all progresses associated with given job
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpGet("get-job-progress/{userId}/{orderId}")]
+        public async Task<ActionResult<List<JobProgress>>> GetJobProgress(Guid userId, Guid orderId)
+        {
+            var response = await _orderService.GetJobProgress(userId,  orderId);
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Returns all offers
         /// </summary>
         /// <returns></returns>
@@ -185,6 +224,19 @@ namespace _3DeshopAPI.Controllers
         public async Task<Offer> DeclineOffer(Guid userId, Guid offerId)
         {
             var response = await _orderService.DeclineOffer(userId, offerId);
+
+            return response;
+        }
+
+        /// <summary>
+        /// Returns all user active jobs
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("get-user-jobs/{id}")]
+        public async Task<List<Job>> GetUserJobs(Guid id)
+        {
+            var response = await _orderService.GetUserJobs(id);
 
             return response;
         }

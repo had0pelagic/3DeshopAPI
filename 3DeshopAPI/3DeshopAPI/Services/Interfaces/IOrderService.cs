@@ -10,6 +10,9 @@ namespace _3DeshopAPI.Services.Interfaces
         public Task<Order> GetOrder(Guid id);
         public Task<OrderDisplayModel> GetDisplayOrder(Guid id);
         public Task<Order> PostOrder(OrderUploadModel model);
+        public Task<Job> SetJobProgress(JobProgressModel model);
+        public Task<Job> WorkerAbandonJob(AbandonJobModel model);
+        public Task<List<JobProgress>> GetJobProgress(Guid userId, Guid orderId);
         public Task<List<Offer>> GetOffers();
         public Task<Offer> GetOffer(Guid id);
         public Task<Offer> PostOffer(OfferUploadModel model);
@@ -17,5 +20,6 @@ namespace _3DeshopAPI.Services.Interfaces
         public Task<Job> AcceptOffer(Guid userId, Guid offerId, Guid orderId);
         public Task<Offer> DeclineOffer(Guid userId, Guid offerId);
         public Task<List<Order>> GetInactiveOrders();
+        public Task<List<Job>> GetUserJobs(Guid id);
     }
 }

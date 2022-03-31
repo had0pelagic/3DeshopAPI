@@ -35,6 +35,7 @@ namespace Infrastructure
         public DbSet<OrderImages> OrderImages { get; set; }
         public DbSet<OrderOffers> OrderOffers { get; set; }
         public DbSet<Job> Jobs { get; set; }
+        public DbSet<JobProgress> Progresses { get; set; }
 
         public DbSet<Payment> Payments { get; set; }
     }
