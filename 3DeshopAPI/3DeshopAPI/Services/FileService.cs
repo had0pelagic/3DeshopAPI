@@ -1,6 +1,7 @@
 ﻿using _3DeshopAPI.Exceptions;
 using _3DeshopAPI.Services.Interfaces;
 using AutoMapper;
+using Domain.Order;
 using Domain.Product;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +28,28 @@ namespace _3DeshopAPI.Services
         /// <summary>
         /// Returns file content result list, which contains bytes, filenames
         /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidClientOperationException"></exception>
+        public async Task<List<FileContentResult>> GetOrderFiles(Guid orderId, Guid userId)
+        {
+            var user = await _userService.GetUser(userId);
+
+            if (user == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+
+            var orderFiles = await GetOrderFiles();
+            var files = GetOrderFileData(orderFiles, orderId);
+
+            return GetFileContents(files);
+        }
+
+        /// <summary>
+        /// Returns file content result list, which contains bytes, filenames
+        /// </summary>
         /// <param name="productId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
@@ -48,7 +71,7 @@ namespace _3DeshopAPI.Services
             }
 
             var productFiles = await GetProductFiles();
-            var files = GetFiles(productFiles, productId);
+            var files = GetProductFileData(productFiles, productId);
 
             return GetFileContents(files);
         }
@@ -88,15 +111,45 @@ namespace _3DeshopAPI.Services
         }
 
         /// <summary>
+        /// Returns OrderFiles table from database
+        /// </summary>
+        /// <returns></returns>
+        private async Task<List<OrderFiles>> GetOrderFiles()
+        {
+            var files = await _context.OrderFiles
+                .Include(x => x.Order)
+                .Include(x => x.File)
+                .ToListAsync();
+
+            return files;
+        }
+
+        /// <summary>
         /// Returns all files associated with product
         /// </summary>
         /// <param name="productFiles"></param>
         /// <param name="productId"></param>
         /// <returns></returns>
-        private List<Domain.Product.File> GetFiles(List<ProductFiles> productFiles, Guid productId)
+        private List<Domain.Product.File> GetProductFileData(List<ProductFiles> productFiles, Guid productId)
         {
             var files = productFiles
                 .Where(x => x.Product.Id == productId)
+                .Select(x => x.File)
+                .ToList();
+
+            return files;
+        }
+
+        /// <summary>
+        /// Returns all files associated with order
+        /// </summary>
+        /// <param name="orderFiles"></param>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        private List<Domain.Product.File> GetOrderFileData(List<OrderFiles> orderFiles, Guid orderId)
+        {
+            var files = orderFiles
+                .Where(x => x.Order.Id == orderId)
                 .Select(x => x.File)
                 .ToList();
 

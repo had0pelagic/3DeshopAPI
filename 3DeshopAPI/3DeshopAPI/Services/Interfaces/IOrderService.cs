@@ -11,6 +11,7 @@ namespace _3DeshopAPI.Services.Interfaces
         public Task<OrderDisplayModel> GetDisplayOrder(Guid id);
         public Task<Order> PostOrder(OrderUploadModel model);
         public Task<Job> SetJobProgress(JobProgressModel model);
+        public Task<Job> SetJobCompletion(JobCompletionModel model);
         public Task<Job> WorkerAbandonJob(AbandonJobModel model);
         public Task<List<JobProgress>> GetJobProgress(Guid userId, Guid orderId);
         public Task<List<Offer>> GetOffers();

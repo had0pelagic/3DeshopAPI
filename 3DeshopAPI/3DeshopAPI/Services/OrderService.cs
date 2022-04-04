@@ -174,6 +174,53 @@ namespace _3DeshopAPI.Services
         }
 
         /// <summary>
+        /// Sets job progress and uploads given files
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidClientOperationException"></exception>
+        public async Task<Job> SetJobCompletion(JobCompletionModel model)
+        {
+            var user = await _userService.GetUser(model.UserId);
+
+            if (user == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+
+            var order = await _context.Orders.FindAsync(model.OrderId);
+
+            if (order == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.OrderNotFound);
+            }
+
+            var job = await GetJob(model.Id);
+
+            if (job == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.JobNotFound);
+            }
+
+            job.Progress = model.Progress;
+            _context.Entry(job).State = EntityState.Modified;
+
+            var jobProgress = new JobProgress()
+            {
+                Created = DateTime.UtcNow,
+                Description = model.Comment,
+                JobId = model.Id,
+                UserId = model.UserId,
+                Progress = model.Progress
+            };
+            await _context.Progresses.AddAsync(jobProgress);
+            await SetOrderFiles(order, model.Files);
+            await _context.SaveChangesAsync();
+
+            return job;
+        }
+
+        /// <summary>
         /// Sets job status to inactive
         /// </summary>
         /// <param name="model"></param>
@@ -493,6 +540,34 @@ namespace _3DeshopAPI.Services
                     await _context.OrderImages.AddAsync(new OrderImages()
                     {
                         Image = newImage,
+                        Order = order
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Sets job files
+        /// </summary>
+        /// <param name="job"></param>
+        /// <param name="files"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        private async Task SetOrderFiles(Order order, List<FileModel> files)
+        {
+            try
+            {
+                foreach (var file in files)
+                {
+                    var newFile = _mapper.Map<Domain.Product.File>(file);
+                    await _context.Files.AddAsync(newFile);
+                    await _context.OrderFiles.AddAsync(new OrderFiles()
+                    {
+                        File = newFile,
                         Order = order
                     });
                 }

@@ -124,6 +124,19 @@ namespace _3DeshopAPI.Controllers
         }
 
         /// <summary>
+        /// Sets job progress and uploads given files
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("set-job-completion")]
+        public async Task<ActionResult<Job>> SetJobCompletion(JobCompletionModel model)
+        {
+            var response = await _orderService.SetJobCompletion(model);
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Sets job status to inactive
         /// </summary>
         /// <param name="model"></param>
@@ -144,7 +157,7 @@ namespace _3DeshopAPI.Controllers
         [HttpGet("get-job-progress/{userId}/{orderId}")]
         public async Task<ActionResult<List<JobProgress>>> GetJobProgress(Guid userId, Guid orderId)
         {
-            var response = await _orderService.GetJobProgress(userId,  orderId);
+            var response = await _orderService.GetJobProgress(userId, orderId);
 
             return Ok(response);
         }

@@ -1,6 +1,6 @@
 ﻿namespace _3DeshopAPI.Models.Product
 {
-    public class ProductFileModel
+    public class FileModel
     {
         public string Name { get; set; }
         public byte[] _data;

@@ -209,7 +209,7 @@ namespace _3DeshopAPI.Services
         /// <param name="files"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        private async Task SetProductFiles(Product product, List<ProductFileModel> files)
+        private async Task SetProductFiles(Product product, List<FileModel> files)
         {
             try
             {
