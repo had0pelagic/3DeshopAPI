@@ -118,6 +118,7 @@ namespace _3DeshopAPI.Services
             }
 
             var order = _mapper.Map<Order>(model);
+            order.Created = DateTime.UtcNow;
 
             await _context.Orders.AddAsync(order);
             await SetOrderImages(order, model.Images);
@@ -125,6 +126,7 @@ namespace _3DeshopAPI.Services
 
             return order;
         }
+
         /// <summary>
         /// Sets job progress and writes progress comment
         /// </summary>
@@ -227,7 +229,9 @@ namespace _3DeshopAPI.Services
                 throw new InvalidClientOperationException(ErrorCodes.OrderNotFound);
             }
 
-            var jobs = await _context.Jobs.ToListAsync();
+            var jobs = await _context.Jobs
+                .Include(x => x.Order)
+                .ToListAsync();
             var job = jobs
                 .Where(x => x.Order.Id == orderId)
                 .FirstOrDefault();
@@ -434,7 +438,7 @@ namespace _3DeshopAPI.Services
                 .Where(x => x.Offer.UserId == id)
                 .ToList();
 
-            return jobs;
+            return userJobs;
         }
 
         /// <summary>
