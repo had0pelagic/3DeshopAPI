@@ -124,6 +124,19 @@ namespace _3DeshopAPI.Controllers
         }
 
         /// <summary>
+        /// Checks if order job is active
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        [HttpGet("is-order-job-active/{orderId}")]
+        public async Task<ActionResult<bool>> IsOrderJobActive(Guid orderId)
+        {
+            var response = await _orderService.IsOrderJobActive(orderId);
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Sets job progress and uploads given files
         /// </summary>
         /// <param name="model"></param>
@@ -250,6 +263,20 @@ namespace _3DeshopAPI.Controllers
         public async Task<List<Job>> GetUserJobs(Guid id)
         {
             var response = await _orderService.GetUserJobs(id);
+
+            return response;
+        }
+
+        /// <summary>
+        /// Approves order
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpGet("approve-order/{orderId}/{userId}")]
+        public async Task<Order> ApproveOrder(Guid orderId, Guid userId)
+        {
+            var response = await _orderService.ApproveOrder(orderId, userId);
 
             return response;
         }

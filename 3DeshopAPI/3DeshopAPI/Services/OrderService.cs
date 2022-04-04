@@ -343,6 +343,7 @@ namespace _3DeshopAPI.Services
             //check if order is being processed (approved)
 
             var offer = _mapper.Map<Offer>(model);
+            offer.Created = DateTime.UtcNow;
             await _context.Offers.AddAsync(offer);
             await _context.OrderOffers.AddAsync(new OrderOffers()
             {
@@ -444,6 +445,36 @@ namespace _3DeshopAPI.Services
         }
 
         /// <summary>
+        /// Approves order
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidClientOperationException"></exception>
+        public async Task<Order> ApproveOrder(Guid orderId, Guid userId)
+        {
+            var user = await _userService.GetUser(userId);
+
+            if (user == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+
+            var order = await GetOrder(orderId);
+
+            if (order == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.OrderNotFound);
+            }
+
+            order.Approved = true;
+            _context.Entry(order).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return order;
+        }
+
+        /// <summary>
         /// Returns job by given id
         /// </summary>
         /// <param name="id"></param>
@@ -455,6 +486,20 @@ namespace _3DeshopAPI.Services
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             return job;
+        }
+
+        /// <summary>
+        /// Checks if order job is active
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        public async Task<bool> IsOrderJobActive(Guid orderId)
+        {
+            var job = await _context.Jobs
+                .Include(x => x.Order)
+                .FirstOrDefaultAsync(x => x.Order.Id == orderId);
+
+            return job.Active;
         }
 
         /// <summary>

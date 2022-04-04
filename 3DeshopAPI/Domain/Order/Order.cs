@@ -9,5 +9,6 @@
         public Guid UserId { get; set; }
         public DateTime Created { get; set; }
         public DateTime CompleteTill { get; set; }
+        public bool Approved { get; set; } = false;
     }
 }

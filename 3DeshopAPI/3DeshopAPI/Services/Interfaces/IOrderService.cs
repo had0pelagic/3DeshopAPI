@@ -22,5 +22,8 @@ namespace _3DeshopAPI.Services.Interfaces
         public Task<Offer> DeclineOffer(Guid userId, Guid offerId);
         public Task<List<Order>> GetInactiveOrders();
         public Task<List<Job>> GetUserJobs(Guid id);
+        public Task<Order> ApproveOrder(Guid orderId, Guid userId);
+        public Task<bool> IsOrderJobActive(Guid orderId);
+
     }
 }

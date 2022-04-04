@@ -39,5 +39,6 @@ namespace Infrastructure
         public DbSet<JobProgress> Progresses { get; set; }
 
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<OrderPayment> OrderPayments { get; set; }
     }
 }

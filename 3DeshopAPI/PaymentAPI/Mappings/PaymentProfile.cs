@@ -26,6 +26,25 @@ namespace PaymentAPI.Mappings
                 .ForSourceMember(x => x.Receiver, opt => opt.DoNotValidate());
             CreateMap<PaymentModel, PaymentDisplayModel>()
                 .ForMember(x => x.Receiver, opt => opt.Ignore());
+
+            CreateMap<OrderPayment, OrderPaymentModel>()
+                .ForSourceMember(x => x.Id, opt => opt.DoNotValidate());
+            CreateMap<OrderPaymentModel, OrderPayment>()
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.ValidTill, opt => opt.Ignore())
+                .ForMember(x => x.Receiver, opt => opt.Ignore());
+
+            CreateMap<OrderPayment, OrderPaymentDisplayModel>()
+                 .ForSourceMember(x => x.Id, opt => opt.DoNotValidate());
+            CreateMap<OrderPaymentDisplayModel, OrderPayment>()
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.ValidTill, opt => opt.Ignore())
+                .ForMember(x => x.Receiver, opt => opt.Ignore());
+
+            CreateMap<OrderPaymentDisplayModel, OrderPaymentModel>()
+                .ForSourceMember(x => x.Receiver, opt => opt.DoNotValidate());
+            CreateMap<OrderPaymentModel, OrderPaymentDisplayModel>()
+                .ForMember(x => x.Receiver, opt => opt.Ignore());
         }
     }
 }

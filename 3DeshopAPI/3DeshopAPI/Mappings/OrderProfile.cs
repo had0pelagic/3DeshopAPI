@@ -13,7 +13,8 @@ namespace _3DeshopAPI.Mappings
                 .ForMember(x => x.Images, opt => opt.Ignore());
             CreateMap<OrderUploadModel, Order>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
-                .ForMember(x => x.Created, opt => opt.Ignore());
+                .ForMember(x => x.Created, opt => opt.Ignore())
+                .ForMember(x => x.Approved, opt => opt.Ignore());
 
             CreateMap<Offer, OfferUploadModel>()
                 .ForSourceMember(x => x.Id, opt => opt.DoNotValidate())
