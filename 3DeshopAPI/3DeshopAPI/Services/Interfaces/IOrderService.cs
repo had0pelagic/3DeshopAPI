@@ -10,6 +10,7 @@ namespace _3DeshopAPI.Services.Interfaces
         public Task<Order> GetOrder(Guid id);
         public Task<OrderDisplayModel> GetDisplayOrder(Guid id);
         public Task<Order> PostOrder(OrderUploadModel model);
+        public Task<Order> RemoveOrder(Guid userId, Guid orderId);
         public Task<Job> SetJobProgress(JobProgressModel model);
         public Task<Job> SetJobCompletion(JobCompletionModel model);
         public Task<Job> WorkerAbandonJob(AbandonJobModel model);
@@ -23,7 +24,6 @@ namespace _3DeshopAPI.Services.Interfaces
         public Task<List<Order>> GetInactiveOrders();
         public Task<List<Job>> GetUserJobs(Guid id);
         public Task<Order> ApproveOrder(Guid orderId, Guid userId);
-        public Task<bool> IsOrderJobActive(Guid orderId);
-
+        public Task<bool?> IsOrderJobActive(Guid orderId);
     }
 }

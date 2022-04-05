@@ -111,6 +111,20 @@ namespace _3DeshopAPI.Controllers
         }
 
         /// <summary>
+        /// Removes user order
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        [HttpGet("remove-order/{userId}/{orderId}")]
+        public async Task<ActionResult<Order>> RemoveOrder(Guid userId, Guid orderId)
+        {
+            var response = await _orderService.RemoveOrder(userId, orderId);
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Sets job progress and writes progress comment
         /// </summary>
         /// <param name="model"></param>

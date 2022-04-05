@@ -128,6 +128,48 @@ namespace _3DeshopAPI.Services
         }
 
         /// <summary>
+        /// Removes user order
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidClientOperationException"></exception>
+        public async Task<Order> RemoveOrder(Guid userId, Guid orderId)
+        {
+            var user = await _userService.GetUser(userId);
+
+            if (user == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+
+            var order = await _context.Orders.FindAsync(orderId);
+
+            if (order == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.OrderNotFound);
+            }
+
+            if (user.Id != order.UserId)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UnauthorizedForAction);
+            }
+
+            var isActive = await IsOrderJobActive(order.Id);
+
+            if (isActive == true)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.CantRemoveOrderIsActive);
+            }
+
+            _context.Orders.Remove(order);
+            ///send payment back to user
+            await _context.SaveChangesAsync();
+
+            return order;
+        }
+
+        /// <summary>
         /// Sets job progress and writes progress comment
         /// </summary>
         /// <param name="model"></param>
@@ -493,13 +535,13 @@ namespace _3DeshopAPI.Services
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        public async Task<bool> IsOrderJobActive(Guid orderId)
+        public async Task<bool?> IsOrderJobActive(Guid orderId)
         {
             var job = await _context.Jobs
                 .Include(x => x.Order)
                 .FirstOrDefaultAsync(x => x.Order.Id == orderId);
 
-            return job.Active;
+            return job?.Active;
         }
 
         /// <summary>

@@ -33,6 +33,8 @@ namespace _3DeshopAPI.Exceptions
         [Description("Job has not been found")]
         JobNotFound,
         [Description("User is unauthorized for this action")]
-        UnauthorizedForAction
+        UnauthorizedForAction,
+        [Description("Order cannot be removed, because it is active")]
+        CantRemoveOrderIsActive
     }
 }
