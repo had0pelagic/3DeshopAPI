@@ -151,6 +151,20 @@ namespace _3DeshopAPI.Controllers
         }
 
         /// <summary>
+        /// Checks if user is the owner of the given order
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        [HttpGet("is-order-owner/{userId}/{orderId}")]
+        public async Task<ActionResult<bool>> IsOrderOwner(Guid userId, Guid orderId)
+        {
+            var response = await _orderService.IsOrderOwner(userId, orderId);
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Sets job progress and uploads given files
         /// </summary>
         /// <param name="model"></param>

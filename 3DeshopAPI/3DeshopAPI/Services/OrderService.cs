@@ -545,6 +545,30 @@ namespace _3DeshopAPI.Services
         }
 
         /// <summary>
+        /// Checks if user is the owner of the given order
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidClientOperationException"></exception>
+        public async Task<bool> IsOrderOwner(Guid userId, Guid orderId)
+        {
+            var order = await GetOrder(orderId);
+
+            if (order == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.OrderNotFound);
+            }
+
+            if (order.UserId == userId)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Returns all existing jobs
         /// </summary>
         /// <returns></returns>

@@ -25,5 +25,6 @@ namespace _3DeshopAPI.Services.Interfaces
         public Task<List<Job>> GetUserJobs(Guid id);
         public Task<Order> ApproveOrder(Guid orderId, Guid userId);
         public Task<bool?> IsOrderJobActive(Guid orderId);
+        public Task<bool> IsOrderOwner(Guid userId, Guid orderId);
     }
 }
