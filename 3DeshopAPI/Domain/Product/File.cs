@@ -16,5 +16,6 @@
         }
         public double Size { get; set; }
         public string Format { get; set; }
+        public DateTime Created { get; set; } = DateTime.UtcNow;
     }
 }

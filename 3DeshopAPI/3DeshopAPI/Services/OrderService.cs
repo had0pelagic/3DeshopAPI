@@ -245,6 +245,7 @@ namespace _3DeshopAPI.Services
             }
 
             job.Progress = model.Progress;
+            job.NeedChanges = false;
             _context.Entry(job).State = EntityState.Modified;
 
             var jobProgress = new JobProgress()
@@ -542,6 +543,44 @@ namespace _3DeshopAPI.Services
                 .FirstOrDefaultAsync(x => x.Order.Id == orderId);
 
             return job?.Active;
+        }
+
+        /// <summary>
+        /// Creates new job progress and sets job as needed for changes
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidClientOperationException"></exception>
+        public async Task<Job> RequestJobChanges(Guid orderId)
+        {
+            var job = await _context.Jobs
+                .Include(x => x.Order)
+                .Include(x => x.Offer)
+                .Where(x => x.Order.Id == orderId)
+                .FirstOrDefaultAsync();
+
+            if (job == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.JobNotFound);
+            }
+
+            var jobProgress = new JobProgress()
+            {
+                Created = DateTime.UtcNow,
+                UserId = job.Offer.UserId,
+                Description = "Need changes",
+                JobId = job.Id,
+                Progress = 0,
+            };
+
+            await _context.Progresses.AddAsync(jobProgress);
+
+            job.NeedChanges = true;
+            job.Progress = 0;
+            _context.Entry(job).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return job;
         }
 
         /// <summary>

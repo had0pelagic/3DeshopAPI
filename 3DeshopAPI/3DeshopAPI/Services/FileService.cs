@@ -90,6 +90,7 @@ namespace _3DeshopAPI.Services
                 var format = FormatParser(file.Format);
                 var fileContent = new FileContentResult(file.Data, format);
                 fileContent.FileDownloadName = file.Name;
+                fileContent.LastModified = DateTime.SpecifyKind(file.Created, DateTimeKind.Utc);
                 fileContents.Add(fileContent);
             }
 

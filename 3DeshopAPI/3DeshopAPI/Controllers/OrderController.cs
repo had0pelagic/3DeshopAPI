@@ -151,6 +151,19 @@ namespace _3DeshopAPI.Controllers
         }
 
         /// <summary>
+        /// Creates new job progress and sets job as needed for changes
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        [HttpGet("request-job-changes/{orderId}")]
+        public async Task<ActionResult<Job>> RequestJobChanges(Guid orderId)
+        {
+            var response = await _orderService.RequestJobChanges(orderId);
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Checks if user is the owner of the given order
         /// </summary>
         /// <param name="userId"></param>

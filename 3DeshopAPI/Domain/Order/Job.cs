@@ -8,5 +8,6 @@
         public int Progress { get; set; } = 0;
         public DateTime Created { get; set; }
         public bool Active { get; set; } = true;
+        public bool NeedChanges { get; set; } = false;
     }
 }
