@@ -1,5 +1,4 @@
-﻿using _3DeshopAPI.Models.Product;
-using _3DeshopAPI.Models.User;
+﻿using _3DeshopAPI.Models.User;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +8,7 @@ namespace _3DeshopAPI.Services.Interfaces
     {
         Task<List<User>> GetAllUsers();
         Task<User?> GetUser(Guid id);
+        Task<UserDisplayModel> GetDisplayUser(Guid id);
         Task RegisterUser(User model);
         Task RemoveUser(User model);
         Task<IActionResult> UpdateUser(Guid id, User model);

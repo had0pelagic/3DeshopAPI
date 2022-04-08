@@ -54,7 +54,7 @@ namespace _3DeshopAPI.Services
         /// Returns all inactive orders
         /// </summary>
         /// <returns></returns>
-        public async Task<List<Order>> GetInactiveOrders()
+        public async Task<List<InactiveOrderDisplayModel>> GetInactiveOrders()
         {
             var jobs = await GetJobs();
             var activeJobIds = jobs
@@ -64,7 +64,7 @@ namespace _3DeshopAPI.Services
                 .Where(x => !activeJobIds.Contains(x.Id))
                 .ToList();
 
-            return orders;
+            return orders.Select(x => OrderToInactiveOrderDisplayModel(x).Result).ToList();
         }
 
         /// <summary>
@@ -655,6 +655,21 @@ namespace _3DeshopAPI.Services
                 CompleteTill = model.CompleteTill,
                 Created = model.Created,
                 Images = await GetOrderImages(model.Id),
+            };
+        }
+
+        public async Task<InactiveOrderDisplayModel> OrderToInactiveOrderDisplayModel(Order model)
+        {
+            return new InactiveOrderDisplayModel
+            {
+                Id = model.Id,
+                Approved = model.Approved,
+                CompleteTill = model.CompleteTill,
+                Created = model.Created,
+                Description = model.Description,
+                Name = model.Name,
+                Price = model.Price,
+                User = await _userService.GetDisplayUser(model.UserId)
             };
         }
 

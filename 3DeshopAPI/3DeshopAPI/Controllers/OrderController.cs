@@ -64,7 +64,7 @@ namespace _3DeshopAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("get-inactive-orders")]
-        public async Task<List<Order>> GetInactiveOrders()
+        public async Task<List<InactiveOrderDisplayModel>> GetInactiveOrders()
         {
             var response = await _orderService.GetInactiveOrders();
 

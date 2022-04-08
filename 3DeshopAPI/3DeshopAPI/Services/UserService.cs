@@ -1,7 +1,7 @@
 ﻿using _3DeshopAPI.Exceptions;
-using _3DeshopAPI.Models.Product;
 using _3DeshopAPI.Models.User;
 using _3DeshopAPI.Services.Interfaces;
+using AutoMapper;
 using Domain;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
@@ -12,12 +12,14 @@ namespace _3DeshopAPI.Services
     public class UserService : IUserService
     {
         private readonly ILogger<UserService> _logger;
+        private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly Context _context;
 
-        public UserService(ILogger<UserService> logger, IHttpContextAccessor contextAccessor, Context context)
+        public UserService(ILogger<UserService> logger, IMapper mapper, IHttpContextAccessor contextAccessor, Context context)
         {
             _logger = logger;
+            _mapper = mapper;
             _context = context;
             _contextAccessor = contextAccessor;
         }
@@ -42,7 +44,30 @@ namespace _3DeshopAPI.Services
         {
             var user = await _context.Users.FindAsync(id);
 
+            if (user == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+
             return user;
+        }
+
+        /// <summary>
+        /// Returns UserDisplayModel
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidClientOperationException"></exception>
+        public async Task<UserDisplayModel> GetDisplayUser(Guid id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+
+            return _mapper.Map<UserDisplayModel>(user);
         }
 
         /// <summary>
