@@ -4,6 +4,7 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20220411080542_balance-update")]
+    partial class balanceupdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,25 +42,12 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("IsTopUp")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("ToId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FromId");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
 
                     b.HasIndex("ToId");
 
@@ -633,23 +622,11 @@ namespace Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("FromId");
 
-                    b.HasOne("Domain.Order.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId");
-
-                    b.HasOne("Domain.Product.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId");
-
                     b.HasOne("Domain.User", "To")
                         .WithMany()
                         .HasForeignKey("ToId");
 
                     b.Navigation("From");
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
 
                     b.Navigation("To");
                 });

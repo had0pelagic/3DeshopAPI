@@ -15,13 +15,15 @@ namespace _3DeshopAPI.Services
         private readonly ILogger<ProductService> _logger;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
+        private readonly IBalanceService _balanceService;
         private readonly Context _context;
 
-        public OrderService(ILogger<ProductService> logger, IMapper mapper, IUserService userService, Context context)
+        public OrderService(ILogger<ProductService> logger, IMapper mapper, IUserService userService, IBalanceService balanceService, Context context)
         {
             _logger = logger;
             _mapper = mapper;
             _userService = userService;
+            _balanceService = balanceService;
             _context = context;
         }
 
@@ -115,6 +117,13 @@ namespace _3DeshopAPI.Services
             if (user == null)
             {
                 throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+
+            var isBalanceEnough = await _balanceService.IsBalanceEnough(model.UserId, model.Price);
+
+            if (!isBalanceEnough)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.NotEnoughBalance);
             }
 
             var order = _mapper.Map<Order>(model);
@@ -658,6 +667,11 @@ namespace _3DeshopAPI.Services
             };
         }
 
+        /// <summary>
+        /// Maps order to InactiveOrderDisplayModel
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<InactiveOrderDisplayModel> OrderToInactiveOrderDisplayModel(Order model)
         {
             return new InactiveOrderDisplayModel

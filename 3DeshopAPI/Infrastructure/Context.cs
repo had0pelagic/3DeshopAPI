@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Balance;
 using Domain.Order;
 using Domain.Payment;
 using Domain.Product;
@@ -29,6 +30,7 @@ namespace Infrastructure
         public DbSet<Format> Formats { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Domain.Product.File> Files { get; set; }
+        public DbSet<BalanceHistory> BalanceHistory { get; set; }
 
         public DbSet<Offer> Offers { get; set; }
         public DbSet<Order> Orders { get; set; }

@@ -35,6 +35,12 @@ namespace _3DeshopAPI.Exceptions
         [Description("User is unauthorized for this action")]
         UnauthorizedForAction,
         [Description("Order cannot be removed, because it is active")]
-        CantRemoveOrderIsActive
+        CantRemoveOrderIsActive,
+        [Description("Not enough balance")]
+        NotEnoughBalance,
+        [Description("Product can't be bought by the owner")]
+        OwnerUnableToBuyProduct,
+        [Description("Can't buy the same product again")]
+        DuplicateBuy
     }
 }

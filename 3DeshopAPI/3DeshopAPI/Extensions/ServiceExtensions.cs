@@ -60,6 +60,7 @@ namespace _3DeshopAPI.Extensions
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IFileService, FileService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<IBalanceService, BalanceService>();
         }
     }
 }

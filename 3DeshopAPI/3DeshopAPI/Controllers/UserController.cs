@@ -1,6 +1,5 @@
 ﻿using _3DeshopAPI.Auth.Interfaces;
 using _3DeshopAPI.Models;
-using _3DeshopAPI.Models.Product;
 using _3DeshopAPI.Models.User;
 using _3DeshopAPI.Services.Interfaces;
 using AutoMapper;
@@ -15,13 +14,15 @@ namespace _3DeshopAPI.Controllers
     {
         private readonly IUserService _userService;
         private readonly IAuthService _authService;
+        private readonly IBalanceService _balanceService;
         private readonly IMapper _mapper;
         private readonly IConfiguration _config;
 
-        public UserController(IUserService userService, IAuthService authService, IMapper mapper, IConfiguration config)
+        public UserController(IUserService userService, IAuthService authService, IBalanceService balanceService, IMapper mapper, IConfiguration config)
         {
             _userService = userService;
             _authService = authService;
+            _balanceService = balanceService;
             _mapper = mapper;
             _config = config;
         }

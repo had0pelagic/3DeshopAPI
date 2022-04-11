@@ -13,15 +13,17 @@ namespace _3DeshopAPI.Services
     {
         private readonly ILogger<UserService> _logger;
         private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _contextAccessor;
         private readonly Context _context;
+        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IBalanceService _balanceService;
 
-        public UserService(ILogger<UserService> logger, IMapper mapper, IHttpContextAccessor contextAccessor, Context context)
+        public UserService(ILogger<UserService> logger, IMapper mapper, IHttpContextAccessor contextAccessor, Context context, IBalanceService balanceService)
         {
             _logger = logger;
             _mapper = mapper;
             _context = context;
             _contextAccessor = contextAccessor;
+            _balanceService = balanceService;
         }
 
         /// <summary>
@@ -88,8 +90,8 @@ namespace _3DeshopAPI.Services
             model.ImageURL = "https://images.random/defaultimage.jp";
 
             _context.Users.Add(model);
-
             await _context.SaveChangesAsync();
+            await _balanceService.BalanceTopUp(model.Id, 0);
         }
 
         /// <summary>
@@ -238,12 +240,7 @@ namespace _3DeshopAPI.Services
         /// <returns></returns>
         public async Task<List<Guid>> GetPurchasedIds(Guid id)
         {
-            var ids = _context.Payments
-                .Where(x => x.UserId == id)
-                .Select(x => x.ProductId)
-                .ToList();
-
-            return ids;
+            return await _balanceService.GetPurchasedIds(id);
         }
 
         /// <summary>
