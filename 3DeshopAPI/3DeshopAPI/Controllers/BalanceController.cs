@@ -39,9 +39,9 @@ namespace _3DeshopAPI.Controllers
         /// <param name="amount"></param>
         /// <returns></returns>
         [HttpPost("balance-top-up")]
-        public async Task<BalanceHistory> BalanceTopUp(Guid userId, double amount)
+        public async Task<BalanceHistory> BalanceTopUp(TopUpModel model)
         {
-            var response = await _balanceService.BalanceTopUp(userId, amount);
+            var response = await _balanceService.BalanceTopUp(model);
 
             return response;
         }

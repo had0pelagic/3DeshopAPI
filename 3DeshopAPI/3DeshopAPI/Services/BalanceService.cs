@@ -61,19 +61,19 @@ namespace _3DeshopAPI.Services
         /// <param name="amount"></param>
         /// <returns></returns>
         /// <exception cref="InvalidClientOperationException"></exception>
-        public async Task<BalanceHistory> BalanceTopUp(Guid userId, double amount)
+        public async Task<BalanceHistory> BalanceTopUp(TopUpModel model)
         {
-            var userExists = _context.Users.Any(x => x.Id == userId);
+            var userExists = _context.Users.Any(x => x.Id == model.UserId);
 
             if (!userExists)
             {
                 throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
             }
 
-            var user = await _context.Users.FindAsync(userId);
+            var user = await _context.Users.FindAsync(model.UserId);
             var balanceHistory = new BalanceHistory()
             {
-                Balance = amount,
+                Balance = model.Amount,
                 To = user,
                 IsPending = false,
                 IsTopUp = true,
@@ -148,6 +148,26 @@ namespace _3DeshopAPI.Services
             await _context.SaveChangesAsync();
 
             return balanceHistory;
+        }
+
+        /// <summary>
+        /// Removes balance history entry by given order
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidClientOperationException"></exception>
+        public async Task RemoveBalanceHistoryByOrder(Guid orderId)
+        {
+            var balanceHistories = await _context.BalanceHistory.Include(x => x.Order).ToListAsync();
+            var orderBalanceHistory = balanceHistories.Where(x => x.Order?.Id == orderId).First();
+
+            if (orderBalanceHistory == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.BalanceHistoryNotFound);
+            }
+
+            _context.BalanceHistory.Remove(orderBalanceHistory);
+            await _context.SaveChangesAsync();
         }
 
         /// <summary>

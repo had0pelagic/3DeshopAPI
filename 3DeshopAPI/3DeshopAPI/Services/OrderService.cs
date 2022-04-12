@@ -179,8 +179,8 @@ namespace _3DeshopAPI.Services
                 throw new InvalidClientOperationException(ErrorCodes.CantRemoveOrderIsActive);
             }
 
+            await _balanceService.RemoveBalanceHistoryByOrder(orderId);
             _context.Orders.Remove(order);
-            ///send payment back to user
             await _context.SaveChangesAsync();
 
             return order;

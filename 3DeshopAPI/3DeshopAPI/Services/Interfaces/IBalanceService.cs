@@ -6,8 +6,9 @@ namespace _3DeshopAPI.Services.Interfaces
     public interface IBalanceService
     {
         Task<UserBalanceModel> GetUserBalance(Guid userId);
-        Task<BalanceHistory> BalanceTopUp(Guid userId, double amount);
+        Task<BalanceHistory> BalanceTopUp(TopUpModel model);
         Task<BalanceHistory> PayForProduct(PayForProductModel model);
+        Task RemoveBalanceHistoryByOrder(Guid orderId);
         Task<BalanceHistory> PayForOrder(PayForOrderModel model);
         Task<BalanceHistory> PayForCompletedOrder(Guid workerId, Guid orderId);
         Task<List<Guid>> GetPurchasedIds(Guid id);

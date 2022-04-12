@@ -1,4 +1,5 @@
 ﻿using _3DeshopAPI.Exceptions;
+using _3DeshopAPI.Models.Balance;
 using _3DeshopAPI.Models.User;
 using _3DeshopAPI.Services.Interfaces;
 using AutoMapper;
@@ -91,7 +92,13 @@ namespace _3DeshopAPI.Services
 
             _context.Users.Add(model);
             await _context.SaveChangesAsync();
-            await _balanceService.BalanceTopUp(model.Id, 0);
+
+            var topUp = new TopUpModel()
+            {
+                UserId = model.Id,
+                Amount = 0
+            };
+            await _balanceService.BalanceTopUp(topUp);
         }
 
         /// <summary>
