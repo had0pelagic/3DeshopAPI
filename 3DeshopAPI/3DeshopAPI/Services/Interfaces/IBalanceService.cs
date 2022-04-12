@@ -8,6 +8,8 @@ namespace _3DeshopAPI.Services.Interfaces
         Task<UserBalanceModel> GetUserBalance(Guid userId);
         Task<BalanceHistory> BalanceTopUp(Guid userId, double amount);
         Task<BalanceHistory> PayForProduct(PayForProductModel model);
+        Task<BalanceHistory> PayForOrder(PayForOrderModel model);
+        Task<BalanceHistory> PayForCompletedOrder(Guid workerId, Guid orderId);
         Task<List<Guid>> GetPurchasedIds(Guid id);
         Task<bool> IsBalanceEnough(Guid userId, double amount);
     }

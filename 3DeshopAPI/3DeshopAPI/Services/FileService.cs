@@ -15,13 +15,15 @@ namespace _3DeshopAPI.Services
         private readonly ILogger<ProductService> _logger;
         private readonly IUserService _userService;
         private readonly IPaymentService _paymentService;
+        private readonly IBalanceService _balanceService;
         private readonly Context _context;
 
-        public FileService(ILogger<ProductService> logger, IUserService userService, IPaymentService paymentService, Context context)
+        public FileService(ILogger<ProductService> logger, IUserService userService, IPaymentService paymentService, IBalanceService balanceService, Context context)
         {
             _logger = logger;
             _userService = userService;
             _paymentService = paymentService;
+            _balanceService = balanceService;
             _context = context;
         }
 
@@ -63,9 +65,10 @@ namespace _3DeshopAPI.Services
                 throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
             }
 
-            var payment = await _paymentService.UserHasPaid(productId, userId);
+            var purchasedIds = await _balanceService.GetPurchasedIds(userId);
+            var isBoughtByUser = purchasedIds.Contains(productId);
 
-            if (payment == null)
+            if (!isBoughtByUser)
             {
                 throw new InvalidClientOperationException(ErrorCodes.NotPaid);
             }

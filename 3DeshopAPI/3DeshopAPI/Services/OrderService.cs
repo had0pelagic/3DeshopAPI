@@ -1,4 +1,5 @@
 ﻿using _3DeshopAPI.Exceptions;
+using _3DeshopAPI.Models.Balance;
 using _3DeshopAPI.Models.Order;
 using _3DeshopAPI.Models.Product;
 using _3DeshopAPI.Services.Interfaces;
@@ -132,6 +133,13 @@ namespace _3DeshopAPI.Services
             await _context.Orders.AddAsync(order);
             await SetOrderImages(order, model.Images);
             await _context.SaveChangesAsync();
+
+            var payModel = new PayForOrderModel()
+            {
+                UserId = user.Id,
+                OrderId = order.Id
+            };
+            await _balanceService.PayForOrder(payModel);
 
             return order;
         }
@@ -523,6 +531,14 @@ namespace _3DeshopAPI.Services
             _context.Entry(order).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
+            var workerId = await _context.Jobs
+                .Include(x => x.Order)
+                .Include(x => x.Offer)
+                .Where(x => x.Order.Id == order.Id)
+                .Select(x => x.Offer.UserId)
+                .FirstAsync();
+            await _balanceService.PayForCompletedOrder(workerId, order.Id);
+            //send payment to worker
             return order;
         }
 

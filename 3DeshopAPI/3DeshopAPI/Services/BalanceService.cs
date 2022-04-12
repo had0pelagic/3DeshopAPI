@@ -39,7 +39,7 @@ namespace _3DeshopAPI.Services
                 .ToListAsync();
 
             var totalBalance = balanceHistoryList
-                .Where(x => x.To?.Id == userId && !x.IsPending)
+                .Where(x => x.To?.Id == userId /*&& !x.IsPending*/)
                 .Sum(x => x.Balance);
 
             var paymentSum = balanceHistoryList
@@ -106,6 +106,7 @@ namespace _3DeshopAPI.Services
                 .Where(x => x.Id == model.ProductId)
                 .First();
             var productOwner = await _context.Users.FindAsync(product.UserId);
+
             if (productOwner == null)
             {
                 throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
@@ -206,6 +207,58 @@ namespace _3DeshopAPI.Services
                 Balance = order.Price,
                 From = user,
                 IsPending = true,
+                IsTopUp = false,
+                LastTime = DateTime.UtcNow,
+                Order = order
+            };
+
+            await _context.BalanceHistory.AddAsync(balanceHistory);
+            await _context.SaveChangesAsync();
+
+            return balanceHistory;
+        }
+
+        /// <summary>
+        /// Sends pending payment to worker after order completion and approvement
+        /// </summary>
+        /// <param name="workerId"></param>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidClientOperationException"></exception>
+        public async Task<BalanceHistory> PayForCompletedOrder(Guid workerId, Guid orderId)
+        {
+            var toUser = await _context.Users.FindAsync(workerId);
+
+            if (toUser == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+
+            var order = _context.Orders
+                .Where(x => x.Id == orderId)
+                .First();
+
+            if (order == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.OrderNotFound);
+            }
+
+            var orderBalanceHistory = await _context.BalanceHistory
+                .Include(x => x.Order)
+                .Where(x => x.Order.Id == orderId && x.IsPending)
+                .FirstAsync();
+
+            if (orderBalanceHistory == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.BalanceHistoryNotFound);
+            }
+
+            var balanceHistory = new BalanceHistory()
+            {
+                Balance = orderBalanceHistory.Balance,
+                From = null,
+                To = toUser,
+                IsPending = false,
                 IsTopUp = false,
                 LastTime = DateTime.UtcNow,
                 Order = order

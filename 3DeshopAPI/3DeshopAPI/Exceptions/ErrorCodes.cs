@@ -41,6 +41,8 @@ namespace _3DeshopAPI.Exceptions
         [Description("Product can't be bought by the owner")]
         OwnerUnableToBuyProduct,
         [Description("Can't buy the same product again")]
-        DuplicateBuy
+        DuplicateBuy,
+        [Description("Payment was not found")]
+        BalanceHistoryNotFound
     }
 }

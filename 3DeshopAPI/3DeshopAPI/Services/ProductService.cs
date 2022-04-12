@@ -14,14 +14,16 @@ namespace _3DeshopAPI.Services
         private readonly ILogger<ProductService> _logger;
         private readonly IUserService _userService;
         private readonly IPaymentService _paymentService;
+        private readonly IBalanceService _balanceService;
         private readonly IMapper _mapper;
         private readonly Context _context;
 
-        public ProductService(ILogger<ProductService> logger, IUserService userService, IPaymentService paymentService, IMapper mapper, Context context)
+        public ProductService(ILogger<ProductService> logger, IUserService userService, IPaymentService paymentService, IBalanceService balanceService, IMapper mapper, Context context)
         {
             _logger = logger;
             _userService = userService;
             _paymentService = paymentService;
+            _balanceService = balanceService;
             _context = context;
             _mapper = mapper;
         }
@@ -59,9 +61,9 @@ namespace _3DeshopAPI.Services
                 throw new InvalidClientOperationException(ErrorCodes.ProductNotFound);
             }
 
-            var payments = await _paymentService.GetPayments();
             var userId = _userService.GetCurrentUser().Id;
-            var isBoughtByUser = payments.Any(x => x.UserId == userId && x.ProductId == id);
+            var purchasedIds = await _balanceService.GetPurchasedIds(userId);
+            var isBoughtByUser = purchasedIds.Contains(id);
 
             return await ProductToProductModel(product, isBoughtByUser);
         }
