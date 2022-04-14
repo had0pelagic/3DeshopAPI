@@ -226,6 +226,11 @@ namespace _3DeshopAPI.Services
         {
             var user = await _context.Users.FindAsync(id);
 
+            if (user == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+
             return user.Username;
         }
 

@@ -158,8 +158,12 @@ namespace _3DeshopAPI.Services
         /// <exception cref="InvalidClientOperationException"></exception>
         public async Task RemoveBalanceHistoryByOrder(Guid orderId)
         {
-            var balanceHistories = await _context.BalanceHistory.Include(x => x.Order).ToListAsync();
-            var orderBalanceHistory = balanceHistories.Where(x => x.Order?.Id == orderId).First();
+            var balanceHistories = await _context.BalanceHistory
+                .Include(x => x.Order)
+                .ToListAsync();
+            var orderBalanceHistory = balanceHistories
+                .Where(x => x.Order?.Id == orderId)
+                .First();
 
             if (orderBalanceHistory == null)
             {
@@ -215,9 +219,9 @@ namespace _3DeshopAPI.Services
             var order = _context.Orders
                 .Where(x => x.Id == model.OrderId)
                 .First();
-            var user = await _context.Users.FindAsync(model.UserId);
+            var orderOwner = await _context.Users.FindAsync(model.UserId);
 
-            if (user == null)
+            if (orderOwner == null)
             {
                 throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
             }
@@ -225,7 +229,7 @@ namespace _3DeshopAPI.Services
             var balanceHistory = new BalanceHistory()
             {
                 Balance = order.Price,
-                From = user,
+                From = orderOwner,
                 IsPending = true,
                 IsTopUp = false,
                 LastTime = DateTime.UtcNow,

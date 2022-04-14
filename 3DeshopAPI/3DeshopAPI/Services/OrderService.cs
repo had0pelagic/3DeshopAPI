@@ -2,6 +2,7 @@
 using _3DeshopAPI.Models.Balance;
 using _3DeshopAPI.Models.Order;
 using _3DeshopAPI.Models.Product;
+using _3DeshopAPI.Models.User;
 using _3DeshopAPI.Services.Interfaces;
 using AutoMapper;
 using Domain.Order;
@@ -320,7 +321,7 @@ namespace _3DeshopAPI.Services
         /// <param name="model"></param>
         /// <returns></returns>
         /// <exception cref="InvalidClientOperationException"></exception>
-        public async Task<List<JobProgress>> GetJobProgress(Guid userId, Guid orderId)
+        public async Task<List<JobProgressDisplayModel>> GetJobProgress(Guid userId, Guid orderId)
         {
             var user = await _userService.GetUser(userId);
 
@@ -352,7 +353,9 @@ namespace _3DeshopAPI.Services
                 .Where(x => x.JobId == job.Id)
                 .ToListAsync();
 
-            return progresses;
+            var displayProgresses = await Task.WhenAll(progresses.Select(x => JobProgressToJobProgressDisplayModel(x)));
+
+            return displayProgresses.ToList();
 
         }
         /// <summary>
@@ -538,7 +541,7 @@ namespace _3DeshopAPI.Services
                 .Select(x => x.Offer.UserId)
                 .FirstAsync();
             await _balanceService.PayForCompletedOrder(workerId, order.Id);
-            //send payment to worker
+
             return order;
         }
 
@@ -703,6 +706,27 @@ namespace _3DeshopAPI.Services
             };
         }
 
+        /// <summary>
+        /// Maps JobProgress to JobProgressDisplayModel
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        private async Task<JobProgressDisplayModel> JobProgressToJobProgressDisplayModel(JobProgress model)
+        {
+            return new JobProgressDisplayModel
+            {
+                Id = model.Id,
+                Created = model.Created,
+                Description = model.Description,
+                JobId = model.JobId,
+                Progress = model.Progress,
+                User = new UserDisplayModel()
+                {
+                    Id = model.UserId,
+                    Username = await _userService.GetUsername(model.UserId)
+                }
+            };
+        }
         /// <summary>
         /// Returns all images associated with order
         /// </summary>

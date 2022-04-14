@@ -209,7 +209,7 @@ namespace _3DeshopAPI.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpGet("get-job-progress/{userId}/{orderId}")]
-        public async Task<ActionResult<List<JobProgress>>> GetJobProgress(Guid userId, Guid orderId)
+        public async Task<ActionResult<List<JobProgressDisplayModel>>> GetJobProgress(Guid userId, Guid orderId)
         {
             var response = await _orderService.GetJobProgress(userId, orderId);
 
