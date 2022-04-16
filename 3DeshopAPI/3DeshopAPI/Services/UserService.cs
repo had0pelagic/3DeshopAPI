@@ -1,12 +1,16 @@
 ﻿using _3DeshopAPI.Exceptions;
 using _3DeshopAPI.Models.Balance;
+using _3DeshopAPI.Models.Product;
+using _3DeshopAPI.Models.Settings;
 using _3DeshopAPI.Models.User;
 using _3DeshopAPI.Services.Interfaces;
 using AutoMapper;
 using Domain;
+using Domain.Product;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace _3DeshopAPI.Services
 {
@@ -17,18 +21,20 @@ namespace _3DeshopAPI.Services
         private readonly Context _context;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IBalanceService _balanceService;
+        private readonly DefaultFileSettings _fileSettings;
 
-        public UserService(ILogger<UserService> logger, IMapper mapper, IHttpContextAccessor contextAccessor, Context context, IBalanceService balanceService)
+        public UserService(ILogger<UserService> logger, IMapper mapper, IHttpContextAccessor contextAccessor, Context context, IBalanceService balanceService, IOptions<DefaultFileSettings> fileSettings)
         {
             _logger = logger;
             _mapper = mapper;
             _context = context;
             _contextAccessor = contextAccessor;
             _balanceService = balanceService;
+            _fileSettings = fileSettings.Value;
         }
 
         /// <summary>
-        /// Gets users list from db
+        /// Gets user list from db
         /// </summary>
         /// <returns></returns>
         public async Task<List<User>> GetAllUsers()
@@ -45,7 +51,10 @@ namespace _3DeshopAPI.Services
         /// <returns></returns>
         public async Task<User?> GetUser(Guid id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users
+                .Include(x => x.Image)
+                .Where(x => x.Id == id)
+                .FirstAsync();
 
             if (user == null)
             {
@@ -88,7 +97,7 @@ namespace _3DeshopAPI.Services
             }
 
             model.UserRole = UserRoles.User;
-            model.ImageURL = "https://images.random/defaultimage.jp";
+            model.Image = await GetDefaultImage(new Guid(_fileSettings.Image));
 
             _context.Users.Add(model);
             await _context.SaveChangesAsync();
@@ -118,37 +127,40 @@ namespace _3DeshopAPI.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<IActionResult> UpdateUser(Guid id, User model)
+        public async Task<IActionResult> UpdateUser(Guid id, UserUpdateModel model)
         {
-            if (!UserExists(id))
+            var user = await _context.Users
+                .Include(x => x.Image)
+                .Where(x => x.Id == id)
+                .FirstAsync();
+
+            if (user == null)
             {
                 throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
             }
 
-            var dbUser = await _context.Users.FindAsync(id);
-
             if (model.FirstName != null)
             {
-                dbUser.FirstName = model.FirstName;
+                user.FirstName = model.FirstName;
             }
             if (model.LastName != null)
             {
-                dbUser.LastName = model.LastName;
+                user.LastName = model.LastName;
             }
             if (model.Email != null)
             {
-                dbUser.Email = model.Email;
+                user.Email = model.Email;
             }
             if (model.Username != null)
             {
-                dbUser.Username = model.Username;
+                user.Username = model.Username;
             }
-            if (model.ImageURL != null)
+            if (model.Image != null)
             {
-                dbUser.ImageURL = model.ImageURL;
+                await SetUserImage(user, model.Image);
             }
 
-            _context.Entry(dbUser).State = EntityState.Modified;
+            _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
             return new NoContentResult();
@@ -253,6 +265,47 @@ namespace _3DeshopAPI.Services
         public async Task<List<Guid>> GetPurchasedIds(Guid id)
         {
             return await _balanceService.GetPurchasedIds(id);
+        }
+
+        /// <summary>
+        /// Sets new user image
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="image"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        private async Task SetUserImage(User user, ImageModel image)
+        {
+            try
+            {
+                var newImage = _mapper.Map<Image>(image);
+                await _context.Images.AddAsync(newImage);
+                await _context.SaveChangesAsync();
+                user.Image = newImage;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Returns image by given id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidClientOperationException"></exception>
+        private async Task<Image> GetDefaultImage(Guid id)
+        {
+            var image = await _context.Images.FindAsync(id);
+
+            if (image == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.ImageNotFound);
+            }
+
+            //_mapper.Map<ImageModel>(image);
+            return image;
         }
 
         /// <summary>

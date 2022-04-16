@@ -75,6 +75,7 @@ builder.Services.AddSwaggerGen(opts =>
 
 builder.SetupServices();
 builder.Services.Configure<SMTPSettings>(builder.Configuration.GetSection("SMTP"));
+builder.Services.Configure<DefaultFileSettings>(builder.Configuration.GetSection("DefaultFileIds"));
 
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
@@ -117,6 +118,9 @@ automapper.ConfigurationProvider.AssertConfigurationIsValid();
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
+
+var defaultFileConfiguration = builder.Configuration.GetSection("DefaultFileIds").Get<DefaultFileSettings>();
+await app.PrepareDatabase(defaultFileConfiguration);
 
 app.ConfigureExceptionHandler();
 

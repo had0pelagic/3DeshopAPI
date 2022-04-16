@@ -11,7 +11,7 @@ namespace _3DeshopAPI.Services.Interfaces
         Task<UserDisplayModel> GetDisplayUser(Guid id);
         Task RegisterUser(User model);
         Task RemoveUser(User model);
-        Task<IActionResult> UpdateUser(Guid id, User model);
+        Task<IActionResult> UpdateUser(Guid id, UserUpdateModel model);
         Task<IActionResult> ChangePassword(Guid id, UserPasswordModel model);
         Task<User?> IsUserValid(UserLoginModel model);
         Task<string?> GetUserRole(UserLoginModel model);

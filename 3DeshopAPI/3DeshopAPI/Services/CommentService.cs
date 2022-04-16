@@ -37,6 +37,7 @@ namespace _3DeshopAPI.Services
             var comments = await _context.Comments
                 .Include(x => x.Product)
                 .Include(x => x.User)
+                .Include(x => x.User.Image)
                 .ToListAsync();
 
             return comments.Where(x => x.Product.Id == productId).ToList();

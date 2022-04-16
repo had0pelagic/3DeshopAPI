@@ -14,7 +14,7 @@ namespace _3DeshopAPI.Mappings
 
             CreateMap<UserRegisterModel, User>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
-                .ForMember(x => x.ImageURL, opt => opt.Ignore());
+                .ForMember(x => x.Image, opt => opt.Ignore());
 
             CreateMap<UserModel, User>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
@@ -27,7 +27,7 @@ namespace _3DeshopAPI.Mappings
                 .ForMember(x => x.LastName, opt => opt.Ignore())
                 .ForMember(x => x.Email, opt => opt.Ignore())
                 .ForMember(x => x.Password, opt => opt.Ignore())
-                .ForMember(x => x.ImageURL, opt => opt.Ignore())
+                .ForMember(x => x.Image, opt => opt.Ignore())
                 .ForMember(x => x.UserRole, opt => opt.Ignore());
 
             CreateMap<User, UserDisplayModel>()
@@ -40,7 +40,7 @@ namespace _3DeshopAPI.Mappings
                 .ForMember(x => x.FirstName, opt => opt.Ignore())
                 .ForMember(x => x.LastName, opt => opt.Ignore())
                 .ForMember(x => x.Email, opt => opt.Ignore())
-                .ForMember(x => x.ImageURL, opt => opt.Ignore())
+                .ForMember(x => x.Image, opt => opt.Ignore())
                 .ForMember(x => x.UserRole, opt => opt.Ignore());
         }
     }

@@ -1,5 +1,6 @@
 ﻿using _3DeshopAPI.Exceptions;
 using _3DeshopAPI.Models.Product;
+using _3DeshopAPI.Models.User;
 using _3DeshopAPI.Services.Interfaces;
 using AutoMapper;
 using Domain.Product;
@@ -13,16 +14,14 @@ namespace _3DeshopAPI.Services
     {
         private readonly ILogger<ProductService> _logger;
         private readonly IUserService _userService;
-        private readonly IPaymentService _paymentService;
         private readonly IBalanceService _balanceService;
         private readonly IMapper _mapper;
         private readonly Context _context;
 
-        public ProductService(ILogger<ProductService> logger, IUserService userService, IPaymentService paymentService, IBalanceService balanceService, IMapper mapper, Context context)
+        public ProductService(ILogger<ProductService> logger, IUserService userService, IBalanceService balanceService, IMapper mapper, Context context)
         {
             _logger = logger;
             _userService = userService;
-            _paymentService = paymentService;
             _balanceService = balanceService;
             _context = context;
             _mapper = mapper;
@@ -106,7 +105,11 @@ namespace _3DeshopAPI.Services
             {
                 About = _mapper.Map<ProductAboutModel>(model.About),
                 Specifications = _mapper.Map<ProductSpecificationsModel>(model.Specifications),
-                UserId = model.UserId,
+                User = new UserDisplayModel()
+                {
+                    Id = model.UserId,
+                    Username = await _userService.GetUsername(model.UserId)
+                },
                 Categories = await GetProductCategories(model.Id),
                 Formats = await GetProductFormats(model.Id),
                 Images = await GetProductImages(model.Id),
@@ -125,7 +128,11 @@ namespace _3DeshopAPI.Services
             {
                 Id = model.Id,
                 Name = model.About.Name,
-                Username = await _userService.GetUsername(model.UserId),
+                User = new UserDisplayModel()
+                {
+                    Id = model.UserId,
+                    Username = await _userService.GetUsername(model.UserId)
+                },
                 Price = model.About.Price,
                 Downloads = model.About.Downloads,
                 Image = await GetProductImage(model.Id),

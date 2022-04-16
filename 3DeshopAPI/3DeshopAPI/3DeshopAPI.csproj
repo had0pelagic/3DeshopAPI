@@ -8,12 +8,22 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="Files\Images\DefaultImage.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="Files\Images\DefaultImage.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="11.0.0" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1">
-			<PrivateAssets>all</PrivateAssets>
+			<!--<PrivateAssets>all</PrivateAssets>-->
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0-rc.1.21452.10">
@@ -32,13 +42,13 @@
 
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-	  <ProjectReference Include="..\PaymentAPI\PaymentAPI.csproj" />
+		<ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+		<ProjectReference Include="..\PaymentAPI\PaymentAPI.csproj" />
 	</ItemGroup>
 
 
 	<ItemGroup>
-	  <Folder Include="Models\File\" />
+		<Folder Include="Models\File\" />
 	</ItemGroup>
 
 </Project>

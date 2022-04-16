@@ -1,12 +1,13 @@
-﻿namespace _3DeshopAPI.Models.User
+﻿using _3DeshopAPI.Models.Product;
+
+namespace _3DeshopAPI.Models.User
 {
-    public class UserRegisterModel
+    public class UserUpdateModel
     {
         public string? Username { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+        public ImageModel? Image { get; set; }
         public string? Email { get; set; }
-        public string? Password { get; set; }
-        public string? UserRole { get; set; }
     }
 }

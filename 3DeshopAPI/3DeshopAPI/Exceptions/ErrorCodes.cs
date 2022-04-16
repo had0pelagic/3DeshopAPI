@@ -43,6 +43,8 @@ namespace _3DeshopAPI.Exceptions
         [Description("Can't buy the same product again")]
         DuplicateBuy,
         [Description("Payment was not found")]
-        BalanceHistoryNotFound
+        BalanceHistoryNotFound,
+        [Description("Image was not found")]
+        ImageNotFound
     }
 }

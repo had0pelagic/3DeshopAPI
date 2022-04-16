@@ -95,11 +95,9 @@ namespace _3DeshopAPI.Controllers
         /// <returns></returns>
         [HttpPut("{id}")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UserModel model)
+        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UserUpdateModel model)
         {
-            var user = _mapper.Map<Domain.User>(model);
-
-            return await _userService.UpdateUser(id, user);
+            return await _userService.UpdateUser(id, model);
         }
 
         /// <summary>
