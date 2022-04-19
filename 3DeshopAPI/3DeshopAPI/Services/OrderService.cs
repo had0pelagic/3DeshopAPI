@@ -35,7 +35,9 @@ namespace _3DeshopAPI.Services
         /// <returns></returns>
         public async Task<List<Order>> GetOrders()
         {
-            var orders = await _context.Orders.ToListAsync();
+            var orders = await _context.Orders
+                .Include(x => x.User)
+                .ToListAsync();
 
             return orders;
         }
@@ -48,7 +50,8 @@ namespace _3DeshopAPI.Services
         public async Task<List<Order>> GetUserOrders(Guid id)
         {
             var orders = await _context.Orders
-                .Where(x => x.UserId == id)
+                .Include(x => x.User)
+                .Where(x => x.User.Id == id)
                 .ToListAsync();
 
             return orders;
@@ -65,6 +68,7 @@ namespace _3DeshopAPI.Services
                 .Select(x => x.Order.Id)
                 .ToList();
             var orders = _context.Orders
+                .Include(x => x.User)
                 .Where(x => !activeJobIds.Contains(x.Id))
                 .ToList();
 
@@ -78,7 +82,10 @@ namespace _3DeshopAPI.Services
         /// <returns></returns>
         public async Task<Order?> GetOrder(Guid id)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders
+                .Include(x => x.User)
+                .Where(x => x.Id == id)
+                .FirstOrDefaultAsync();
 
             if (order == null)
             {
@@ -96,7 +103,10 @@ namespace _3DeshopAPI.Services
         /// <exception cref="InvalidClientOperationException"></exception>
         public async Task<OrderDisplayModel?> GetDisplayOrder(Guid id)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders
+                .Include(x => x.User)
+                .Where(x => x.Id == id)
+                .FirstOrDefaultAsync();
 
             if (order == null)
             {
@@ -130,6 +140,8 @@ namespace _3DeshopAPI.Services
 
             var order = _mapper.Map<Order>(model);
             order.Created = DateTime.UtcNow;
+            order.User = user;
+            _context.Entry(order).State = EntityState.Modified;
 
             await _context.Orders.AddAsync(order);
             await SetOrderImages(order, model.Images);
@@ -161,14 +173,17 @@ namespace _3DeshopAPI.Services
                 throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
             }
 
-            var order = await _context.Orders.FindAsync(orderId);
+            var order = await _context.Orders
+                .Include(x => x.User)
+                .Where(x => x.Id == orderId)
+                .FirstOrDefaultAsync();
 
             if (order == null)
             {
                 throw new InvalidClientOperationException(ErrorCodes.OrderNotFound);
             }
 
-            if (user.Id != order.UserId)
+            if (user.Id != order.User.Id)
             {
                 throw new InvalidClientOperationException(ErrorCodes.UnauthorizedForAction);
             }
@@ -303,7 +318,7 @@ namespace _3DeshopAPI.Services
                 throw new InvalidClientOperationException(ErrorCodes.JobNotFound);
             }
 
-            if (job.Offer.UserId != model.UserId)
+            if (job.Offer.User.Id != model.UserId)
             {
                 throw new InvalidClientOperationException(ErrorCodes.UnauthorizedForAction);
             }
@@ -353,9 +368,7 @@ namespace _3DeshopAPI.Services
                 .Where(x => x.JobId == job.Id)
                 .ToListAsync();
 
-            var displayProgresses = await Task.WhenAll(progresses.Select(x => JobProgressToJobProgressDisplayModel(x)));
-
-            return displayProgresses.ToList();
+            return progresses.Select(x => JobProgressToJobProgressDisplayModel(x).Result).ToList();
 
         }
         /// <summary>
@@ -407,6 +420,9 @@ namespace _3DeshopAPI.Services
 
             var offer = _mapper.Map<Offer>(model);
             offer.Created = DateTime.UtcNow;
+            offer.User = user;
+            _context.Entry(offer).State = EntityState.Modified;
+
             await _context.Offers.AddAsync(offer);
             await _context.OrderOffers.AddAsync(new OrderOffers()
             {
@@ -422,13 +438,14 @@ namespace _3DeshopAPI.Services
         /// Returns all offers associated with selected order
         /// </summary>
         /// <returns></returns>
-        public async Task<List<Offer>> GetOrderOffers(Guid orderId)
+        public async Task<List<OfferDisplayModel>> GetOrderOffers(Guid orderId)
         {
             var offers = await _context.OrderOffers
                 .Include(x => x.Order)
                 .Include(x => x.Offer)
+                .Include(x => x.Offer.User)
                 .Where(x => x.Order.Id == orderId)
-                .Select(x => x.Offer)
+                .Select(x => _mapper.Map<OfferDisplayModel>(x.Offer))
                 .ToListAsync();
 
             return offers;
@@ -538,7 +555,7 @@ namespace _3DeshopAPI.Services
                 .Include(x => x.Order)
                 .Include(x => x.Offer)
                 .Where(x => x.Order.Id == order.Id)
-                .Select(x => x.Offer.UserId)
+                .Select(x => x.Offer.User.Id)
                 .FirstAsync();
             await _balanceService.PayForCompletedOrder(workerId, order.Id);
 
@@ -579,12 +596,13 @@ namespace _3DeshopAPI.Services
         /// <param name="orderId"></param>
         /// <returns></returns>
         /// <exception cref="InvalidClientOperationException"></exception>
-        public async Task<Job> RequestJobChanges(Guid orderId)
+        public async Task<Job> RequestJobChanges(ChangeRequestModel model)
         {
             var job = await _context.Jobs
                 .Include(x => x.Order)
                 .Include(x => x.Offer)
-                .Where(x => x.Order.Id == orderId)
+                .Include(x => x.Offer.User)
+                .Where(x => x.Order.Id == model.OrderId)
                 .FirstOrDefaultAsync();
 
             if (job == null)
@@ -595,8 +613,8 @@ namespace _3DeshopAPI.Services
             var jobProgress = new JobProgress()
             {
                 Created = DateTime.UtcNow,
-                UserId = job.Offer.UserId,
-                Description = "Need changes",
+                UserId = job.Offer.User.Id,
+                Description = model.Description,
                 JobId = job.Id,
                 Progress = 0,
             };
@@ -627,7 +645,7 @@ namespace _3DeshopAPI.Services
                 throw new InvalidClientOperationException(ErrorCodes.OrderNotFound);
             }
 
-            if (order.UserId == userId)
+            if (order.User.Id == userId)
             {
                 return true;
             }
@@ -653,14 +671,17 @@ namespace _3DeshopAPI.Services
         /// Returns all existing jobs
         /// </summary>
         /// <returns></returns>
-        public async Task<List<Job>> GetUserJobs(Guid id)
+        public async Task<List<JobDisplayModel>> GetUserJobs(Guid id)
         {
             var jobs = await _context.Jobs
                 .Include(x => x.Order)
+                .Include(x => x.Order.User)
                 .Include(x => x.Offer)
+                .Include(x => x.Offer.User)
+                .Select(x => _mapper.Map<JobDisplayModel>(x))
                 .ToListAsync();
             var userJobs = jobs
-                .Where(x => x.Offer.UserId == id)
+                .Where(x => x.Offer.User.Id == id)
                 .ToList();
 
             return userJobs;
@@ -679,10 +700,11 @@ namespace _3DeshopAPI.Services
                 Name = model.Name,
                 Description = model.Description,
                 Price = model.Price,
-                UserId = model.UserId,
+                User = _mapper.Map<UserDisplayModel>(model.User),
                 CompleteTill = model.CompleteTill,
                 Created = model.Created,
                 Images = await GetOrderImages(model.Id),
+                Approved = model.Approved
             };
         }
 
@@ -702,7 +724,7 @@ namespace _3DeshopAPI.Services
                 Description = model.Description,
                 Name = model.Name,
                 Price = model.Price,
-                User = await _userService.GetDisplayUser(model.UserId)
+                User = await _userService.GetDisplayUser(model.User.Id)
             };
         }
 

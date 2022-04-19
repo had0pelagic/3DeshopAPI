@@ -83,13 +83,14 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddRouting(opts => opts.LowercaseUrls = true);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<Context>(opts =>
-{
-    var connString = builder.Configuration.GetConnectionString("MyConnectionString");
-    opts.UseSqlServer(connString, options =>
-    {
-        options.MigrationsAssembly(typeof(Context).Assembly.FullName.Split(',')[0]);
-    });
-});
+ {
+     var connString = builder.Configuration.GetConnectionString("MyConnectionString");
+     opts.UseSqlServer(connString, options =>
+     {
+         options.MigrationsAssembly(typeof(Context).Assembly.FullName.Split(',')[0]);
+     });
+
+ }, ServiceLifetime.Transient);
 builder.Services.AddAuthentication(opts =>
 {
     opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

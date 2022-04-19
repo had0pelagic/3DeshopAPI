@@ -155,10 +155,10 @@ namespace _3DeshopAPI.Controllers
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        [HttpGet("request-job-changes/{orderId}")]
-        public async Task<ActionResult<Job>> RequestJobChanges(Guid orderId)
+        [HttpPost("request-job-changes")]
+        public async Task<ActionResult<Job>> RequestJobChanges(ChangeRequestModel model)
         {
-            var response = await _orderService.RequestJobChanges(orderId);
+            var response = await _orderService.RequestJobChanges(model);
 
             return Ok(response);
         }
@@ -259,7 +259,7 @@ namespace _3DeshopAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("get-order-offers/{id}")]
-        public async Task<List<Offer>> GetOrderOffers(Guid id)
+        public async Task<List<OfferDisplayModel>> GetOrderOffers(Guid id)
         {
             var response = await _orderService.GetOrderOffers(id);
 
@@ -301,7 +301,7 @@ namespace _3DeshopAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("get-user-jobs/{id}")]
-        public async Task<List<Job>> GetUserJobs(Guid id)
+        public async Task<List<JobDisplayModel>> GetUserJobs(Guid id)
         {
             var response = await _orderService.GetUserJobs(id);
 

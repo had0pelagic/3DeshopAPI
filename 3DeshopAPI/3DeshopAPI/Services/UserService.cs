@@ -304,7 +304,6 @@ namespace _3DeshopAPI.Services
                 throw new InvalidClientOperationException(ErrorCodes.ImageNotFound);
             }
 
-            //_mapper.Map<ImageModel>(image);
             return image;
         }
 
