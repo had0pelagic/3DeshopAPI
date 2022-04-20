@@ -61,7 +61,7 @@ namespace _3DeshopAPI.Services
             }
 
             var userId = _userService.GetCurrentUser().Id;
-            var purchasedIds = await _balanceService.GetPurchasedIds(userId);
+            var purchasedIds = await _balanceService.GetPurchasedProductIds(userId);
             var isBoughtByUser = purchasedIds.Contains(id);
 
             return await ProductToProductModel(product, isBoughtByUser);

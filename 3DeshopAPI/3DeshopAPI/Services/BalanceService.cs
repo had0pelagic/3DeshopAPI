@@ -39,7 +39,7 @@ namespace _3DeshopAPI.Services
                 .ToListAsync();
 
             var totalBalance = balanceHistoryList
-                .Where(x => x.To?.Id == userId /*&& !x.IsPending*/)
+                .Where(x => x.To?.Id == userId && !x.IsPending)
                 .Sum(x => x.Balance);
 
             var paymentSum = balanceHistoryList
@@ -126,7 +126,7 @@ namespace _3DeshopAPI.Services
                 throw new InvalidClientOperationException(ErrorCodes.NotEnoughBalance);
             }
 
-            var purchasedIds = await GetPurchasedIds(model.UserId);
+            var purchasedIds = await GetPurchasedProductIds(model.UserId);
 
             if (purchasedIds.Contains(model.ProductId))
             {
@@ -209,7 +209,7 @@ namespace _3DeshopAPI.Services
         /// <exception cref="InvalidClientOperationException"></exception>
         public async Task<BalanceHistory> PayForOrder(PayForOrderModel model)
         {
-            var userExists = _context.Users.Any(x => x.Id == model.UserId);
+            var userExists = _context.Users.Any(x => x.Id == model.From);
 
             if (!userExists)
             {
@@ -219,9 +219,16 @@ namespace _3DeshopAPI.Services
             var order = _context.Orders
                 .Where(x => x.Id == model.OrderId)
                 .First();
-            var orderOwner = await _context.Users.FindAsync(model.UserId);
+            var orderOwner = await _context.Users.FindAsync(model.From);
 
             if (orderOwner == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+
+            var paymentReceiver = await _context.Users.FindAsync(model.To);
+
+            if (paymentReceiver == null)
             {
                 throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
             }
@@ -230,6 +237,7 @@ namespace _3DeshopAPI.Services
             {
                 Balance = order.Price,
                 From = orderOwner,
+                To = paymentReceiver,
                 IsPending = true,
                 IsTopUp = false,
                 LastTime = DateTime.UtcNow,
@@ -267,28 +275,19 @@ namespace _3DeshopAPI.Services
                 throw new InvalidClientOperationException(ErrorCodes.OrderNotFound);
             }
 
-            var orderBalanceHistory = await _context.BalanceHistory
+            var balanceHistory = await _context.BalanceHistory
                 .Include(x => x.Order)
                 .Where(x => x.Order.Id == orderId && x.IsPending)
                 .FirstAsync();
 
-            if (orderBalanceHistory == null)
+            if (balanceHistory == null)
             {
                 throw new InvalidClientOperationException(ErrorCodes.BalanceHistoryNotFound);
             }
 
-            var balanceHistory = new BalanceHistory()
-            {
-                Balance = orderBalanceHistory.Balance,
-                From = null,
-                To = toUser,
-                IsPending = false,
-                IsTopUp = false,
-                LastTime = DateTime.UtcNow,
-                Order = order
-            };
+            balanceHistory.IsPending = false;
+            _context.Entry(balanceHistory).State = EntityState.Modified;
 
-            await _context.BalanceHistory.AddAsync(balanceHistory);
             await _context.SaveChangesAsync();
 
             return balanceHistory;
@@ -300,7 +299,7 @@ namespace _3DeshopAPI.Services
         /// <param name="id"></param>
         /// <returns></returns>
         /// <exception cref="InvalidClientOperationException"></exception>
-        public async Task<List<Guid>> GetPurchasedIds(Guid id)
+        public async Task<List<Guid>> GetPurchasedProductIds(Guid id)
         {
             var userExists = _context.Users.Any(x => x.Id == id);
 

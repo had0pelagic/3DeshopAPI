@@ -264,7 +264,7 @@ namespace _3DeshopAPI.Services
         /// <returns></returns>
         public async Task<List<Guid>> GetPurchasedIds(Guid id)
         {
-            return await _balanceService.GetPurchasedIds(id);
+            return await _balanceService.GetPurchasedProductIds(id);
         }
 
         /// <summary>

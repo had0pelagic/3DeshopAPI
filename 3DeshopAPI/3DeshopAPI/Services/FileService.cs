@@ -65,7 +65,7 @@ namespace _3DeshopAPI.Services
                 throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
             }
 
-            var purchasedIds = await _balanceService.GetPurchasedIds(userId);
+            var purchasedIds = await _balanceService.GetPurchasedProductIds(userId);
             var isBoughtByUser = purchasedIds.Contains(productId);
 
             if (!isBoughtByUser)

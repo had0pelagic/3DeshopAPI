@@ -11,7 +11,7 @@ namespace _3DeshopAPI.Services.Interfaces
         Task RemoveBalanceHistoryByOrder(Guid orderId);
         Task<BalanceHistory> PayForOrder(PayForOrderModel model);
         Task<BalanceHistory> PayForCompletedOrder(Guid workerId, Guid orderId);
-        Task<List<Guid>> GetPurchasedIds(Guid id);
+        Task<List<Guid>> GetPurchasedProductIds(Guid id);
         Task<bool> IsBalanceEnough(Guid userId, double amount);
     }
 }

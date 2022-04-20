@@ -147,13 +147,6 @@ namespace _3DeshopAPI.Services
             await SetOrderImages(order, model.Images);
             await _context.SaveChangesAsync();
 
-            var payModel = new PayForOrderModel()
-            {
-                UserId = user.Id,
-                OrderId = order.Id
-            };
-            await _balanceService.PayForOrder(payModel);
-
             return order;
         }
 
@@ -311,7 +304,10 @@ namespace _3DeshopAPI.Services
                 throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
             }
 
-            var job = await GetJob(model.JobId);
+            var job = await _context.Jobs
+                .Include(x => x.Offer)
+                .Include(x => x.Offer.User)
+                .FirstOrDefaultAsync(x => x.Id == model.JobId);
 
             if (job == null)
             {
@@ -323,6 +319,7 @@ namespace _3DeshopAPI.Services
                 throw new InvalidClientOperationException(ErrorCodes.UnauthorizedForAction);
             }
 
+            //set to inactive or remove?
             job.Active = false;
             _context.Entry(job).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -389,7 +386,10 @@ namespace _3DeshopAPI.Services
         /// <returns></returns>
         public async Task<Offer> GetOffer(Guid id)
         {
-            var order = await _context.Offers.FindAsync(id);
+            var order = await _context.Offers
+                .Include(x => x.User)
+                .Where(x => x.Id == id)
+                .FirstOrDefaultAsync();
 
             return order;
         }
@@ -490,6 +490,13 @@ namespace _3DeshopAPI.Services
             };
 
             await _context.Jobs.AddAsync(job);
+            var orderModel = new PayForOrderModel()
+            {
+                OrderId = orderId,
+                From = userId,
+                To = offer.User.Id
+            };
+            await _balanceService.PayForOrder(orderModel);
             await _context.SaveChangesAsync();
 
             return job;

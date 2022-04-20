@@ -2,7 +2,8 @@
 {
     public class PayForOrderModel
     {
-        public Guid UserId { get; set; }
+        public Guid From { get; set; }
+        public Guid To { get; set; }
         public Guid OrderId { get; set; }
     }
 }
