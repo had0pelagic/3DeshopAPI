@@ -191,7 +191,7 @@ namespace _3DeshopAPI.Controllers
         }
 
         /// <summary>
-        /// Sets job status to inactive
+        /// Resets all progress of a give job
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>

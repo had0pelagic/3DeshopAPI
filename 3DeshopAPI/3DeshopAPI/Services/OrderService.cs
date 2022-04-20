@@ -290,7 +290,7 @@ namespace _3DeshopAPI.Services
         }
 
         /// <summary>
-        /// Sets job status to inactive
+        /// Resets all progress of a give job
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -307,6 +307,7 @@ namespace _3DeshopAPI.Services
             var job = await _context.Jobs
                 .Include(x => x.Offer)
                 .Include(x => x.Offer.User)
+                .Include(x => x.Order)
                 .FirstOrDefaultAsync(x => x.Id == model.JobId);
 
             if (job == null)
@@ -314,14 +315,45 @@ namespace _3DeshopAPI.Services
                 throw new InvalidClientOperationException(ErrorCodes.JobNotFound);
             }
 
+            if (job.Offer == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.OfferNotFound);
+            }
+
+            if (job.Order == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.OrderNotFound);
+            }
+
             if (job.Offer.User.Id != model.UserId)
             {
                 throw new InvalidClientOperationException(ErrorCodes.UnauthorizedForAction);
             }
 
-            //set to inactive or remove?
-            job.Active = false;
-            _context.Entry(job).State = EntityState.Modified;
+            var progresses = await _context.Progresses
+                .Where(x => x.JobId == job.Id)
+                .ToListAsync();
+            var orderOffer = await _context.OrderOffers
+                .Where(x => x.Offer.Id == job.Offer.Id)
+                .FirstOrDefaultAsync();
+            var orderFiles = await _context.OrderFiles
+                .Include(x => x.File)
+                .Where(x => x.Order.Id == job.Order.Id)
+                .ToListAsync();
+
+            if (orderOffer == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.OrderOfferNotFound);
+            }
+
+            _context.Jobs.Remove(job);
+            _context.Offers.Remove(job.Offer);
+            _context.OrderOffers.Remove(orderOffer);
+            _context.Files.RemoveRange(orderFiles.Select(x => x.File));
+            _context.OrderFiles.RemoveRange(orderFiles);
+            _context.Progresses.RemoveRange(progresses);
+            await _balanceService.RemoveBalanceHistoryByOrder(job.Order.Id);
+
             await _context.SaveChangesAsync();
 
             return job;
