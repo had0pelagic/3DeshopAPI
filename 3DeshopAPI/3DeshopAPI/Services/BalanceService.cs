@@ -104,7 +104,7 @@ namespace _3DeshopAPI.Services
             var product = _context.Products
                 .Include(x => x.About)
                 .Where(x => x.Id == model.ProductId)
-                .First();
+                .FirstOrDefault();
             var productOwner = await _context.Users.FindAsync(product.UserId);
 
             if (productOwner == null)
@@ -160,10 +160,10 @@ namespace _3DeshopAPI.Services
         {
             var balanceHistories = await _context.BalanceHistory
                 .Include(x => x.Order)
+                .Where(x => x.Order != null)
                 .ToListAsync();
             var orderBalanceHistory = balanceHistories
-                .Where(x => x.Order?.Id == orderId)
-                .First();
+                .FirstOrDefault(x => x.Order.Id == orderId);
 
             if (orderBalanceHistory == null)
             {
@@ -218,7 +218,7 @@ namespace _3DeshopAPI.Services
 
             var order = _context.Orders
                 .Where(x => x.Id == model.OrderId)
-                .First();
+                .FirstOrDefault();
             var orderOwner = await _context.Users.FindAsync(model.From);
 
             if (orderOwner == null)
@@ -268,7 +268,7 @@ namespace _3DeshopAPI.Services
 
             var order = _context.Orders
                 .Where(x => x.Id == orderId)
-                .First();
+                .FirstOrDefault();
 
             if (order == null)
             {
@@ -278,7 +278,7 @@ namespace _3DeshopAPI.Services
             var balanceHistory = await _context.BalanceHistory
                 .Include(x => x.Order)
                 .Where(x => x.Order.Id == orderId && x.IsPending)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
             if (balanceHistory == null)
             {

@@ -188,8 +188,15 @@ namespace _3DeshopAPI.Services
                 throw new InvalidClientOperationException(ErrorCodes.CantRemoveOrderIsActive);
             }
 
-            await _balanceService.RemoveBalanceHistoryByOrder(orderId);
+            var orderImages = await _context.OrderImages
+                .Include(x => x.Order)
+                .Include(x => x.Image)
+                .Where(x => x.Order.Id == orderId)
+                .ToListAsync();
+
             _context.Orders.Remove(order);
+            _context.Images.RemoveRange(orderImages.Select(x => x.Image));
+            _context.OrderImages.RemoveRange(orderImages);
             await _context.SaveChangesAsync();
 
             return order;
@@ -595,7 +602,7 @@ namespace _3DeshopAPI.Services
                 .Include(x => x.Offer)
                 .Where(x => x.Order.Id == order.Id)
                 .Select(x => x.Offer.User.Id)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
             await _balanceService.PayForCompletedOrder(workerId, order.Id);
 
             return order;

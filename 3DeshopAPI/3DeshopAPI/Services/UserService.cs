@@ -54,7 +54,7 @@ namespace _3DeshopAPI.Services
             var user = await _context.Users
                 .Include(x => x.Image)
                 .Where(x => x.Id == id)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
             if (user == null)
             {
@@ -132,7 +132,7 @@ namespace _3DeshopAPI.Services
             var user = await _context.Users
                 .Include(x => x.Image)
                 .Where(x => x.Id == id)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
             if (user == null)
             {
@@ -224,7 +224,7 @@ namespace _3DeshopAPI.Services
         /// <returns></returns>
         public async Task<string?> GetUserRole(UserLoginModel model)
         {
-            var user = await _context.Users.Where(x => x.Username == model.Username).FirstAsync();
+            var user = await _context.Users.Where(x => x.Username == model.Username).FirstOrDefaultAsync();
 
             return user.UserRole;
         }
