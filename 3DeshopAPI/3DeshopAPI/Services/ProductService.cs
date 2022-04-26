@@ -42,6 +42,30 @@ namespace _3DeshopAPI.Services
         }
 
         /// <summary>
+        /// Returns all user uploaded products
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidClientOperationException"></exception>
+        public async Task<List<ProductTableDisplayModel>> GetUserProducts(Guid userId)
+        {
+            var user = await _userService.GetUser(userId);
+
+            if (user == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+
+            var products = await _context.Products
+                .Include(i => i.About)
+                .Where(x => x.UserId == userId)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return products.Select(x => ProductToProductTableDisplayModel(x).Result).ToList();
+        }
+
+        /// <summary>
         /// Get product by id, returns full information about product
         /// </summary>
         /// <param name="id"></param>
@@ -154,6 +178,20 @@ namespace _3DeshopAPI.Services
                 .ToListAsync();
 
             return products.Select(x => ProductToProductDisplayModel(x).Result).ToList();
+        }
+
+        /// <summary>
+        /// Maps Product model to ProductTableDisplayModel
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        private async Task<ProductTableDisplayModel> ProductToProductTableDisplayModel(Product model)
+        {
+            return new ProductTableDisplayModel
+            {
+                Id = model.Id,
+                Name = model.About.Name,
+            };
         }
 
         /// <summary>

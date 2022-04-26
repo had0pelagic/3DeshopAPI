@@ -34,6 +34,18 @@ namespace _3DeshopAPI.Controllers
         }
 
         /// <summary>
+        /// Returns all user uploaded products
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("user-products/{id}")]
+        public async Task<ActionResult<List<ProductTableDisplayModel>>> GetUserProducts(Guid id)
+        {
+            var response = await _productService.GetUserProducts(id);
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Get product by id
         /// </summary>
         /// <param name="id"></param>
