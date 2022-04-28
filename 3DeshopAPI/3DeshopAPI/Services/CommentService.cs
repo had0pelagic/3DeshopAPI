@@ -51,12 +51,13 @@ namespace _3DeshopAPI.Services
         public async Task<IActionResult> AddProductComment(Guid productId, Guid userId, Comment model)
         {
             var product = await _context.Products.FindAsync(productId);
-            var user = await _userService.GetUser(userId);
+            var user = await _context.Users.FindAsync(userId);
 
             if (product == null)
             {
                 throw new InvalidClientOperationException(ErrorCodes.ProductNotFound);
             }
+
             if (user == null)
             {
                 throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
@@ -70,7 +71,7 @@ namespace _3DeshopAPI.Services
                 Created = DateTime.UtcNow
             };
 
-            _context.Comments.Add(comment);
+            await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();
 
             return new NoContentResult();

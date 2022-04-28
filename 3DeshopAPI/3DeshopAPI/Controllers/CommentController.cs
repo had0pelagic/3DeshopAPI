@@ -1,6 +1,7 @@
 ﻿using _3DeshopAPI.Models.Product;
 using _3DeshopAPI.Services.Interfaces;
 using AutoMapper;
+using Domain.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,7 +42,7 @@ namespace _3DeshopAPI.Controllers
         [Authorize(Roles = "User")]
         public async Task<IActionResult> AddProductComment(Guid productId, Guid userId, [FromBody] ProductCommentModel model)
         {
-            var comment = _mapper.Map<Domain.Product.Comment>(model);
+            var comment = _mapper.Map<Comment>(model);
 
             return await _commentService.AddProductComment(productId, userId, comment);
         }
