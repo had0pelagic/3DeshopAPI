@@ -16,16 +16,14 @@ namespace _3DeshopAPI.Services
 {
     public class UserService : IUserService
     {
-        private readonly ILogger<UserService> _logger;
         private readonly IMapper _mapper;
         private readonly Context _context;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IBalanceService _balanceService;
         private readonly DefaultFileSettings _fileSettings;
 
-        public UserService(ILogger<UserService> logger, IMapper mapper, IHttpContextAccessor contextAccessor, Context context, IBalanceService balanceService, IOptions<DefaultFileSettings> fileSettings)
+        public UserService(IMapper mapper, IHttpContextAccessor contextAccessor, Context context, IBalanceService balanceService, IOptions<DefaultFileSettings> fileSettings)
         {
-            _logger = logger;
             _mapper = mapper;
             _context = context;
             _contextAccessor = contextAccessor;

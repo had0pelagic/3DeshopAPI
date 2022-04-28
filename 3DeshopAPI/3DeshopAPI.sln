@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{DD1F44AF-98B2-4D19-A351-CDD71A12DC7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentAPI", "PaymentAPI\PaymentAPI.csproj", "{DB3403B6-6700-49DF-85DC-0DCED86B088D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAPI", "PaymentAPI\PaymentAPI.csproj", "{DB3403B6-6700-49DF-85DC-0DCED86B088D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3DeshopAPITest", "3DeshopAPITest\3DeshopAPITest.csproj", "{6E2B53E4-173D-4910-9C1E-A433AB5FCB32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{DB3403B6-6700-49DF-85DC-0DCED86B088D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB3403B6-6700-49DF-85DC-0DCED86B088D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB3403B6-6700-49DF-85DC-0DCED86B088D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E2B53E4-173D-4910-9C1E-A433AB5FCB32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E2B53E4-173D-4910-9C1E-A433AB5FCB32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E2B53E4-173D-4910-9C1E-A433AB5FCB32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E2B53E4-173D-4910-9C1E-A433AB5FCB32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
