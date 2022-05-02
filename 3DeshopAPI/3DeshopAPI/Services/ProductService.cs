@@ -42,6 +42,33 @@ namespace _3DeshopAPI.Services
         }
 
         /// <summary>
+        /// Gets all products by given name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public async Task<List<ProductDisplayModel>> GetProductsByName(string name)
+        {
+            var products = await _context.Products
+                .Include(i => i.About)
+                .Where(x => x.About.Name.Contains(name))
+                .AsNoTracking()
+                .ToListAsync();
+
+            return products.Select(x => ProductToProductDisplayModel(x).Result).ToList();
+        }
+
+        public async Task<List<ProductDisplayModel>> GetProductsBySpecifications(string name)
+        {
+            var products = await _context.Products
+                .Include(i => i.About)
+                .Where(x => x.About.Name.Contains(name))
+                .AsNoTracking()
+                .ToListAsync();
+
+            return products.Select(x => ProductToProductDisplayModel(x).Result).ToList();
+        }
+
+        /// <summary>
         /// Returns all user uploaded products
         /// </summary>
         /// <param name="userId"></param>

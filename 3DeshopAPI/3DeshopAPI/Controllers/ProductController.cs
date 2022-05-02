@@ -34,6 +34,19 @@ namespace _3DeshopAPI.Controllers
         }
 
         /// <summary>
+        /// Gets all products by given name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [HttpGet("get-products-by-name/{name}")]
+        public async Task<ActionResult<List<ProductDisplayModel>>> GetProductsByName(string name)
+        {
+            var response = await _productService.GetProductsByName(name);
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Returns all user uploaded products
         /// </summary>
         /// <returns></returns>

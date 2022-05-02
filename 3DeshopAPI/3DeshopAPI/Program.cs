@@ -88,6 +88,7 @@ builder.Services.AddDbContext<Context>(opts =>
      opts.UseSqlServer(connString, options =>
      {
          options.MigrationsAssembly(typeof(Context).Assembly.FullName.Split(',')[0]);
+         options.CommandTimeout(300);
      });
 
  }, ServiceLifetime.Transient);
