@@ -47,6 +47,19 @@ namespace _3DeshopAPI.Controllers
         }
 
         /// <summary>
+        /// Gets all products by given criteria
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("get-products-by-criteria")]
+        public async Task<ActionResult<List<ProductDisplayModel>>> GetProductsByCriteria([FromBody] ProductFindByCriteriaModel model)
+        {
+            var response = await _productService.GetProductsByCriteria(model);
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Returns all user uploaded products
         /// </summary>
         /// <returns></returns>

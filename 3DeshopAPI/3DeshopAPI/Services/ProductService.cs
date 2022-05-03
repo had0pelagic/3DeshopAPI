@@ -57,15 +57,55 @@ namespace _3DeshopAPI.Services
             return products.Select(x => ProductToProductDisplayModel(x).Result).ToList();
         }
 
-        public async Task<List<ProductDisplayModel>> GetProductsBySpecifications(string name)
+        /// <summary>
+        /// Gets all products by given criteria
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public async Task<List<ProductDisplayModel>> GetProductsByCriteria(ProductFindByCriteriaModel model)
         {
-            var products = await _context.Products
-                .Include(i => i.About)
-                .Where(x => x.About.Name.Contains(name))
+            var productsByName = await _context.Products
+                .Include(x => x.About)
+                .Include(x => x.Specifications)
+                .Where(x => x.About.Name.Contains(model.Name))
                 .AsNoTracking()
                 .ToListAsync();
 
-            return products.Select(x => ProductToProductDisplayModel(x).Result).ToList();
+            var containsValidCategoryIds = model.Categories.Any(x => Guid.TryParse(x, out _));
+            if (containsValidCategoryIds)
+            {
+                var categoriesToGuid = model.Categories
+                    .ConvertAll(x => Guid.Parse(x));
+                var productIdsByCategory = await _context.ProductCategories
+                    .Include(x => x.Product)
+                    .Include(x => x.Category)
+                    .Where(x => categoriesToGuid.Contains(x.Category.Id))
+                    .Select(x => x.Product.Id)
+                    .ToListAsync();
+                productsByName = productsByName
+                    .Where(x => productIdsByCategory.Contains(x.Id))
+                    .ToList();
+            }
+
+            //formats
+
+            var unselectedSpecifications = model.Specifications.GetType().GetProperties()
+                    .Where(x => x.PropertyType == typeof(bool))
+                    .Select(x => (bool)x.GetValue(model.Specifications))
+                    .All(x => x.Equals(false));
+            if (unselectedSpecifications)
+            {
+                productsByName = productsByName
+                    .Where(x => x.Specifications.Textures == model.Specifications.Textures)
+                    .Where(x => x.Specifications.Materials == model.Specifications.Materials)
+                    .Where(x => x.Specifications.Animation == model.Specifications.Animation)
+                    .Where(x => x.Specifications.Rig == model.Specifications.Rig)
+                    .ToList();
+            }
+
+            throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+
+            //return products.Select(x => ProductToProductDisplayModel(x).Result).ToList();
         }
 
         /// <summary>
