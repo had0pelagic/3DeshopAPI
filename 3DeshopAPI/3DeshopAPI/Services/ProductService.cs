@@ -6,7 +6,6 @@ using AutoMapper;
 using Domain.Product;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using PaymentAPI.Services.Interfaces;
 
 namespace _3DeshopAPI.Services
 {
@@ -72,40 +71,32 @@ namespace _3DeshopAPI.Services
                 .ToListAsync();
 
             var containsValidCategoryIds = model.Categories.Any(x => Guid.TryParse(x, out _));
+
             if (containsValidCategoryIds)
             {
-                var categoriesToGuid = model.Categories
-                    .ConvertAll(x => Guid.Parse(x));
-                var productIdsByCategory = await _context.ProductCategories
-                    .Include(x => x.Product)
-                    .Include(x => x.Category)
-                    .Where(x => categoriesToGuid.Contains(x.Category.Id))
-                    .Select(x => x.Product.Id)
-                    .ToListAsync();
-                productsByName = productsByName
-                    .Where(x => productIdsByCategory.Contains(x.Id))
-                    .ToList();
+                productsByName = await GetProductsByCategories(model, productsByName);
             }
 
-            //formats
+            var containsValidFormatIds = model.Formats.Any(x => Guid.TryParse(x, out _));
 
-            var unselectedSpecifications = model.Specifications.GetType().GetProperties()
-                    .Where(x => x.PropertyType == typeof(bool))
-                    .Select(x => (bool)x.GetValue(model.Specifications))
-                    .All(x => x.Equals(false));
-            if (unselectedSpecifications)
+            if (containsValidFormatIds)
             {
-                productsByName = productsByName
-                    .Where(x => x.Specifications.Textures == model.Specifications.Textures)
-                    .Where(x => x.Specifications.Materials == model.Specifications.Materials)
-                    .Where(x => x.Specifications.Animation == model.Specifications.Animation)
-                    .Where(x => x.Specifications.Rig == model.Specifications.Rig)
-                    .ToList();
+                productsByName = await GetProductsByFormats(model, productsByName);
             }
 
-            throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            var unselectedSpecifications = model.Specifications
+                .GetType()
+                .GetProperties()
+                .Where(x => x.PropertyType == typeof(bool))
+                .Select(x => (bool)x.GetValue(model.Specifications))
+                .All(x => x.Equals(false));
 
-            //return products.Select(x => ProductToProductDisplayModel(x).Result).ToList();
+            if (!unselectedSpecifications)
+            {
+                productsByName = GetProductsBySpecifications(model, productsByName);
+            }
+
+            return productsByName.Select(x => ProductToProductDisplayModel(x).Result).ToList();
         }
 
         /// <summary>
@@ -245,6 +236,94 @@ namespace _3DeshopAPI.Services
                 .ToListAsync();
 
             return products.Select(x => ProductToProductDisplayModel(x).Result).ToList();
+        }
+
+        /// <summary>
+        /// Finds products by given categories
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="products"></param>
+        /// <returns></returns>
+        private async Task<List<Product>> GetProductsByCategories(ProductFindByCriteriaModel model, List<Product> products)
+        {
+            var categoriesToGuid = model.Categories
+                .ConvertAll(x => Guid.Parse(x));
+
+            var productIdsByCategory = await _context.ProductCategories
+                .Include(x => x.Product)
+                .Include(x => x.Category)
+                .Where(x => categoriesToGuid.Contains(x.Category.Id))
+                .Select(x => x.Product.Id)
+                .ToListAsync();
+
+            products = products
+                .Where(x => productIdsByCategory.Contains(x.Id))
+                .ToList();
+
+            return products;
+        }
+
+        /// <summary>
+        /// Finds products by given formats
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="products"></param>
+        /// <returns></returns>
+        private async Task<List<Product>> GetProductsByFormats(ProductFindByCriteriaModel model, List<Product> products)
+        {
+            var formatsToGuid = model.Formats
+                .ConvertAll(x => Guid.Parse(x));
+
+            var productIdsByFormat = await _context.ProductFormats
+                .Include(x => x.Product)
+                .Include(x => x.Format)
+                .Where(x => formatsToGuid.Contains(x.Format.Id))
+                .Select(x => x.Product.Id)
+                .ToListAsync();
+
+            products = products
+                .Where(x => productIdsByFormat.Contains(x.Id))
+                .ToList();
+
+            return products;
+        }
+        /// <summary>
+        /// Finds products by given specifications
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="products"></param>
+        /// <returns></returns>
+        private List<Product> GetProductsBySpecifications(ProductFindByCriteriaModel model, List<Product> products)
+        {
+            if (model.Specifications.Textures)
+            {
+                products = products
+                .Where(x => x.Specifications.Textures)
+                .ToList();
+            }
+
+            if (model.Specifications.Materials)
+            {
+                products = products
+                .Where(x => x.Specifications.Materials)
+                .ToList();
+            }
+
+            if (model.Specifications.Animation)
+            {
+                products = products
+                .Where(x => x.Specifications.Animation)
+                .ToList();
+            }
+
+            if (model.Specifications.Rig)
+            {
+                products = products
+                .Where(x => x.Specifications.Rig)
+                .ToList();
+            }
+
+            return products;
         }
 
         /// <summary>
