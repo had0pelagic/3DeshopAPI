@@ -100,6 +100,114 @@ namespace _3DeshopAPI.Services
         }
 
         /// <summary>
+        /// Gets all products by given ids and sorts by price
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<List<ProductDisplayModel>> GetProductsByGivenIdsAndOrderByPrice(ProductGetByIdAndOrderModel model)
+        {
+            var idsToGuid = model.ProductIds
+                       .ConvertAll(x => Guid.Parse(x));
+
+            var products = await _context.Products
+                       .Include(x => x.About)
+                       .Include(x => x.Specifications)
+                       .Where(x=> idsToGuid.Contains(x.Id))
+                       .AsNoTracking()
+                       .ToListAsync();
+
+            if (model.Ascending)
+            {
+                products = products.OrderBy(x => x.About.Price).ToList();
+            }
+            else
+            {
+                products = products.OrderByDescending(x => x.About.Price).ToList();
+            }
+
+            return products.Select(x => ProductToProductDisplayModel(x).Result).ToList();
+        }
+
+        /// <summary>
+        /// Gets all products by given ids and sorts by date
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<List<ProductDisplayModel>> GetProductsByGivenIdsAndOrderByDate(ProductGetByIdAndOrderModel model)
+        {
+            var idsToGuid = model.ProductIds
+                       .ConvertAll(x => Guid.Parse(x));
+
+            var products = await _context.Products
+                       .Include(x => x.About)
+                       .Include(x => x.Specifications)
+                       .Where(x => idsToGuid.Contains(x.Id))
+                       .AsNoTracking()
+                       .ToListAsync();
+
+            if (model.Ascending)
+            {
+                products = products.OrderBy(x => x.About.UploadDate).ToList();
+            }
+            else
+            {
+                products = products.OrderByDescending(x => x.About.UploadDate).ToList();
+            }
+
+            return products.Select(x => ProductToProductDisplayModel(x).Result).ToList();
+        }
+
+        /// <summary>
+        /// Gets all products ordered by price
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<List<ProductDisplayModel>> GetProductsOrderByPrice(bool ascending)
+        {
+            var products = await _context.Products
+                       .Include(x => x.About)
+                       .Include(x => x.Specifications)
+                       .AsNoTracking()
+                       .ToListAsync();
+
+            if (ascending)
+            {
+                products = products.OrderBy(x => x.About.Price).ToList();
+            }
+            else
+            {
+                products = products.OrderByDescending(x => x.About.Price).ToList();
+            }
+
+            return products.Select(x => ProductToProductDisplayModel(x).Result).ToList();
+        }
+
+        /// <summary>
+        /// Gets all products ordered by upload date
+        /// </summary>
+        /// <param name="ascending"></param>
+        /// <returns></returns>
+        public async Task<List<ProductDisplayModel>> GetProductsOrderByUploadDate(bool ascending)
+        {
+            var products = await _context.Products
+                       .Include(x => x.About)
+                       .Include(x => x.Specifications)
+                       .AsNoTracking()
+                       .ToListAsync();
+
+            if (ascending)
+            {
+                products = products.OrderBy(x => x.About.UploadDate).ToList();
+            }
+            else
+            {
+                products = products.OrderByDescending(x => x.About.UploadDate).ToList();
+            }
+
+            return products.Select(x => ProductToProductDisplayModel(x).Result).ToList();
+        }
+
+        /// <summary>
         /// Returns all user uploaded products
         /// </summary>
         /// <param name="userId"></param>

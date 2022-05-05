@@ -60,6 +60,57 @@ namespace _3DeshopAPI.Controllers
         }
 
         /// <summary>
+        /// Gets all products by given ids and sorts by price
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("get-products-by-ids-order-by-price")]
+        public async Task<ActionResult<List<ProductDisplayModel>>> GetProductsByGivenIdsAndOrderByPrice(ProductGetByIdAndOrderModel model)
+        {
+            var response = await _productService.GetProductsByGivenIdsAndOrderByPrice(model);
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Get all products by given ids and sorts by date
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("get-products-by-ids-order-by-date")]
+        public async Task<ActionResult<List<ProductDisplayModel>>> GetProductsByGivenIdsAndOrderByDate(ProductGetByIdAndOrderModel model)
+        {
+            var response = await _productService.GetProductsByGivenIdsAndOrderByDate(model);
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Gets all products ordered by price
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("get-products-order-by-price/{ascending}")]
+        public async Task<ActionResult<List<ProductDisplayModel>>> GetProductsOrderByPrice(bool ascending)
+        {
+            var response = await _productService.GetProductsOrderByPrice(ascending);
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Gets all products ordered by upload date
+        /// </summary>
+        /// <param name="ascending"></param>
+        /// <returns></returns>
+        [HttpGet("get-products-order-by-date/{ascending}")]
+        public async Task<ActionResult<List<ProductDisplayModel>>> GetProductsOrderByUploadDate(bool ascending)
+        {
+            var response = await _productService.GetProductsOrderByUploadDate(ascending);
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Returns all user uploaded products
         /// </summary>
         /// <returns></returns>
