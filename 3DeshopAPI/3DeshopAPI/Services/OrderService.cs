@@ -389,7 +389,8 @@ namespace _3DeshopAPI.Services
             }
 
             var jobs = await _context.Jobs
-                .Include(x => x.Order)
+                .Include(x => x.Order.User)
+                .Include(x => x.Offer.User)
                 .ToListAsync();
             var job = jobs
                 .Where(x => x.Order.Id == orderId)
@@ -400,6 +401,11 @@ namespace _3DeshopAPI.Services
                 throw new InvalidClientOperationException(ErrorCodes.JobNotFound);
             }
 
+            if (job.Order.User.Id != userId && job.Offer.User.Id != userId)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UnauthorizedForAction);
+            }
+
             var progresses = await _context.Progresses
                 .Where(x => x.JobId == job.Id)
                 .ToListAsync();
@@ -407,6 +413,7 @@ namespace _3DeshopAPI.Services
             return progresses.Select(x => JobProgressToJobProgressDisplayModel(x).Result).ToList();
 
         }
+
         /// <summary>
         /// Returns all offers
         /// </summary>
@@ -479,6 +486,24 @@ namespace _3DeshopAPI.Services
         /// <returns></returns>
         public async Task<List<OfferDisplayModel>> GetOrderOffers(Guid orderId)
         {
+            var orderOffers = await _context.OrderOffers
+                .Include(x => x.Order)
+                .Include(x => x.Order.User)
+                .Where(x => x.Order.Id == orderId)
+                .ToListAsync();
+
+            var currentUser = _userService.GetCurrentUser();
+            var orderOwner = orderOffers.FirstOrDefault()?.Order.User.Id;
+
+            if (orderOwner == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+            if (orderOffers.FirstOrDefault()?.Order.User.Id != currentUser.Id)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UnauthorizedForAction);
+            }
+
             var offers = await _context.OrderOffers
                 .Include(x => x.Order)
                 .Include(x => x.Offer)
