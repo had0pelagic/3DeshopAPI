@@ -4,6 +4,7 @@ using _3DeshopAPI.Models.Product;
 using _3DeshopAPI.Models.Settings;
 using _3DeshopAPI.Models.User;
 using _3DeshopAPI.Services.Interfaces;
+using _3DeshopAPI.Utils;
 using AutoMapper;
 using Domain;
 using Domain.Product;
@@ -96,6 +97,7 @@ namespace _3DeshopAPI.Services
 
             model.UserRole = UserRoles.User;
             model.Image = await GetDefaultImage(new Guid(_fileSettings.Image));
+            model.Password = PasswordHashing.HashPassword(model.Password);
 
             _context.Users.Add(model);
             await _context.SaveChangesAsync();
@@ -179,16 +181,16 @@ namespace _3DeshopAPI.Services
 
             var dbUser = await _context.Users.FindAsync(id);
 
+            if (model.Password == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.EmptyPassword);
+            }
             if (model.Password != model.ConfirmPassword)
             {
                 throw new InvalidClientOperationException(ErrorCodes.BadPassword);
             }
-            if (dbUser.Password == model.Password)
-            {
-                throw new InvalidClientOperationException(ErrorCodes.SamePassword);
-            }
 
-            dbUser.Password = model.Password;
+            dbUser.Password = PasswordHashing.HashPassword(model.Password);
 
             _context.Entry(dbUser).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -207,9 +209,13 @@ namespace _3DeshopAPI.Services
                 .Users
                 .FirstOrDefaultAsync(x => EF.Functions.Collate(x.Username, "SQL_Latin1_General_CP1_CS_AS") == model.Username);
 
-            if (dbUser == null || dbUser?.Password != model.Password)
+            if (dbUser == null)
             {
-                return null;
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+            if (!PasswordHashing.IsPasswordValid(model.Password, dbUser.Password))
+            {
+                throw new InvalidClientOperationException(ErrorCodes.WrongPassword);
             }
 
             return dbUser;

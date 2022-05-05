@@ -1,104 +1,29 @@
-2022-05-03 20:28:14.229 +03:00 [ERR] An unhandled exception has occurred while executing the request.
-System.InvalidOperationException: An exception was thrown while attempting to evaluate a LINQ query parameter expression. See the inner exception for more information. To show additional information call 'DbContextOptionsBuilder.EnableSensitiveDataLogging'.
- ---> System.FormatException: Unrecognized Guid format.
-   at System.Guid.GuidResult.SetFailure(Boolean overflow, String failureMessageID)
-   at System.Guid.TryParseGuid(ReadOnlySpan`1 guidString, GuidResult& result)
-   at System.Guid.Parse(ReadOnlySpan`1 input)
-   at System.Guid.Parse(String input)
-   at System.Collections.Generic.List`1.ConvertAll[TOutput](Converter`2 converter)
-   at lambda_method91(Closure )
-   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.GetValue(Expression expression, String& parameterName)
-   --- End of inner exception stack trace ---
-   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.GetValue(Expression expression, String& parameterName)
-   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.Evaluate(Expression expression, Boolean generateParameter)
-   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.Visit(Expression expression)
-   at System.Linq.Expressions.ExpressionVisitor.VisitMethodCall(MethodCallExpression node)
-   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.Visit(Expression expression)
-   at System.Linq.Expressions.ExpressionVisitor.VisitLambda[T](Expression`1 node)
-   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.Visit(Expression expression)
-   at System.Linq.Expressions.ExpressionVisitor.VisitUnary(UnaryExpression node)
-   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.Visit(Expression expression)
-   at System.Dynamic.Utils.ExpressionVisitorUtils.VisitArguments(ExpressionVisitor visitor, IArgumentProvider nodes)
-   at System.Linq.Expressions.ExpressionVisitor.VisitMethodCall(MethodCallExpression node)
-   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.Visit(Expression expression)
-   at System.Dynamic.Utils.ExpressionVisitorUtils.VisitArguments(ExpressionVisitor visitor, IArgumentProvider nodes)
-   at System.Linq.Expressions.ExpressionVisitor.VisitMethodCall(MethodCallExpression node)
-   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.Visit(Expression expression)
-   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.ExtractParameters(Expression expression, Boolean clearEvaluatedValues)
-   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.ExtractParameters(Expression expression)
-   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExtractParameters(Expression query, IParameterValues parameterValues, IDiagnosticsLogger`1 logger, Boolean parameterize, Boolean generateContextAccessors)
-   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.ExecuteAsync[TResult](Expression expression, CancellationToken cancellationToken)
-   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
-   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
-   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
-   at _3DeshopAPI.Services.ProductService.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\ProductService.cs:line 74
-   at _3DeshopAPI.Controllers.ProductController.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\ProductController.cs:line 57
-   at lambda_method81(Closure , Object )
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
-   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
-   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2022-05-03 20:29:12.154 +03:00 [ERR] An unhandled exception has occurred while executing the request.
-System.FormatException: Unrecognized Guid format.
-   at System.Guid.GuidResult.SetFailure(Boolean overflow, String failureMessageID)
-   at System.Guid.TryParseGuid(ReadOnlySpan`1 guidString, GuidResult& result)
-   at System.Guid.Parse(ReadOnlySpan`1 input)
-   at System.Guid.Parse(String input)
-   at System.Collections.Generic.List`1.ConvertAll[TOutput](Converter`2 converter)
-   at _3DeshopAPI.Services.ProductService.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\ProductService.cs:line 75
-   at _3DeshopAPI.Controllers.ProductController.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\ProductController.cs:line 57
-   at lambda_method81(Closure , Object )
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
-   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
-   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2022-05-03 20:40:20.224 +03:00 [ERR] An unhandled exception has occurred while executing the request.
-System.FormatException: Unrecognized Guid format.
-   at System.Guid.GuidResult.SetFailure(Boolean overflow, String failureMessageID)
-   at System.Guid.TryParseGuid(ReadOnlySpan`1 guidString, GuidResult& result)
-   at System.Guid.Parse(ReadOnlySpan`1 input)
-   at System.Guid.Parse(String input)
-   at _3DeshopAPI.Services.ProductService.<>c.<GetProductsByCriteria>b__8_0(String x) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\ProductService.cs:line 75
-   at System.Collections.Generic.List`1.ConvertAll[TOutput](Converter`2 converter)
-   at _3DeshopAPI.Services.ProductService.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\ProductService.cs:line 75
-   at _3DeshopAPI.Controllers.ProductController.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\ProductController.cs:line 57
-   at lambda_method81(Closure , Object )
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
-   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
-   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2022-05-03 20:44:02.168 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+2022-05-05 14:14:37.250 +03:00 [ERR] An unhandled exception has occurred while executing the request.
 _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
-   at _3DeshopAPI.Services.ProductService.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\ProductService.cs:line 85
-   at _3DeshopAPI.Controllers.ProductController.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\ProductController.cs:line 57
+   at _3DeshopAPI.Auth.Services.AuthService.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Auth\Services\AuthService.cs:line 36
+   at _3DeshopAPI.Controllers.UserController.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 124
+   at lambda_method85(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2022-05-05 14:17:58.202 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+BCrypt.Net.SaltParseException: Invalid salt version
+   at BCrypt.Net.BCrypt.HashPassword(String inputKey, String salt, Boolean enhancedEntropy, HashType hashType)
+   at BCrypt.Net.BCrypt.Verify(String text, String hash, Boolean enhancedEntropy, HashType hashType)
+   at _3DeshopAPI.Utils.PasswordHashing.IsPasswordValid(String password, String hash) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Utils\PasswordHashing.cs:line 12
+   at _3DeshopAPI.Services.UserService.IsUserValid(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\UserService.cs:line 212
+   at _3DeshopAPI.Auth.Services.AuthService.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Auth\Services\AuthService.cs:line 32
+   at _3DeshopAPI.Controllers.UserController.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 124
    at lambda_method81(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -113,10 +38,14 @@ _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
    at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2022-05-03 20:49:29.344 +03:00 [ERR] An unhandled exception has occurred while executing the request.
-_3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
-   at _3DeshopAPI.Services.ProductService.GetProductsByCriteria(ProductFindByCriteriaModel model)
-   at _3DeshopAPI.Controllers.ProductController.GetProductsByCriteria(ProductFindByCriteriaModel model)
+2022-05-05 14:18:23.545 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+BCrypt.Net.SaltParseException: Invalid salt version
+   at BCrypt.Net.BCrypt.HashPassword(String inputKey, String salt, Boolean enhancedEntropy, HashType hashType)
+   at BCrypt.Net.BCrypt.Verify(String text, String hash, Boolean enhancedEntropy, HashType hashType)
+   at _3DeshopAPI.Utils.PasswordHashing.IsPasswordValid(String password, String hash) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Utils\PasswordHashing.cs:line 12
+   at _3DeshopAPI.Services.UserService.IsUserValid(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\UserService.cs:line 212
+   at _3DeshopAPI.Auth.Services.AuthService.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Auth\Services\AuthService.cs:line 32
+   at _3DeshopAPI.Controllers.UserController.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 124
    at lambda_method81(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -131,10 +60,14 @@ _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
    at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2022-05-03 21:18:01.196 +03:00 [ERR] An unhandled exception has occurred while executing the request.
-_3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
-   at _3DeshopAPI.Services.ProductService.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\ProductService.cs:line 90
-   at _3DeshopAPI.Controllers.ProductController.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\ProductController.cs:line 57
+2022-05-05 14:22:44.229 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+System.ArgumentOutOfRangeException: The work factor must be between 4 and 31 (inclusive) (Parameter 'workFactor')
+Actual value was 579354.
+   at BCrypt.Net.BCrypt.GenerateSalt(Int32 workFactor, Char bcryptMinorRevision)
+   at BCrypt.Net.BCrypt.HashPassword(String inputKey, Int32 workFactor, Boolean enhancedEntropy)
+   at _3DeshopAPI.Utils.PasswordHashing.HashPassword(String password) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Utils\PasswordHashing.cs:line 8
+   at _3DeshopAPI.Services.UserService.RegisterUser(User model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\UserService.cs:line 100
+   at _3DeshopAPI.Controllers.UserController.RegisterUser(UserRegisterModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 65
    at lambda_method81(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -149,10 +82,14 @@ _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
    at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2022-05-03 22:27:06.853 +03:00 [ERR] An unhandled exception has occurred while executing the request.
-_3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
-   at _3DeshopAPI.Services.ProductService.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\ProductService.cs:line 106
-   at _3DeshopAPI.Controllers.ProductController.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\ProductController.cs:line 57
+2022-05-05 14:24:05.658 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+System.ArgumentOutOfRangeException: The work factor must be between 4 and 31 (inclusive) (Parameter 'workFactor')
+Actual value was 54.
+   at BCrypt.Net.BCrypt.GenerateSalt(Int32 workFactor, Char bcryptMinorRevision)
+   at BCrypt.Net.BCrypt.HashPassword(String inputKey, Int32 workFactor, Boolean enhancedEntropy)
+   at _3DeshopAPI.Utils.PasswordHashing.HashPassword(String password) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Utils\PasswordHashing.cs:line 8
+   at _3DeshopAPI.Services.UserService.RegisterUser(User model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\UserService.cs:line 100
+   at _3DeshopAPI.Controllers.UserController.RegisterUser(UserRegisterModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 65
    at lambda_method81(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -167,10 +104,14 @@ _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
    at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2022-05-03 22:31:21.639 +03:00 [ERR] An unhandled exception has occurred while executing the request.
-_3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
-   at _3DeshopAPI.Services.ProductService.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\ProductService.cs:line 106
-   at _3DeshopAPI.Controllers.ProductController.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\ProductController.cs:line 57
+2022-05-05 14:25:36.316 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+System.ArgumentOutOfRangeException: The work factor must be between 4 and 31 (inclusive) (Parameter 'workFactor')
+Actual value was 54.
+   at BCrypt.Net.BCrypt.GenerateSalt(Int32 workFactor, Char bcryptMinorRevision)
+   at BCrypt.Net.BCrypt.HashPassword(String inputKey, Int32 workFactor, Boolean enhancedEntropy)
+   at _3DeshopAPI.Utils.PasswordHashing.HashPassword(String password) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Utils\PasswordHashing.cs:line 8
+   at _3DeshopAPI.Services.UserService.RegisterUser(User model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\UserService.cs:line 100
+   at _3DeshopAPI.Controllers.UserController.RegisterUser(UserRegisterModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 65
    at lambda_method81(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -185,10 +126,28 @@ _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
    at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2022-05-03 22:43:36.697 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+2022-05-05 14:28:11.873 +03:00 [ERR] An unhandled exception has occurred while executing the request.
 _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
-   at _3DeshopAPI.Services.ProductService.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\ProductService.cs:line 109
-   at _3DeshopAPI.Controllers.ProductController.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\ProductController.cs:line 57
+   at _3DeshopAPI.Auth.Services.AuthService.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Auth\Services\AuthService.cs:line 36
+   at _3DeshopAPI.Controllers.UserController.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 124
+   at lambda_method324(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2022-05-05 14:29:29.149 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+_3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
+   at _3DeshopAPI.Auth.Services.AuthService.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Auth\Services\AuthService.cs:line 36
+   at _3DeshopAPI.Controllers.UserController.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 124
    at lambda_method81(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -203,10 +162,14 @@ _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
    at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2022-05-03 22:45:44.798 +03:00 [ERR] An unhandled exception has occurred while executing the request.
-_3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
-   at _3DeshopAPI.Services.ProductService.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\ProductService.cs:line 109
-   at _3DeshopAPI.Controllers.ProductController.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\ProductController.cs:line 57
+2022-05-05 14:32:27.169 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+BCrypt.Net.SaltParseException: Invalid salt version
+   at BCrypt.Net.BCrypt.HashPassword(String inputKey, String salt, Boolean enhancedEntropy, HashType hashType)
+   at BCrypt.Net.BCrypt.Verify(String text, String hash, Boolean enhancedEntropy, HashType hashType)
+   at _3DeshopAPI.Utils.PasswordHashing.IsPasswordValid(String password, String hash) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Utils\PasswordHashing.cs:line 13
+   at _3DeshopAPI.Services.UserService.IsUserValid(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\UserService.cs:line 212
+   at _3DeshopAPI.Auth.Services.AuthService.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Auth\Services\AuthService.cs:line 32
+   at _3DeshopAPI.Controllers.UserController.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 124
    at lambda_method81(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -221,10 +184,10 @@ _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
    at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2022-05-03 22:49:32.375 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+2022-05-05 14:32:51.124 +03:00 [ERR] An unhandled exception has occurred while executing the request.
 _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
-   at _3DeshopAPI.Services.ProductService.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\ProductService.cs:line 109
-   at _3DeshopAPI.Controllers.ProductController.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\ProductController.cs:line 57
+   at _3DeshopAPI.Auth.Services.AuthService.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Auth\Services\AuthService.cs:line 36
+   at _3DeshopAPI.Controllers.UserController.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 124
    at lambda_method81(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -239,10 +202,10 @@ _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
    at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2022-05-03 22:49:51.244 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+2022-05-05 14:32:59.979 +03:00 [ERR] An unhandled exception has occurred while executing the request.
 _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
-   at _3DeshopAPI.Services.ProductService.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\ProductService.cs:line 109
-   at _3DeshopAPI.Controllers.ProductController.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\ProductController.cs:line 57
+   at _3DeshopAPI.Auth.Services.AuthService.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Auth\Services\AuthService.cs:line 36
+   at _3DeshopAPI.Controllers.UserController.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 124
    at lambda_method81(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -257,10 +220,10 @@ _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
    at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2022-05-03 22:51:11.629 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+2022-05-05 14:44:11.796 +03:00 [ERR] An unhandled exception has occurred while executing the request.
 _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
-   at _3DeshopAPI.Services.ProductService.GetProductsByCriteria(ProductFindByCriteriaModel model)
-   at _3DeshopAPI.Controllers.ProductController.GetProductsByCriteria(ProductFindByCriteriaModel model)
+   at _3DeshopAPI.Auth.Services.AuthService.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Auth\Services\AuthService.cs:line 36
+   at _3DeshopAPI.Controllers.UserController.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 124
    at lambda_method81(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -275,10 +238,11 @@ _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
    at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2022-05-03 22:51:48.562 +03:00 [ERR] An unhandled exception has occurred while executing the request.
-_3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
-   at _3DeshopAPI.Services.ProductService.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\ProductService.cs:line 109
-   at _3DeshopAPI.Controllers.ProductController.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\ProductController.cs:line 57
+2022-05-05 14:47:41.934 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+_3DeshopAPI.Exceptions.InvalidClientOperationException: Wrong password
+   at _3DeshopAPI.Services.UserService.IsUserValid(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\UserService.cs:line 218
+   at _3DeshopAPI.Auth.Services.AuthService.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Auth\Services\AuthService.cs:line 32
+   at _3DeshopAPI.Controllers.UserController.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 124
    at lambda_method81(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -293,10 +257,11 @@ _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
    at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2022-05-03 22:52:00.193 +03:00 [ERR] An unhandled exception has occurred while executing the request.
-_3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
-   at _3DeshopAPI.Services.ProductService.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\ProductService.cs:line 109
-   at _3DeshopAPI.Controllers.ProductController.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\ProductController.cs:line 57
+2022-05-05 14:48:24.747 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+_3DeshopAPI.Exceptions.InvalidClientOperationException: Wrong password
+   at _3DeshopAPI.Services.UserService.IsUserValid(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\UserService.cs:line 218
+   at _3DeshopAPI.Auth.Services.AuthService.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Auth\Services\AuthService.cs:line 32
+   at _3DeshopAPI.Controllers.UserController.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 124
    at lambda_method81(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
@@ -311,10 +276,30 @@ _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
    at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2022-05-03 22:52:12.835 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+2022-05-05 14:48:32.821 +03:00 [ERR] An unhandled exception has occurred while executing the request.
 _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
-   at _3DeshopAPI.Services.ProductService.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\ProductService.cs:line 109
-   at _3DeshopAPI.Controllers.ProductController.GetProductsByCriteria(ProductFindByCriteriaModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\ProductController.cs:line 57
+   at _3DeshopAPI.Services.UserService.IsUserValid(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\UserService.cs:line 214
+   at _3DeshopAPI.Auth.Services.AuthService.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Auth\Services\AuthService.cs:line 32
+   at _3DeshopAPI.Controllers.UserController.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 124
+   at lambda_method81(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+2022-05-05 14:50:43.934 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+_3DeshopAPI.Exceptions.InvalidClientOperationException: Wrong password
+   at _3DeshopAPI.Services.UserService.IsUserValid(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\UserService.cs:line 218
+   at _3DeshopAPI.Auth.Services.AuthService.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Auth\Services\AuthService.cs:line 31
+   at _3DeshopAPI.Controllers.UserController.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 124
    at lambda_method81(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
