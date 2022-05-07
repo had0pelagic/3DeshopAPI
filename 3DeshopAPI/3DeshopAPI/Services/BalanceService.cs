@@ -103,9 +103,10 @@ namespace _3DeshopAPI.Services
 
             var product = _context.Products
                 .Include(x => x.About)
+                .Include(x=>x.User)
                 .Where(x => x.Id == model.ProductId)
                 .FirstOrDefault();
-            var productOwner = await _context.Users.FindAsync(product.UserId);
+            var productOwner = await _context.Users.FindAsync(product.User.Id);
 
             if (productOwner == null)
             {

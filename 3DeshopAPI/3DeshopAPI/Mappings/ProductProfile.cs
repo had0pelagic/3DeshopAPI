@@ -67,7 +67,8 @@ namespace _3DeshopAPI.Mappings
                 .ForMember(x => x.Images, opt => opt.Ignore())
                 .ForMember(x => x.Files, opt => opt.Ignore());
             CreateMap<ProductUploadModel, Product>()
-                .ForMember(x => x.Id, opt => opt.Ignore());
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.User, opt => opt.Ignore());
 
             CreateMap<Comment, ProductCommentDisplayModel>()
                 .ForSourceMember(x => x.Id, opt => opt.DoNotValidate());

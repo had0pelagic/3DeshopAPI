@@ -33,7 +33,8 @@ namespace _3DeshopAPI.Services
         public async Task<List<ProductDisplayModel>> GetAllProducts()
         {
             var products = await _context.Products
-                .Include(i => i.About)
+                .Include(x => x.About)
+                .Include(x => x.User)
                 .AsNoTracking()
                 .ToListAsync();
 
@@ -49,6 +50,7 @@ namespace _3DeshopAPI.Services
         {
             var products = await _context.Products
                 .Include(i => i.About)
+                .Include(x => x.User)
                 .Where(x => x.About.Name.Contains(name))
                 .AsNoTracking()
                 .ToListAsync();
@@ -66,6 +68,7 @@ namespace _3DeshopAPI.Services
             var productsByName = await _context.Products
                 .Include(x => x.About)
                 .Include(x => x.Specifications)
+                .Include(x => x.User)
                 .Where(x => x.About.Name.Contains(model.Name))
                 .AsNoTracking()
                 .ToListAsync();
@@ -112,7 +115,8 @@ namespace _3DeshopAPI.Services
             var products = await _context.Products
                        .Include(x => x.About)
                        .Include(x => x.Specifications)
-                       .Where(x=> idsToGuid.Contains(x.Id))
+                       .Include(x => x.User)
+                       .Where(x => idsToGuid.Contains(x.Id))
                        .AsNoTracking()
                        .ToListAsync();
 
@@ -141,6 +145,7 @@ namespace _3DeshopAPI.Services
             var products = await _context.Products
                        .Include(x => x.About)
                        .Include(x => x.Specifications)
+                       .Include(x => x.User)
                        .Where(x => idsToGuid.Contains(x.Id))
                        .AsNoTracking()
                        .ToListAsync();
@@ -167,6 +172,7 @@ namespace _3DeshopAPI.Services
             var products = await _context.Products
                        .Include(x => x.About)
                        .Include(x => x.Specifications)
+                       .Include(x => x.User)
                        .AsNoTracking()
                        .ToListAsync();
 
@@ -192,6 +198,7 @@ namespace _3DeshopAPI.Services
             var products = await _context.Products
                        .Include(x => x.About)
                        .Include(x => x.Specifications)
+                       .Include(x => x.User)
                        .AsNoTracking()
                        .ToListAsync();
 
@@ -223,8 +230,9 @@ namespace _3DeshopAPI.Services
             }
 
             var products = await _context.Products
-                .Include(i => i.About)
-                .Where(x => x.UserId == userId)
+                .Include(x => x.About)
+                .Include(x => x.User)
+                .Where(x => x.User.Id == userId)
                 .AsNoTracking()
                 .ToListAsync();
 
@@ -240,10 +248,11 @@ namespace _3DeshopAPI.Services
         public async Task<ProductModel?> GetProduct(Guid id)
         {
             var product = await _context.Products
-                .Include(i => i.About)
-                .Include(i => i.Specifications)
+                .Include(x => x.About)
+                .Include(x => x.Specifications)
+                .Include(x => x.User)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(i => i.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (product == null)
             {
@@ -273,6 +282,8 @@ namespace _3DeshopAPI.Services
 
             var newProduct = _mapper.Map<Product>(model);
 
+            newProduct.User = user;
+            _context.Entry(user).State = EntityState.Unchanged;
             await _context.Products.AddAsync(newProduct);
             await SetProductFiles(newProduct, model.Files);
             await SetProductCategories(newProduct, model.Categories);
@@ -297,8 +308,8 @@ namespace _3DeshopAPI.Services
                 Specifications = _mapper.Map<ProductSpecificationsModel>(model.Specifications),
                 User = new UserDisplayModel()
                 {
-                    Id = model.UserId,
-                    Username = await _userService.GetUsername(model.UserId)
+                    Id = model.User.Id,
+                    Username = await _userService.GetUsername(model.User.Id)
                 },
                 Categories = await GetProductCategories(model.Id),
                 Formats = await GetProductFormats(model.Id),
@@ -320,8 +331,8 @@ namespace _3DeshopAPI.Services
                 Name = model.About.Name,
                 User = new UserDisplayModel()
                 {
-                    Id = model.UserId,
-                    Username = await _userService.GetUsername(model.UserId)
+                    Id = model.User.Id,
+                    Username = await _userService.GetUsername(model.User.Id)
                 },
                 Price = model.About.Price,
                 Downloads = model.About.Downloads,
@@ -339,6 +350,7 @@ namespace _3DeshopAPI.Services
         {
             var products = await _context.Products
                 .Include(i => i.About)
+                .Include(x => x.User)
                 .Where(x => productIds.Contains(x.Id))
                 .AsNoTracking()
                 .ToListAsync();
