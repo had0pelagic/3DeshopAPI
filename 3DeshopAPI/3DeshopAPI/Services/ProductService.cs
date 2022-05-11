@@ -259,8 +259,14 @@ namespace _3DeshopAPI.Services
                 throw new InvalidClientOperationException(ErrorCodes.ProductNotFound);
             }
 
-            var userId = _userService.GetCurrentUser().Id;
-            var purchasedIds = await _balanceService.GetPurchasedProductIds(userId);
+            var user = _userService.GetCurrentUser();
+
+            if (user == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+
+            var purchasedIds = await _balanceService.GetPurchasedProductIds(user.Id);
             var isBoughtByUser = purchasedIds.Contains(id);
 
             return await ProductToProductModel(product, isBoughtByUser);

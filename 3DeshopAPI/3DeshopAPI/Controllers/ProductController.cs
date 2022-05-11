@@ -62,7 +62,7 @@ namespace _3DeshopAPI.Controllers
         /// <summary>
         /// Gets all products by given ids and sorts by price
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="model"></param> 
         /// <returns></returns>
         [HttpPost("get-products-by-ids-order-by-price")]
         public async Task<ActionResult<List<ProductDisplayModel>>> GetProductsByGivenIdsAndOrderByPrice(ProductGetByIdAndOrderModel model)
