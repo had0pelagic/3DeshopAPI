@@ -11,5 +11,6 @@ namespace _3DeshopAPI.Models.Product
         public int? Downloads { get; set; }
         public ImageModel Image { get; set; }
         public List<ProductCategoryModel> Categories { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }

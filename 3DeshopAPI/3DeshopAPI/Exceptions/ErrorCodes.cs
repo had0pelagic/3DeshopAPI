@@ -18,6 +18,8 @@ namespace _3DeshopAPI.Exceptions
         EmptyPassword,
         [Description("Product was not found")]
         ProductNotFound,
+        [Description("Product about was not found")]
+        ProductAboutNotFound,
         [Description("Category was not found")]
         CategoryNotFound,
         [Description("Format was not found")]

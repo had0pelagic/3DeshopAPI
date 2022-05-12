@@ -22,6 +22,17 @@ namespace _3DeshopAPI.Controllers
         }
 
         /// <summary>
+        /// Changes product activity status
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("change-product-status/{id}")]
+        public async Task<IActionResult> ChangeProductStatus(Guid id)
+        {
+            return await _productService.ChangeProductStatus(id);
+        }
+
+        /// <summary>
         /// Get all products
         /// </summary>
         /// <returns></returns>

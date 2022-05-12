@@ -5,6 +5,7 @@ using _3DeshopAPI.Services.Interfaces;
 using AutoMapper;
 using Domain.Product;
 using Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace _3DeshopAPI.Services
@@ -26,6 +27,43 @@ namespace _3DeshopAPI.Services
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Changes product activity status
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> ChangeProductStatus(Guid id)
+        {
+            var product = await _context.Products
+                .Include(x => x.About)
+                .Include(x => x.User)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (product == null || product.About==null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.ProductNotFound);
+            }
+
+            var user = _userService.GetCurrentUser();
+
+            if (user == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+            }
+
+            var productAbout = await _context.About.FirstOrDefaultAsync(x=>x.Id == product.About.Id);
+
+            if (productAbout == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.ProductAboutNotFound);
+            }
+
+            productAbout.IsActive = !productAbout.IsActive;
+            _context.Entry(productAbout).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return new NoContentResult();
+        }
         /// <summary>
         /// Get all products, returns only front page data about product
         /// </summary>
@@ -343,7 +381,8 @@ namespace _3DeshopAPI.Services
                 Price = model.About.Price,
                 Downloads = model.About.Downloads,
                 Image = await GetProductImage(model.Id),
-                Categories = await GetProductCategories(model.Id)
+                Categories = await GetProductCategories(model.Id),
+                IsActive=model.About.IsActive
             };
         }
 
@@ -463,6 +502,7 @@ namespace _3DeshopAPI.Services
             {
                 Id = model.Id,
                 Name = model.About.Name,
+                IsActive = model.About.IsActive
             };
         }
 

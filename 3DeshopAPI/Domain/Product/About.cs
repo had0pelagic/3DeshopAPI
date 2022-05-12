@@ -9,5 +9,6 @@
         public string Description { get; set; }
         public int? Downloads { get; set; }
         public string? VideoLink { get; set; } = null;
+        public bool IsActive { get; set; } = true;
     }
 }

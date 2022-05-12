@@ -1,10 +1,12 @@
 ﻿using _3DeshopAPI.Models.Product;
 using Domain.Product;
+using Microsoft.AspNetCore.Mvc;
 
 namespace _3DeshopAPI.Services.Interfaces
 {
     public interface IProductService
     {
+        Task<IActionResult> ChangeProductStatus(Guid id);
         Task<List<ProductDisplayModel>> GetAllProducts();
         Task<List<ProductDisplayModel>> GetProductsByName(string name);
         Task<List<ProductDisplayModel>> GetProductsByCriteria(ProductFindByCriteriaModel name);
