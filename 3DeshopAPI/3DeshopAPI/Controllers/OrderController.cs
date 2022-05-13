@@ -11,28 +11,13 @@ namespace _3DeshopAPI.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly IMailService _mailService;
         private readonly IMapper _mapper;
         private readonly IOrderService _orderService;
 
-        public OrderController(IMailService mailService, IMapper mapper, IOrderService orderService)
+        public OrderController(IMapper mapper, IOrderService orderService)
         {
-            _mailService = mailService;
             _mapper = mapper;
             _orderService = orderService;
-        }
-
-        /// <summary>
-        /// Sends email through google smtp server
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [HttpPost("send-mail")]
-        public async Task<IActionResult> SendMail(MailModel model)
-        {
-            var mail = _mapper.Map<Domain.Mail.Mail>(model);
-
-            return Ok(await _mailService.SendMail(mail));
         }
 
         /// <summary>
@@ -55,6 +40,20 @@ namespace _3DeshopAPI.Controllers
         public async Task<List<Order>> GetUserOrders(Guid id)
         {
             var response = await _orderService.GetUserOrders(id);
+
+            return response;
+        }
+
+        /// <summary>
+        /// Returns users completed job count
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpGet("get-user-completed-job-count/{id}")]
+
+        public async Task<int> GetUserCompletedJobs(Guid id)
+        {
+            var response = await _orderService.GetUserCompletedJobs(id);
 
             return response;
         }

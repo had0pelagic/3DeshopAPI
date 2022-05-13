@@ -39,7 +39,7 @@ namespace _3DeshopAPI.Services
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (product == null || product.About==null)
+            if (product == null || product.About == null)
             {
                 throw new InvalidClientOperationException(ErrorCodes.ProductNotFound);
             }
@@ -51,7 +51,7 @@ namespace _3DeshopAPI.Services
                 throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
             }
 
-            var productAbout = await _context.About.FirstOrDefaultAsync(x=>x.Id == product.About.Id);
+            var productAbout = await _context.About.FirstOrDefaultAsync(x => x.Id == product.About.Id);
 
             if (productAbout == null)
             {
@@ -382,7 +382,7 @@ namespace _3DeshopAPI.Services
                 Downloads = model.About.Downloads,
                 Image = await GetProductImage(model.Id),
                 Categories = await GetProductCategories(model.Id),
-                IsActive=model.About.IsActive
+                IsActive = model.About.IsActive
             };
         }
 

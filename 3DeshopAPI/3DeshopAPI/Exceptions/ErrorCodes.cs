@@ -40,6 +40,8 @@ namespace _3DeshopAPI.Exceptions
         OrderOfferNotFound,
         [Description("Job has not been found")]
         JobNotFound,
+        [Description("No jobs were found")]
+        JobsNotFound,
         [Description("User is unauthorized for this action")]
         UnauthorizedForAction,
         [Description("Order cannot be removed, because it is active")]
@@ -53,6 +55,8 @@ namespace _3DeshopAPI.Exceptions
         [Description("Payment was not found")]
         BalanceHistoryNotFound,
         [Description("Image was not found")]
-        ImageNotFound
+        ImageNotFound,
+        [Description("Progress for the job was not found")]
+        ProgressNotFound
     }
 }

@@ -58,6 +58,27 @@ namespace _3DeshopAPI.Services
         }
 
         /// <summary>
+        /// Returns users completed job count
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<int> GetUserCompletedJobs(Guid userId)
+        {
+            var jobs = await _context.Jobs
+                .Include(x => x.Offer)
+                .Include(x => x.Order)
+                .Where(x => x.Offer.User.Id == userId && x.Order.Approved == true)
+                .ToListAsync();
+
+            if (jobs == null)
+            {
+                throw new InvalidClientOperationException(ErrorCodes.JobsNotFound);
+            }
+
+            return jobs.Count();
+        }
+
+        /// <summary>
         /// Returns all inactive orders
         /// </summary>
         /// <returns></returns>
@@ -461,8 +482,6 @@ namespace _3DeshopAPI.Services
             {
                 throw new InvalidClientOperationException(ErrorCodes.OrderNotFound);
             }
-
-            //check if order is being processed (approved)
 
             var offer = _mapper.Map<Offer>(model);
             offer.Created = DateTime.UtcNow;
