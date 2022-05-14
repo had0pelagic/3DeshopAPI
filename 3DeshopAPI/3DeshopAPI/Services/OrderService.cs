@@ -14,15 +14,13 @@ namespace _3DeshopAPI.Services
 {
     public class OrderService : IOrderService
     {
-        private readonly ILogger<ProductService> _logger;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
         private readonly IBalanceService _balanceService;
         private readonly Context _context;
 
-        public OrderService(ILogger<ProductService> logger, IMapper mapper, IUserService userService, IBalanceService balanceService, Context context)
+        public OrderService(IMapper mapper, IUserService userService, IBalanceService balanceService, Context context)
         {
-            _logger = logger;
             _mapper = mapper;
             _userService = userService;
             _balanceService = balanceService;

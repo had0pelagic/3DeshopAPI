@@ -45,6 +45,11 @@ namespace _3DeshopAPITest
                 _fileSettings);
         }
 
+        /// <summary>
+        /// Registers 2 users with the same username
+        /// checks if correct exception is thrown
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task RegisterUser_UserAlreadyExists_Test()
         {
@@ -71,6 +76,11 @@ namespace _3DeshopAPITest
             }
         }
 
+        /// <summary>
+        /// Registers user
+        /// checks if returned user is not null
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task RegisterUser_Success_Test()
         {
@@ -94,12 +104,17 @@ namespace _3DeshopAPITest
                 Assert.IsNotNull(response);
                 transaction.Rollback();
             }
-            catch (Exception ex)
+            catch
             {
                 transaction.Rollback();
             }
         }
 
+        /// <summary>
+        /// Tries to change user password with random user id
+        /// checks if correct exception is thrown
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task ChangePassword_UserNotFound_Test()
         {
@@ -116,6 +131,12 @@ namespace _3DeshopAPITest
             }
         }
 
+        /// <summary>
+        /// Registers user
+        /// tries to change password, with null values instead of password
+        /// checks if correct exception is thrown
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task ChangePassword_EmptyPassword_Test()
         {
@@ -149,6 +170,12 @@ namespace _3DeshopAPITest
             }
         }
 
+        /// <summary>
+        /// Registers user
+        /// changes password
+        /// checks if correct response is returned
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task ChangePassword_Success_Test()
         {
@@ -184,9 +211,14 @@ namespace _3DeshopAPITest
             {
                 transaction.Rollback();
             }
-
         }
 
+        /// <summary>
+        /// Registers new user
+        /// updates user information
+        /// checks if correct response is returned
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task UpdateUser_Success_Test()
         {
@@ -227,6 +259,11 @@ namespace _3DeshopAPITest
             }
         }
 
+        /// <summary>
+        /// Tries to update user with random user id
+        /// checks if correct exception is thrown
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task UpdateUser_UserNotFound_Test()
         {
@@ -243,10 +280,15 @@ namespace _3DeshopAPITest
             }
         }
 
+        /// <summary>
+        /// Registers 3 different users
+        /// returns all users
+        /// checks if returned user count is equal to 3
+        /// </summary>
+        /// <returns></returns>
         [Test]
         public async Task GetAllUsers_Success_Test()
         {
-            bool success = false;
             using var transaction = _context.Database.BeginTransaction();
 
             var user = new User()
