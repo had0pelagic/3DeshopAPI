@@ -136,7 +136,7 @@ namespace _3DeshopAPI.Services
         }
 
         /// <summary>
-        /// Uploads new offer
+        /// Uploads new order
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -508,6 +508,11 @@ namespace _3DeshopAPI.Services
                 .Include(x => x.Order.User)
                 .Where(x => x.Order.Id == orderId)
                 .ToListAsync();
+
+            if (orderOffers.Count == 0)
+            {
+                return new List<OfferDisplayModel>();
+            }
 
             var currentUser = _userService.GetCurrentUser();
             var orderOwner = orderOffers.FirstOrDefault()?.Order.User.Id;

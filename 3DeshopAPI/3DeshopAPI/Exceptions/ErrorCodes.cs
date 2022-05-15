@@ -38,6 +38,8 @@ namespace _3DeshopAPI.Exceptions
         OfferNotFound,
         [Description("Order offer has not been found")]
         OrderOfferNotFound,
+        [Description("Order has no offers")]
+        OrderContainsNoOffers,
         [Description("Job has not been found")]
         JobNotFound,
         [Description("No jobs were found")]
