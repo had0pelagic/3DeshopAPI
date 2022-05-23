@@ -5,319 +5,312 @@ using Domain.Balance;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
-namespace _3DeshopAPI.Services
+namespace _3DeshopAPI.Services;
+
+public class BalanceService : IBalanceService
 {
-    public class BalanceService : IBalanceService
+    private readonly Context _context;
+
+    public BalanceService(Context context)
     {
-        private readonly Context _context;
+        _context = context;
+    }
 
-        public BalanceService(Context context)
+    /// <summary>
+    /// Returns user total balance
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidClientOperationException"></exception>
+    public async Task<UserBalanceModel> GetUserBalance(Guid userId)
+    {
+        var userExists = _context.Users.Any(x => x.Id == userId);
+
+        if (!userExists)
         {
-            _context = context;
+            throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
         }
 
-        /// <summary>
-        /// Returns user total balance
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        /// <exception cref="InvalidClientOperationException"></exception>
-        public async Task<UserBalanceModel> GetUserBalance(Guid userId)
+        var balanceHistoryList = await _context.BalanceHistory
+            .Include(x => x.From)
+            .Include(x => x.To)
+            .AsQueryable()
+            .Where(x => x.To.Id == userId || x.From.Id == userId)
+            .ToListAsync();
+
+        var totalBalance = balanceHistoryList
+            .Where(x => x.To?.Id == userId && !x.IsPending)
+            .Sum(x => x.Balance);
+
+        var paymentSum = balanceHistoryList
+            .Where(x => x.From?.Id == userId)
+            .Sum(x => x.Balance);
+
+        var userBalance = new UserBalanceModel
         {
-            var userExists = _context.Users.Any(x => x.Id == userId);
+            Balance = totalBalance - paymentSum
+        };
 
-            if (!userExists)
-            {
-                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
-            }
+        return userBalance;
+    }
 
-            var balanceHistoryList = await _context.BalanceHistory
-                .Include(x => x.From)
-                .Include(x => x.To)
-                .AsQueryable()
-                .Where(x => x.To.Id == userId || x.From.Id == userId)
-                .ToListAsync();
+    /// <summary>
+    /// Adds selected amount to user balance
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidClientOperationException"></exception>
+    public async Task<BalanceHistory> BalanceTopUp(TopUpModel model)
+    {
+        var userExists = _context.Users.Any(x => x.Id == model.UserId);
 
-            var totalBalance = balanceHistoryList
-                .Where(x => x.To?.Id == userId && !x.IsPending)
-                .Sum(x => x.Balance);
-
-            var paymentSum = balanceHistoryList
-                .Where(x => x.From?.Id == userId)
-                .Sum(x => x.Balance);
-
-            var userBalance = new UserBalanceModel()
-            {
-                Balance = totalBalance - paymentSum,
-            };
-
-            return userBalance;
+        if (!userExists)
+        {
+            throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
         }
 
-        /// <summary>
-        /// Adds selected amount to user balance
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="amount"></param>
-        /// <returns></returns>
-        /// <exception cref="InvalidClientOperationException"></exception>
-        public async Task<BalanceHistory> BalanceTopUp(TopUpModel model)
+        var user = await _context.Users.FindAsync(model.UserId);
+        var balanceHistory = new BalanceHistory
         {
-            var userExists = _context.Users.Any(x => x.Id == model.UserId);
+            Balance = model.Amount,
+            To = user,
+            IsPending = false,
+            IsTopUp = true,
+            LastTime = DateTime.UtcNow
+        };
 
-            if (!userExists)
-            {
-                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
-            }
+        await _context.BalanceHistory.AddAsync(balanceHistory);
+        await _context.SaveChangesAsync();
 
-            var user = await _context.Users.FindAsync(model.UserId);
-            var balanceHistory = new BalanceHistory()
-            {
-                Balance = model.Amount,
-                To = user,
-                IsPending = false,
-                IsTopUp = true,
-                LastTime = DateTime.UtcNow
-            };
+        return balanceHistory;
+    }
 
-            await _context.BalanceHistory.AddAsync(balanceHistory);
-            await _context.SaveChangesAsync();
+    /// <summary>
+    /// Pays for selected product
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidClientOperationException"></exception>
+    public async Task<BalanceHistory> PayForProduct(PayForProductModel model)
+    {
+        var userExists = _context.Users.Any(x => x.Id == model.UserId);
 
-            return balanceHistory;
+        if (!userExists)
+        {
+            throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
         }
 
-        /// <summary>
-        /// Pays for selected product
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        /// <exception cref="InvalidClientOperationException"></exception>
-        public async Task<BalanceHistory> PayForProduct(PayForProductModel model)
+        var product = _context.Products
+            .Include(x => x.About)
+            .Include(x => x.User)
+            .Where(x => x.Id == model.ProductId)
+            .FirstOrDefault();
+        var productOwner = await _context.Users.FindAsync(product.User.Id);
+
+        if (productOwner == null)
         {
-            var userExists = _context.Users.Any(x => x.Id == model.UserId);
-
-            if (!userExists)
-            {
-                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
-            }
-
-            var product = _context.Products
-                .Include(x => x.About)
-                .Include(x=>x.User)
-                .Where(x => x.Id == model.ProductId)
-                .FirstOrDefault();
-            var productOwner = await _context.Users.FindAsync(product.User.Id);
-
-            if (productOwner == null)
-            {
-                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
-            }
-
-            var user = await _context.Users.FindAsync(model.UserId);
-
-            if (model.UserId == productOwner.Id)
-            {
-                throw new InvalidClientOperationException(ErrorCodes.OwnerUnableToBuyProduct);
-            }
-
-            var isBalanceEnough = await IsBalanceEnough(model.UserId, product.About.Price);
-
-            if (!isBalanceEnough)
-            {
-                throw new InvalidClientOperationException(ErrorCodes.NotEnoughBalance);
-            }
-
-            var purchasedIds = await GetPurchasedProductIds(model.UserId);
-
-            if (purchasedIds.Contains(model.ProductId))
-            {
-                throw new InvalidClientOperationException(ErrorCodes.DuplicateBuy);
-            }
-
-            var balanceHistory = new BalanceHistory()
-            {
-                Balance = product.About.Price,
-                From = user,
-                To = productOwner,
-                IsPending = false,
-                IsTopUp = false,
-                LastTime = DateTime.UtcNow,
-                Product = product
-            };
-
-            await _context.BalanceHistory.AddAsync(balanceHistory);
-            await _context.SaveChangesAsync();
-
-            return balanceHistory;
+            throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
         }
 
-        /// <summary>
-        /// Removes balance history entry by given order
-        /// </summary>
-        /// <param name="orderId"></param>
-        /// <returns></returns>
-        /// <exception cref="InvalidClientOperationException"></exception>
-        public async Task RemoveBalanceHistoryByOrder(Guid orderId)
+        var user = await _context.Users.FindAsync(model.UserId);
+
+        if (model.UserId == productOwner.Id)
         {
-            var balanceHistories = await _context.BalanceHistory
-                .Include(x => x.Order)
-                .Where(x => x.Order != null)
-                .ToListAsync();
-            var orderBalanceHistory = balanceHistories
-                .FirstOrDefault(x => x.Order.Id == orderId);
-
-            if (orderBalanceHistory == null)
-            {
-                throw new InvalidClientOperationException(ErrorCodes.BalanceHistoryNotFound);
-            }
-
-            _context.BalanceHistory.Remove(orderBalanceHistory);
-            await _context.SaveChangesAsync();
+            throw new InvalidClientOperationException(ErrorCodes.OwnerUnableToBuyProduct);
         }
 
-        /// <summary>
-        /// Checks if user balance is enough for given the amount
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="amount"></param>
-        /// <returns></returns>
-        /// <exception cref="InvalidClientOperationException"></exception>
-        public async Task<bool> IsBalanceEnough(Guid userId, double amount)
+        var isBalanceEnough = await IsBalanceEnough(model.UserId, product.About.Price);
+
+        if (!isBalanceEnough)
         {
-            var user = await _context.Users.FindAsync(userId);
-
-            if (user == null)
-            {
-                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
-            }
-
-            var userBalance = await GetUserBalance(userId);
-            var balanceLeft = userBalance.Balance - amount;
-
-            if (balanceLeft < 0)
-            {
-                return false;
-            }
-
-            return true;
+            throw new InvalidClientOperationException(ErrorCodes.NotEnoughBalance);
         }
 
-        /// <summary>
-        /// Pays/reserves money for created order
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        /// <exception cref="InvalidClientOperationException"></exception>
-        public async Task<BalanceHistory> PayForOrder(PayForOrderModel model)
+        var purchasedIds = await GetPurchasedProductIds(model.UserId);
+
+        if (purchasedIds.Contains(model.ProductId))
         {
-            var userExists = _context.Users.Any(x => x.Id == model.From);
-
-            if (!userExists)
-            {
-                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
-            }
-
-            var order = _context.Orders
-                .Where(x => x.Id == model.OrderId)
-                .FirstOrDefault();
-            var orderOwner = await _context.Users.FindAsync(model.From);
-
-            if (orderOwner == null)
-            {
-                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
-            }
-
-            var paymentReceiver = await _context.Users.FindAsync(model.To);
-
-            if (paymentReceiver == null)
-            {
-                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
-            }
-
-            var balanceHistory = new BalanceHistory()
-            {
-                Balance = order.Price,
-                From = orderOwner,
-                To = paymentReceiver,
-                IsPending = true,
-                IsTopUp = false,
-                LastTime = DateTime.UtcNow,
-                Order = order
-            };
-
-            await _context.BalanceHistory.AddAsync(balanceHistory);
-            await _context.SaveChangesAsync();
-
-            return balanceHistory;
+            throw new InvalidClientOperationException(ErrorCodes.DuplicateBuy);
         }
 
-        /// <summary>
-        /// Sends pending payment to worker after order completion and approvement
-        /// </summary>
-        /// <param name="workerId"></param>
-        /// <param name="orderId"></param>
-        /// <returns></returns>
-        /// <exception cref="InvalidClientOperationException"></exception>
-        public async Task<BalanceHistory> PayForCompletedOrder(Guid workerId, Guid orderId)
+        var balanceHistory = new BalanceHistory
         {
-            var toUser = await _context.Users.FindAsync(workerId);
+            Balance = product.About.Price,
+            From = user,
+            To = productOwner,
+            IsPending = false,
+            IsTopUp = false,
+            LastTime = DateTime.UtcNow,
+            Product = product
+        };
 
-            if (toUser == null)
-            {
-                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
-            }
+        await _context.BalanceHistory.AddAsync(balanceHistory);
+        await _context.SaveChangesAsync();
 
-            var order = _context.Orders
-                .Where(x => x.Id == orderId)
-                .FirstOrDefault();
+        return balanceHistory;
+    }
 
-            if (order == null)
-            {
-                throw new InvalidClientOperationException(ErrorCodes.OrderNotFound);
-            }
+    /// <summary>
+    /// Removes balance history entry by given order
+    /// </summary>
+    /// <param name="orderId"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidClientOperationException"></exception>
+    public async Task RemoveBalanceHistoryByOrder(Guid orderId)
+    {
+        var balanceHistories = await _context.BalanceHistory
+            .Include(x => x.Order)
+            .Where(x => x.Order != null)
+            .ToListAsync();
+        var orderBalanceHistory = balanceHistories
+            .FirstOrDefault(x => x.Order.Id == orderId);
 
-            var balanceHistory = await _context.BalanceHistory
-                .Include(x => x.Order)
-                .Where(x => x.Order.Id == orderId && x.IsPending)
-                .FirstOrDefaultAsync();
-
-            if (balanceHistory == null)
-            {
-                throw new InvalidClientOperationException(ErrorCodes.BalanceHistoryNotFound);
-            }
-
-            balanceHistory.IsPending = false;
-            _context.Entry(balanceHistory).State = EntityState.Modified;
-
-            await _context.SaveChangesAsync();
-
-            return balanceHistory;
+        if (orderBalanceHistory == null)
+        {
+            throw new InvalidClientOperationException(ErrorCodes.BalanceHistoryNotFound);
         }
 
-        /// <summary>
-        /// Returns all user purchased product ids
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <exception cref="InvalidClientOperationException"></exception>
-        public async Task<List<Guid>> GetPurchasedProductIds(Guid id)
+        _context.BalanceHistory.Remove(orderBalanceHistory);
+        await _context.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Checks if user balance is enough for given the amount
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="amount"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidClientOperationException"></exception>
+    public async Task<bool> IsBalanceEnough(Guid userId, double amount)
+    {
+        var user = await _context.Users.FindAsync(userId);
+
+        if (user == null)
         {
-            var userExists = _context.Users.Any(x => x.Id == id);
-
-            if (!userExists)
-            {
-                throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
-            }
-
-            var ids = await _context.BalanceHistory
-                .Include(x => x.Product)
-                .AsQueryable()
-                .Where(x => x.From.Id == id)
-                .Where(x => x.Product.Id != null)
-                .Select(x => x.Product.Id)
-                .ToListAsync();
-
-            return ids;
+            throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
         }
+
+        var userBalance = await GetUserBalance(userId);
+        var balanceLeft = userBalance.Balance - amount;
+
+        return !(balanceLeft < 0);
+    }
+
+    /// <summary>
+    /// Pays/reserves money for created order
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidClientOperationException"></exception>
+    public async Task<BalanceHistory> PayForOrder(PayForOrderModel model)
+    {
+        var userExists = _context.Users.Any(x => x.Id == model.From);
+
+        if (!userExists)
+        {
+            throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+        }
+
+        var order = _context.Orders
+            .Where(x => x.Id == model.OrderId)
+            .FirstOrDefault();
+        var orderOwner = await _context.Users.FindAsync(model.From);
+
+        if (orderOwner == null)
+        {
+            throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+        }
+
+        var paymentReceiver = await _context.Users.FindAsync(model.To);
+
+        if (paymentReceiver == null)
+        {
+            throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+        }
+
+        var balanceHistory = new BalanceHistory
+        {
+            Balance = order.Price,
+            From = orderOwner,
+            To = paymentReceiver,
+            IsPending = true,
+            IsTopUp = false,
+            LastTime = DateTime.UtcNow,
+            Order = order
+        };
+
+        await _context.BalanceHistory.AddAsync(balanceHistory);
+        await _context.SaveChangesAsync();
+
+        return balanceHistory;
+    }
+
+    /// <summary>
+    /// Sends pending payment to worker after order completion and approvement
+    /// </summary>
+    /// <param name="workerId"></param>
+    /// <param name="orderId"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidClientOperationException"></exception>
+    public async Task<BalanceHistory> PayForCompletedOrder(Guid workerId, Guid orderId)
+    {
+        var toUser = await _context.Users.FindAsync(workerId);
+
+        if (toUser == null)
+        {
+            throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+        }
+
+        var order = _context.Orders
+            .Where(x => x.Id == orderId)
+            .FirstOrDefault();
+
+        if (order == null)
+        {
+            throw new InvalidClientOperationException(ErrorCodes.OrderNotFound);
+        }
+
+        var balanceHistory = await _context.BalanceHistory
+            .Include(x => x.Order)
+            .Where(x => x.Order.Id == orderId && x.IsPending)
+            .FirstOrDefaultAsync();
+
+        if (balanceHistory == null)
+        {
+            throw new InvalidClientOperationException(ErrorCodes.BalanceHistoryNotFound);
+        }
+
+        balanceHistory.IsPending = false;
+        _context.Entry(balanceHistory).State = EntityState.Modified;
+
+        await _context.SaveChangesAsync();
+
+        return balanceHistory;
+    }
+
+    /// <summary>
+    /// Returns all user purchased product ids
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidClientOperationException"></exception>
+    public async Task<List<Guid>> GetPurchasedProductIds(Guid id)
+    {
+        var userExists = _context.Users.Any(x => x.Id == id);
+
+        if (!userExists)
+        {
+            throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
+        }
+
+        var ids = await _context.BalanceHistory
+            .Include(x => x.Product)
+            .AsQueryable()
+            .Where(x => x.From.Id == id)
+            .Where(x => x.Product.Id != null)
+            .Select(x => x.Product.Id)
+            .ToListAsync();
+
+        return ids;
     }
 }

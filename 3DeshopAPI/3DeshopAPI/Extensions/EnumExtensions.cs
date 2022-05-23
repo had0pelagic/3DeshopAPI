@@ -1,16 +1,15 @@
 ﻿using System.ComponentModel;
 
-namespace _3DeshopAPI.Extensions
+namespace _3DeshopAPI.Extensions;
+
+public static class EnumExtensions
 {
-    public static class EnumExtensions
+    public static string GetEnumDescription(this Enum enumValue)
     {
-        public static string GetEnumDescription(this Enum enumValue)
-        {
-            var fieldInfo = enumValue.GetType().GetField(enumValue.ToString());
+        var fieldInfo = enumValue.GetType().GetField(enumValue.ToString());
 
-            var descriptionAttributes = (DescriptionAttribute[])fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), false);
+        var descriptionAttributes = (DescriptionAttribute[])fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), false);
 
-            return descriptionAttributes.Length > 0 ? descriptionAttributes[0].Description : enumValue.ToString();
-        }
+        return descriptionAttributes.Length > 0 ? descriptionAttributes[0].Description : enumValue.ToString();
     }
 }

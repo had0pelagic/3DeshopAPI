@@ -1,19 +1,18 @@
-﻿namespace _3DeshopAPI.Models.Product
+﻿namespace _3DeshopAPI.Models.Product;
+
+public class FileModel
 {
-    public class FileModel
+    public string Name { get; set; }
+    public byte[] _data;
+    public byte[] Data
     {
-        public string Name { get; set; }
-        public byte[] _data;
-        public byte[] Data
+        get => _data;
+        set
         {
-            get => _data;
-            set
-            {
-                _data = value;
-                Size = _data.Length;
-            }
+            _data = value;
+            Size = _data.Length;
         }
-        public double? Size { get; set; }
-        public string Format { get; set; }
     }
+    public double? Size { get; set; }
+    public string Format { get; set; }
 }

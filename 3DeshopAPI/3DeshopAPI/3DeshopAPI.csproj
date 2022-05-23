@@ -8,6 +8,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Models\File\**" />
+	  <Content Remove="Models\File\**" />
+	  <EmbeddedResource Remove="Models\File\**" />
+	  <None Remove="Models\File\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Remove="Files\Images\DefaultImage.png" />
 	</ItemGroup>
 
@@ -44,12 +51,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-		<ProjectReference Include="..\PaymentAPI\PaymentAPI.csproj" />
-	</ItemGroup>
-
-
-	<ItemGroup>
-		<Folder Include="Models\File\" />
 	</ItemGroup>
 
 </Project>

@@ -1,10 +1,9 @@
 ﻿using Domain.Product;
 
-namespace _3DeshopAPI.Services.Interfaces
+namespace _3DeshopAPI.Services.Interfaces;
+
+public interface IProductDetailService
 {
-    public interface IProductDetailService
-    {
-        Task<List<Category>> GetAllCategories();
-        Task<List<Format>> GetAllFormats();
-    }
+    Task<List<Category>> GetAllCategories();
+    Task<List<Format>> GetAllFormats();
 }

@@ -1,9 +1,8 @@
-﻿namespace Domain.Product
+﻿namespace Domain.Product;
+
+public class ProductFiles
 {
-    public class ProductFiles
-    {
-        public Guid Id { get; set; }
-        public Product Product { get; set; }
-        public File File { get; set; }
-    }
+    public Guid Id { get; set; }
+    public Product Product { get; set; }
+    public File File { get; set; }
 }

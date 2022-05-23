@@ -1,8 +1,7 @@
-﻿namespace _3DeshopAPI.Models.User
+﻿namespace _3DeshopAPI.Models.User;
+
+public static class UserRoles
 {
-    public static class UserRoles
-    {
-        public const string Admin = "Admin";
-        public const string User = "User";
-    }
+    public const string Admin = "Admin";
+    public const string User = "User";
 }

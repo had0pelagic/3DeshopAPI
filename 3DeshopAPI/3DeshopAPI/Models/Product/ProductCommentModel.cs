@@ -1,7 +1,6 @@
-﻿namespace _3DeshopAPI.Models.Product
+﻿namespace _3DeshopAPI.Models.Product;
+
+public class ProductCommentModel
 {
-    public class ProductCommentModel
-    {
-        public string Description { get; set; }
-    }
+    public string Description { get; set; }
 }

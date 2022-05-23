@@ -1,7 +1,6 @@
-﻿namespace _3DeshopAPI.Models.Product
+﻿namespace _3DeshopAPI.Models.Product;
+
+public class ProductFormatModel
 {
-    public class ProductFormatModel
-    {
-        public string Name { get; set; }
-    }
+    public string Name { get; set; }
 }

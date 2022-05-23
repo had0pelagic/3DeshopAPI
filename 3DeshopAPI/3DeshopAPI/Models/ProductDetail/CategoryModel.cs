@@ -1,8 +1,7 @@
-﻿namespace _3DeshopAPI.Models.ProductDetail
+﻿namespace _3DeshopAPI.Models.ProductDetail;
+
+public class CategoryModel
 {
-    public class CategoryModel
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-    }
+    public Guid Id { get; set; }
+    public string Name { get; set; }
 }

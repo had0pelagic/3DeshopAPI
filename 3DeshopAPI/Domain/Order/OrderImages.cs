@@ -1,11 +1,10 @@
 ﻿using Domain.Product;
 
-namespace Domain.Order
+namespace Domain.Order;
+
+public class OrderImages
 {
-    public class OrderImages
-    {
-        public Guid Id { get; set; }
-        public Order Order { get; set; }
-        public Image Image { get; set; }
-    }
+    public Guid Id { get; set; }
+    public Order Order { get; set; }
+    public Image Image { get; set; }
 }

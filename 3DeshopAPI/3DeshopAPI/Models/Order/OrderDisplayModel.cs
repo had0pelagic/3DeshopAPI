@@ -1,18 +1,16 @@
-﻿using _3DeshopAPI.Models.Product;
-using _3DeshopAPI.Models.User;
+﻿using _3DeshopAPI.Models.User;
 
-namespace _3DeshopAPI.Models.Order
+namespace _3DeshopAPI.Models.Order;
+
+public class OrderDisplayModel
 {
-    public class OrderDisplayModel
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public double Price { get; set; }
-        public UserDisplayModel User { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime CompleteTill { get; set; }
-        public List<ImageModel> Images { get; set; }
-        public bool Approved { get; set; }
-    }
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public double Price { get; set; }
+    public UserDisplayModel User { get; set; }
+    public DateTime Created { get; set; }
+    public DateTime CompleteTill { get; set; }
+    public List<ImageModel> Images { get; set; }
+    public bool Approved { get; set; }
 }

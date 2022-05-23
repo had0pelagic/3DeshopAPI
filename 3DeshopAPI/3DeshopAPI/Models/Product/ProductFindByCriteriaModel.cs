@@ -1,10 +1,9 @@
-﻿namespace _3DeshopAPI.Models.Product
+﻿namespace _3DeshopAPI.Models.Product;
+
+public class ProductFindByCriteriaModel
 {
-    public class ProductFindByCriteriaModel
-    {
-        public string Name { get; set; } = "";
-        public List<string> Categories { get; set; }
-        public List<string> Formats { get; set; }
-        public ProductSpecificationsModel Specifications { get; set; }
-    }
+    public string Name { get; set; } = "";
+    public List<string> Categories { get; set; }
+    public List<string> Formats { get; set; }
+    public ProductSpecificationsModel Specifications { get; set; }
 }

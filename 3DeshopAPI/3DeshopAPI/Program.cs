@@ -11,8 +11,7 @@ using Serilog.Events;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-ConfigurationManager config = builder.Configuration;
-//builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().CreateLogger());
+var config = builder.Configuration;
 
 var origins = "AllowOrigins";
 builder.Services.AddCors(options =>
@@ -51,14 +50,14 @@ builder.Services.AddSwaggerGen(opts =>
         Title = "3Deshop",
         Version = "v1"
     });
-    opts.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    opts.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "JWT Authorization header using the Bearer scheme. bearer {token}",
+        Description = "JWT Authorization header using the Bearer scheme. bearer {token}"
     });
     opts.AddSecurityRequirement(new OpenApiSecurityRequirement {
         {
@@ -74,7 +73,6 @@ builder.Services.AddSwaggerGen(opts =>
 });
 
 builder.SetupServices();
-builder.Services.Configure<SMTPSettings>(builder.Configuration.GetSection("SMTP"));
 builder.Services.Configure<DefaultFileSettings>(builder.Configuration.GetSection("DefaultFileIds"));
 
 builder.Services.AddHttpClient();
@@ -102,7 +100,7 @@ builder.Services.AddAuthentication(opts =>
     {
         opts.SaveToken = true;
         opts.RequireHttpsMetadata = false;
-        opts.TokenValidationParameters = new TokenValidationParameters()
+        opts.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = false,
             ValidateAudience = false,

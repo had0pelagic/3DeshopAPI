@@ -1,8 +1,7 @@
-﻿namespace _3DeshopAPI.Models.User
+﻿namespace _3DeshopAPI.Models.User;
+
+public class UserPasswordModel
 {
-    public class UserPasswordModel
-    {
-        public string? Password { get; set; }
-        public string? ConfirmPassword { get; set; }
-    }
+    public string? Password { get; set; }
+    public string? ConfirmPassword { get; set; }
 }

@@ -1,9 +1,8 @@
-﻿namespace Domain.Product
+﻿namespace Domain.Product;
+
+public class ProductImages
 {
-    public class ProductImages
-    {
-        public Guid Id { get; set; }
-        public Product Product { get; set; }
-        public Image Image { get; set; }
-    }
+    public Guid Id { get; set; }
+    public Product Product { get; set; }
+    public Image Image { get; set; }
 }

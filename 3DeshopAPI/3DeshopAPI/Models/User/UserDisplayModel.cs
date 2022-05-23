@@ -1,11 +1,8 @@
-﻿using _3DeshopAPI.Models.Product;
+﻿namespace _3DeshopAPI.Models.User;
 
-namespace _3DeshopAPI.Models.User
+public class UserDisplayModel
 {
-    public class UserDisplayModel
-    {
-        public Guid Id { get; set; }
-        public string Username { get; set; }
-        public ImageModel Image { get; set; }
-    }
+    public Guid Id { get; set; }
+    public string Username { get; set; }
+    public ImageModel Image { get; set; }
 }

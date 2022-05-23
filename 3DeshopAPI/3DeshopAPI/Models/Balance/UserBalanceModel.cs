@@ -1,7 +1,6 @@
-﻿namespace _3DeshopAPI.Models.Balance
+﻿namespace _3DeshopAPI.Models.Balance;
+
+public class UserBalanceModel
 {
-    public class UserBalanceModel
-    {
-        public double Balance { get; set; }
-    }
+    public double Balance { get; set; }
 }

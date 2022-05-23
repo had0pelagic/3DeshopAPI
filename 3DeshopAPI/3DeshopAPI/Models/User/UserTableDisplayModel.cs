@@ -1,8 +1,7 @@
-﻿namespace _3DeshopAPI.Models.User
+﻿namespace _3DeshopAPI.Models.User;
+
+public class UserTableDisplayModel
 {
-    public class UserTableDisplayModel
-    {
-        public Guid Id { get; set; }
-        public string Username { get; set; }
-    }
+    public Guid Id { get; set; }
+    public string Username { get; set; }
 }

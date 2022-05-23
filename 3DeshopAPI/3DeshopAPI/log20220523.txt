@@ -1,9 +1,9 @@
-2022-05-12 15:30:14.762 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+2022-05-23 15:53:07.745 +03:00 [ERR] An unhandled exception has occurred while executing the request.
 _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
-   at _3DeshopAPI.Services.UserService.IsUserValid(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\UserService.cs:line 214
-   at _3DeshopAPI.Auth.Services.AuthService.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Auth\Services\AuthService.cs:line 31
-   at _3DeshopAPI.Controllers.UserController.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 124
-   at lambda_method618(Closure , Object )
+   at _3DeshopAPI.Services.UserService.IsUserValid(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\UserService.cs:line 215
+   at _3DeshopAPI.Auth.Services.AuthService.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Auth\Services\AuthService.cs:line 32
+   at _3DeshopAPI.Controllers.UserController.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 120
+   at lambda_method239(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
@@ -17,12 +17,12 @@ _3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
    at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2022-05-12 15:30:43.152 +03:00 [ERR] An unhandled exception has occurred while executing the request.
-_3DeshopAPI.Exceptions.InvalidClientOperationException: Wrong password
-   at _3DeshopAPI.Services.UserService.IsUserValid(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\UserService.cs:line 218
-   at _3DeshopAPI.Auth.Services.AuthService.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Auth\Services\AuthService.cs:line 31
-   at _3DeshopAPI.Controllers.UserController.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 124
-   at lambda_method618(Closure , Object )
+2022-05-23 15:53:07.745 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+_3DeshopAPI.Exceptions.InvalidClientOperationException: User does not exist
+   at _3DeshopAPI.Services.UserService.IsUserValid(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\UserService.cs:line 215
+   at _3DeshopAPI.Auth.Services.AuthService.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Auth\Services\AuthService.cs:line 32
+   at _3DeshopAPI.Controllers.UserController.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 120
+   at lambda_method239(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
@@ -36,12 +36,11 @@ _3DeshopAPI.Exceptions.InvalidClientOperationException: Wrong password
    at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2022-05-12 15:30:48.842 +03:00 [ERR] An unhandled exception has occurred while executing the request.
-_3DeshopAPI.Exceptions.InvalidClientOperationException: Wrong password
-   at _3DeshopAPI.Services.UserService.IsUserValid(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\UserService.cs:line 218
-   at _3DeshopAPI.Auth.Services.AuthService.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Auth\Services\AuthService.cs:line 31
-   at _3DeshopAPI.Controllers.UserController.UserLogin(UserLoginModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\UserController.cs:line 124
-   at lambda_method618(Closure , Object )
+2022-05-23 17:52:44.857 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+_3DeshopAPI.Exceptions.InvalidClientOperationException: Not enough balance
+   at _3DeshopAPI.Services.OrderService.PostOrder(OrderUploadModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\OrderService.cs:line 158
+   at _3DeshopAPI.Controllers.OrderController.PostOrder(OrderUploadModel model) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\OrderController.cs:line 103
+   at lambda_method1558(Closure , Object )
    at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
@@ -52,25 +51,6 @@ _3DeshopAPI.Exceptions.InvalidClientOperationException: Wrong password
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
-   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
-   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
-2022-05-12 15:46:52.505 +03:00 [ERR] An unhandled exception has occurred while executing the request.
-_3DeshopAPI.Exceptions.InvalidClientOperationException: User has not bought the product
-   at _3DeshopAPI.Services.FileService.GetProductFiles(Guid productId, Guid userId) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Services\FileService.cs:line 73
-   at _3DeshopAPI.Controllers.FileController.GetProductFiles(Guid productId, Guid userId) in E:\As\UNI\Bakalauro projektas\API\3DeshopAPI\3DeshopAPI\Controllers\FileController.cs:line 28
-   at lambda_method795(Closure , Object )
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
-   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
    at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)

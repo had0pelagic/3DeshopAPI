@@ -1,13 +1,10 @@
-﻿using _3DeshopAPI.Models.Product;
+﻿namespace _3DeshopAPI.Models.User;
 
-namespace _3DeshopAPI.Models.User
+public class UserUpdateModel
 {
-    public class UserUpdateModel
-    {
-        public string? Username { get; set; }
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public ImageModel? Image { get; set; }
-        public string? Email { get; set; }
-    }
+    public string? Username { get; set; }
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
+    public ImageModel? Image { get; set; }
+    public string? Email { get; set; }
 }

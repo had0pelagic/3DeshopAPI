@@ -1,13 +1,12 @@
-﻿namespace Domain.Order
+﻿namespace Domain.Order;
+
+public class Job
 {
-    public class Job
-    {
-        public Guid Id { get; set; }
-        public Order Order { get; set; }
-        public Offer Offer { get; set; }
-        public int Progress { get; set; } = 0;
-        public DateTime Created { get; set; }
-        public bool Active { get; set; } = true;
-        public bool NeedChanges { get; set; } = false;
-    }
+    public Guid Id { get; set; }
+    public Order Order { get; set; }
+    public Offer Offer { get; set; }
+    public int Progress { get; set; } = 0;
+    public DateTime Created { get; set; }
+    public bool Active { get; set; } = true;
+    public bool NeedChanges { get; set; } = false;
 }

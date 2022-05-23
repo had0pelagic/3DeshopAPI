@@ -2,22 +2,21 @@
 using Domain.Product;
 using Microsoft.AspNetCore.Mvc;
 
-namespace _3DeshopAPI.Services.Interfaces
+namespace _3DeshopAPI.Services.Interfaces;
+
+public interface IProductService
 {
-    public interface IProductService
-    {
-        Task<IActionResult> ChangeProductStatus(Guid id);
-        Task<List<ProductDisplayModel>> GetAllProducts();
-        Task<List<ProductDisplayModel>> GetProductsByName(string name);
-        Task<List<ProductDisplayModel>> GetProductsByCriteria(ProductFindByCriteriaModel name);
-        Task<List<ProductDisplayModel>> GetProductsByGivenIdsAndOrderByPrice(ProductGetByIdAndOrderModel model);
-        Task<List<ProductDisplayModel>> GetProductsByGivenIdsAndOrderByDate(ProductGetByIdAndOrderModel model);
-        Task<List<ProductDisplayModel>> GetProductsOrderByPrice(bool ascending);
-        Task<List<ProductDisplayModel>> GetProductsOrderByUploadDate(bool ascending);
-        Task<List<ProductTableDisplayModel>> GetUserProducts(Guid id);
-        Task<ProductModel?> GetProduct(Guid id);
-        Task<Product> UploadProduct(ProductUploadModel product);
-        Task<ProductModel> ProductToProductModel(Product model, bool isBoughtByUser = false);
-        Task<List<ProductDisplayModel>> GetAllPurchases(Guid id, List<Guid> productIds);
-    }
+    Task<IActionResult> ChangeProductStatus(Guid id);
+    Task<List<ProductDisplayModel>> GetAllProducts();
+    Task<List<ProductDisplayModel>> GetProductsByName(string name);
+    Task<List<ProductDisplayModel>> GetProductsByCriteria(ProductFindByCriteriaModel name);
+    Task<List<ProductDisplayModel>> GetProductsByGivenIdsAndOrderByPrice(ProductGetByIdAndOrderModel model);
+    Task<List<ProductDisplayModel>> GetProductsByGivenIdsAndOrderByDate(ProductGetByIdAndOrderModel model);
+    Task<List<ProductDisplayModel>> GetProductsOrderByPrice(bool ascending);
+    Task<List<ProductDisplayModel>> GetProductsOrderByUploadDate(bool ascending);
+    Task<List<ProductTableDisplayModel>> GetUserProducts(Guid id);
+    Task<ProductModel?> GetProduct(Guid id);
+    Task<Product> UploadProduct(ProductUploadModel product);
+    Task<ProductModel> ProductToProductModel(Product model, bool isBoughtByUser = false);
+    Task<List<ProductDisplayModel>> GetAllPurchases(Guid id, List<Guid> productIds);
 }
