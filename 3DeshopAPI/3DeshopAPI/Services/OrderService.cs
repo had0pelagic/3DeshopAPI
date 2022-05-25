@@ -451,14 +451,14 @@ public class OrderService : IOrderService
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public async Task<Offer> GetOffer(Guid id)
+    public async Task<OfferDisplayModel> GetOffer(Guid id)
     {
-        var order = await _context.Offers
+        var offer = await _context.Offers
             .Include(x => x.User)
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync();
 
-        return order;
+        return _mapper.Map<OfferDisplayModel>(offer);
     }
 
     /// <summary>
@@ -556,7 +556,10 @@ public class OrderService : IOrderService
             throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
         }
 
-        var offer = await GetOffer(offerId);
+        var offer = await _context.Offers
+            .Include(x => x.User)
+            .Where(x => x.Id == offerId)
+            .FirstOrDefaultAsync();
 
         if (offer == null)
         {
@@ -606,7 +609,10 @@ public class OrderService : IOrderService
             throw new InvalidClientOperationException(ErrorCodes.UserNotFound);
         }
 
-        var offer = await GetOffer(offerId);
+        var offer = await _context.Offers
+            .Include(x => x.User)
+            .Where(x => x.Id == offerId)
+            .FirstOrDefaultAsync();
 
         if (offer == null)
         {

@@ -13,13 +13,15 @@ public static class ApplicationBuilderExtensions
     /// <param name="app"></param>
     /// <param name="defaultFileConfiguration"></param>
     /// <returns></returns>
-    public static async Task<IApplicationBuilder> PrepareDatabase(this IApplicationBuilder app, DefaultFileSettings defaultFileConfiguration)
+    public static async Task<IApplicationBuilder> PrepareDatabase(this IApplicationBuilder app, DefaultFileSettings defaultFileConfiguration, List<DefaultCategorySettings> defaultCategorySettings, List<DefaultFormatSettings> defaultFormatSettings)
     {
         using var scopedServices = app.ApplicationServices.CreateScope();
         var serviceProvider = scopedServices.ServiceProvider;
         var context = serviceProvider.GetRequiredService<Context>();
 
         await SeedDefaultImage(context, defaultFileConfiguration.Image);
+        await SeedCategories(context, defaultCategorySettings);
+        await SeedFormats(context, defaultFormatSettings);
 
         return app;
     }
@@ -43,6 +45,56 @@ public static class ApplicationBuilderExtensions
         var defaultImage = GetDefaultImage(defaultImageGuid);
 
         await context.Images.AddAsync(defaultImage);
+        await context.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Uploads default product categories to database
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="defaultCategorySettings"></param>
+    /// <returns></returns>
+    private static async Task SeedCategories(Context context, List<DefaultCategorySettings> defaultCategorySettings)
+    {
+        foreach (var categoryValues in defaultCategorySettings)
+        {
+            var categoryId = new Guid(categoryValues.Id);
+            var dbCategory = await context.Categories.FindAsync(categoryId);
+
+            if (dbCategory != null)
+            {
+                continue;
+            }
+
+            var category = new Category { Id = categoryId, Name = categoryValues.Name };
+            await context.Categories.AddAsync(category);
+        }
+
+        await context.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Uploads default formats to database
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="defaultFormatSettings"></param>
+    /// <returns></returns>
+    private static async Task SeedFormats(Context context, List<DefaultFormatSettings> defaultFormatSettings)
+    {
+        foreach (var formatValues in defaultFormatSettings)
+        {
+            var formatId = new Guid(formatValues.Id);
+            var dbFormat = await context.Formats.FindAsync(formatId);
+
+            if (dbFormat != null)
+            {
+                continue;
+            }
+
+            var format = new Format { Id = formatId, Name = formatValues.Name };
+            await context.Formats.AddAsync(format);
+        }
+
         await context.SaveChangesAsync();
     }
 

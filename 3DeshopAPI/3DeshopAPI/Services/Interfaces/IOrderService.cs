@@ -17,7 +17,7 @@ public interface IOrderService
     public Task<Job> WorkerAbandonJob(AbandonJobModel model);
     public Task<List<JobProgressDisplayModel>> GetJobProgress(Guid userId, Guid orderId);
     public Task<List<Offer>> GetOffers();
-    public Task<Offer> GetOffer(Guid id);
+    public Task<OfferDisplayModel> GetOffer(Guid id);
     public Task<Offer> PostOffer(OfferUploadModel model);
     public Task<List<OfferDisplayModel>> GetOrderOffers(Guid orderId);
     public Task<Job> AcceptOffer(Guid userId, Guid offerId, Guid orderId);

@@ -229,7 +229,7 @@ public class OrderController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("get-offer/{id}")]
-    public async Task<ActionResult<Offer>> GetOffer(Guid id)
+    public async Task<ActionResult<OfferDisplayModel>> GetOffer(Guid id)
     {
         var response = await _orderService.GetOffer(id);
 

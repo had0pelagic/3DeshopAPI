@@ -74,6 +74,8 @@ builder.Services.AddSwaggerGen(opts =>
 
 builder.SetupServices();
 builder.Services.Configure<DefaultFileSettings>(builder.Configuration.GetSection("DefaultFileIds"));
+builder.Services.Configure<List<DefaultCategorySettings>>(builder.Configuration.GetSection("DefaultCategorySettings"));
+builder.Services.Configure<List<DefaultFormatSettings>>(builder.Configuration.GetSection("DefaultFormatSettings"));
 
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
@@ -120,7 +122,9 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 var defaultFileConfiguration = builder.Configuration.GetSection("DefaultFileIds").Get<DefaultFileSettings>();
-await app.PrepareDatabase(defaultFileConfiguration);
+var defaultCategoryConfiguration = builder.Configuration.GetSection("DefaultCategorySettings").Get<List<DefaultCategorySettings>>();
+var defaultFormatConfiguration = builder.Configuration.GetSection("DefaultFormatSettings").Get<List<DefaultFormatSettings>>();
+await app.PrepareDatabase(defaultFileConfiguration, defaultCategoryConfiguration, defaultFormatConfiguration);
 
 app.ConfigureExceptionHandler();
 
